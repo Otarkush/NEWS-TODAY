@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  OnboardingViewController.swift
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
@@ -7,15 +7,16 @@
 
 import UIKit
 
-protocol HomeViewPresenter: AnyObject {}
+protocol OnboardingViewPresenter: AnyObject {}
 
-final class HomeViewController: UIViewController {
-  
+final class OnboardingViewController: UIViewController {
+    
     //MARK: - Properties
-    private let presenter: HomeViewPresenter
+    private let presenter: OnboardingViewPresenter?
     
     //MARK: - Init
-    init(presenter: HomeViewPresenter) {
+    
+    init(presenter: OnboardingViewPresenter?) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,9 +28,10 @@ final class HomeViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
     }
+
+    
 }
 
-//MARK: - HomeViewController + HomeViewDelegate
-extension HomeViewController: HomeViewDelegate {}
+//MARK: - OnboardingViewController + OnboardingViewDelegate
+extension OnboardingViewController: OnboardingViewDelegate {}

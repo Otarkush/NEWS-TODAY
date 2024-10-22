@@ -1,21 +1,22 @@
 //
-//  HomeViewController.swift
+//  ProfileViewPresenter.swift
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
 //
 
+
 import UIKit
 
-protocol HomeViewPresenter: AnyObject {}
+protocol ProfileViewPresenter: AnyObject {}
 
-final class HomeViewController: UIViewController {
+final class ProfileViewController: UIViewController {
   
     //MARK: - Properties
-    private let presenter: HomeViewPresenter
+    private let presenter: ProfileViewPresenter
     
     //MARK: - Init
-    init(presenter: HomeViewPresenter) {
+    init(presenter: ProfileViewPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,9 +28,9 @@ final class HomeViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .red
     }
 }
 
-//MARK: - HomeViewController + HomeViewDelegate
-extension HomeViewController: HomeViewDelegate {}
+//MARK: - ProfileViewController + ProfileViewDelegate
+extension ProfileViewController: ProfileViewDelegate {}

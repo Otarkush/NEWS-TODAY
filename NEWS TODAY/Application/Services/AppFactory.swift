@@ -9,10 +9,15 @@ import UIKit
 
 protocol AppFactory {
     func makeHomeModule(_ router: AppRouter) -> UIViewController
-    func makeTabBar(_ viewControllers: UIViewController...) -> UITabBarController
+    func makeTabBar(_ router: AppRouter) -> UITabBarController
+    func makeOnboardingModule(_ router: AppRouter) -> UIViewController
+    func makeCategoriesModule(_ router: AppRouter) -> UIViewController
+    func makeDetailModule(_ router: AppRouter) -> UIViewController
+    func makeProfileModule(_ router: AppRouter) -> UIViewController
+    func makeBookmarksModule(_ router: AppRouter) -> UIViewController
 }
 
-final class AppFactoryImpl: AppFactory  {
+final class AppFactoryImpl  {
     
     //MARK: - Properties
     private let networking: AppNetworking
@@ -30,7 +35,29 @@ final class AppFactoryImpl: AppFactory  {
             navigation: navigationController)
     }
     
-    //MARK: - Methods
+}
+
+//MARK: - AppFactoryImpl + AppFactory
+extension AppFactoryImpl: AppFactory {
+    
+    //MARK: - Create TabBar
+    func makeTabBar(_ router: AppRouter) -> UITabBarController {
+        let tabBarController = MainTabBarController()
+        
+        let homeModule = makeHomeModule(router)
+        let categoriesModule = makeCategoriesModule(router)
+        let bookmarksModule = makeBookmarksModule(router)
+        let profileModule = makeProfileModule(router)
+        
+        let homeNavController = UINavigationController(rootViewController: homeModule)
+        
+        
+        tabBarController.viewControllers = [homeNavController, categoriesModule,bookmarksModule ,profileModule]
+        
+        return tabBarController
+    }
+    
+    //MARK: - Create Modules
     func makeHomeModule(_ router: AppRouter) -> UIViewController {
         
         let presenter = HomeViewPresenterImpl(
@@ -39,7 +66,7 @@ final class AppFactoryImpl: AppFactory  {
         
         let viewController = HomeViewController(presenter: presenter)
         presenter.view = viewController
-    #warning("Норм что в здесь создаем табБар итемы?")
+        #warning("Норм pдесь создавать табБар итемы?")
         viewController.tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(systemName: "house"),
@@ -48,9 +75,75 @@ final class AppFactoryImpl: AppFactory  {
         return viewController
     }
     
-    func makeTabBar(_ viewControllers: UIViewController..., factory: AppFactory) -> UITabBarController {
-        let tabBar = MainTabBarController()
-        tabBar.viewControllers = viewControllers
-        return tabBar
+    func makeCategoriesModule(_ router: AppRouter) -> UIViewController {
+        let presenter = CategoriesViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = CategoriesViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Categories",
+            image: UIImage(systemName: "square.grid.2x2"),
+            selectedImage: UIImage(systemName: "square.grid.2x2.fill"))
+        
+        return viewController
     }
+    
+    func makeBookmarksModule(_ router: AppRouter) -> UIViewController {
+        let presenter = BookmarksViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = BookmarksViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Bookmarks",
+            image: UIImage(systemName: "bookmark"),
+            selectedImage: UIImage(systemName: "bookmark.fill"))
+        
+        return viewController
+    }
+    
+    func makeProfileModule(_ router: AppRouter) -> UIViewController {
+        let presenter = ProfileViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = ProfileViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill"))
+        
+        return viewController
+    }
+    
+    func makeOnboardingModule(_ router: any AppRouter) -> UIViewController {
+        
+        let presenter = OnboardingViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = OnboardingViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        return viewController
+    }
+    
+    func makeDetailModule(_ router: any AppRouter) -> UIViewController {
+        let presenter = DetailViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = DetailViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        return viewController
+    }
+    
 }

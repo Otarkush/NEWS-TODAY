@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  DetailViewController.swift
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
@@ -7,15 +7,15 @@
 
 import UIKit
 
-protocol HomeViewPresenter: AnyObject {}
+protocol DetailViewPresenter: AnyObject {}
 
-final class HomeViewController: UIViewController {
-  
+final class DetailViewController: UIViewController {
+   
     //MARK: - Properties
-    private let presenter: HomeViewPresenter
-    
+    private let presenter: DetailViewPresenter
+
     //MARK: - Init
-    init(presenter: HomeViewPresenter) {
+    init(presenter: DetailViewPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,9 +27,8 @@ final class HomeViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
     }
 }
 
-//MARK: - HomeViewController + HomeViewDelegate
-extension HomeViewController: HomeViewDelegate {}
+//MARK: - DetailViewController + DetailViewDelegate
+extension DetailViewController: DetailViewDelegate {}

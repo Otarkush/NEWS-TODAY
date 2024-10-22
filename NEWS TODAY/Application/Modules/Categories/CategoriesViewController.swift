@@ -1,21 +1,22 @@
 //
-//  HomeViewController.swift
+//  CategoriesViewPresenter.swift
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
 //
 
+
 import UIKit
 
-protocol HomeViewPresenter: AnyObject {}
+protocol CategoriesViewPresenter: AnyObject {}
 
-final class HomeViewController: UIViewController {
+final class CategoriesViewController: UIViewController {
   
     //MARK: - Properties
-    private let presenter: HomeViewPresenter
+    private let presenter: CategoriesViewPresenter
     
     //MARK: - Init
-    init(presenter: HomeViewPresenter) {
+    init(presenter: CategoriesViewPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,9 +28,9 @@ final class HomeViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .green
     }
 }
 
-//MARK: - HomeViewController + HomeViewDelegate
-extension HomeViewController: HomeViewDelegate {}
+//MARK: - CategoriesViewController + CategoriesViewDelegate
+extension CategoriesViewController: CategoriesViewDelegate {}

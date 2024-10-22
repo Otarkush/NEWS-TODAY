@@ -1,22 +1,22 @@
 //
-//  HomeViewPresenterImpl.swift
+//  CategoriesViewDelegate.swift
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
 //
 
+
 import Foundation
 
-protocol HomeViewDelegate: AnyObject {}
+protocol CategoriesViewDelegate: AnyObject {}
 
-final class HomeViewPresenterImpl  {
+final class CategoriesViewPresenterImpl  {
   
     //MARK: - Properties
-    weak var view: HomeViewDelegate?
+    weak var view: CategoriesViewDelegate?
     private let networking: AppNetworking
     private let router: AppRouter
   
-    
     //MARK: - Init
     init(networking: AppNetworking,
          router: AppRouter) {
@@ -25,5 +25,5 @@ final class HomeViewPresenterImpl  {
     }
 }
 
-//MARK: - HomeViewPresenterImpl + HomeViewPresenter
-extension HomeViewPresenterImpl: HomeViewPresenter {}
+//MARK: - CategoriesViewPresenterImpl + CategoriesViewPresenter
+extension CategoriesViewPresenterImpl: CategoriesViewPresenter {}
