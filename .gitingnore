@@ -94,7 +94,7 @@ fastlane/screenshots
 .DS_Store
 .AppleDouble
 .LSOverride
-.xcuserstate
+*.xcuserstate
 
 # OSX Thumbnails
 ._*
