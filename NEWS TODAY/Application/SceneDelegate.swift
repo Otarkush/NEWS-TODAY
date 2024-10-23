@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let factory = AppFactoryImpl()
         let navigationController = UINavigationController()
-        let appRouter = AppRouterImpl(factory: factory, navigation: navigationController)
+        let appRouter = AppRouterImpl(
+            factory: factory,
+            navigation: navigationController)
 
         let tabBarController = factory.makeTabBar(appRouter)
 

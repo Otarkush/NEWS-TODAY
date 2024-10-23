@@ -28,6 +28,10 @@ final class ProfileViewPresenterImpl  {
 
 //MARK: - ProfileViewPresenterImpl + ProfileViewPresenter
 extension ProfileViewPresenterImpl: ProfileViewPresenter {
+    func didTapTestButton() {
+        router.showDetailView()
+    }
+    
     
     func didTapConditions() {
         router.showTermsView()

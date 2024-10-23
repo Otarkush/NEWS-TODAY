@@ -35,7 +35,6 @@ final class AppFactoryImpl  {
             factory: AppFactoryImpl(),
             navigation: navigationController)
     }
-    
 }
 
 //MARK: - AppFactoryImpl + AppFactory

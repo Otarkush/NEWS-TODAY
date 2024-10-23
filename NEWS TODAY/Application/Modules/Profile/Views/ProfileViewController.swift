@@ -15,6 +15,7 @@ protocol ProfileViewPresenter: AnyObject {
     func didTapConditions()
     func didTapSignOut()
     func didTapChangeLanguage()
+    func didTapTestButton()
 }
 
 final class ProfileViewController: UIViewController {
@@ -74,10 +75,32 @@ final class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    private lazy var testButton: UIButton = {
+           let button = UIButton(type: .system)
+           button.setTitle("Test Navigation", for: .normal)
+           button.backgroundColor = .systemBlue
+           button.setTitleColor(.white, for: .normal)
+           button.addTarget(self, action: #selector(testButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+           return button
+       }()
     
-    private lazy var languageButton = ProfileButton(type: .changeLanguage, target: self, action: #selector(languageButtonTapped))
-    private lazy var conditionsButton = ProfileButton(type: .conditions, target: self, action: #selector(conditionsButtonTapped))
-    private lazy var logoutButton = ProfileButton(type: .signOut, target: self, action: #selector(logoutButtonTapped))
+    @objc private func testButtonTapped() {
+         presenter.didTapTestButton()
+     }
+    
+    private lazy var languageButton = ProfileButton(
+        type: .changeLanguage,
+        target: self,
+        action: #selector(languageButtonTapped))
+    private lazy var conditionsButton = ProfileButton(
+        type: .conditions,
+        target: self,
+        action: #selector(conditionsButtonTapped))
+    private lazy var logoutButton = ProfileButton(
+        type: .signOut,
+        target: self,
+        action: #selector(logoutButtonTapped))
     
     
     // MARK: - Button Actions
@@ -99,7 +122,8 @@ final class ProfileViewController: UIViewController {
          emailLabel,
          languageButton,
          conditionsButton,
-         logoutButton
+         logoutButton,
+         testButton
         ].forEach { view.addSubview($0)}
         
         view.backgroundColor = .white
@@ -140,6 +164,11 @@ private extension ProfileViewController {
             
             logoutButton.topAnchor.constraint(equalTo: conditionsButton.bottomAnchor, constant: Drawing.signOutButtonTopPadding),
             logoutButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                        testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                        testButton.widthAnchor.constraint(equalToConstant: 200),
+                        testButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }
