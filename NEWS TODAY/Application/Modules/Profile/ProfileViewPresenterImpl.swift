@@ -5,10 +5,11 @@
 //  Created by Daniil Murzin on 22.10.2024.
 //
 
-
 import Foundation
 
-protocol ProfileViewDelegate: AnyObject {}
+protocol ProfileViewDelegate: AnyObject {
+    func updateUI()
+}
 
 final class ProfileViewPresenterImpl  {
   
@@ -26,4 +27,16 @@ final class ProfileViewPresenterImpl  {
 }
 
 //MARK: - ProfileViewPresenterImpl + ProfileViewPresenter
-extension ProfileViewPresenterImpl: ProfileViewPresenter {}
+extension ProfileViewPresenterImpl: ProfileViewPresenter {
+    func showUserName() -> String {
+        "Bob"
+    }
+    
+    func showUserEmail() -> String {
+       "Bob1@gmail.com"
+    }
+    
+    func showUserImage() -> String {
+        "profilePhoto"
+    }
+}
