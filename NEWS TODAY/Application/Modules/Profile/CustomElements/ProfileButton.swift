@@ -17,15 +17,15 @@ class ProfileButton: UIButton {
         case conditions
         case signOut
     }
-    
-    //MARK: - Properties
-    
+
     // MARK: - Init
-    init(type: ButtonType) {
+    init(type: ButtonType, target: Any?, action: Selector) {
         super.init(frame: .zero)
         self.configuration = .plain()
         setupButton(type: type)
         setupConstraints()
+        
+        addTarget(target, action: action, for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -49,14 +49,11 @@ class ProfileButton: UIButton {
         switch type {
         case .changeLanguage:
             setTitle("Language", for: .normal)
-            addTarget(self, action: #selector(changeLanguageTapped), for: .touchUpInside)
         case .conditions:
             setTitle("Terms and Conditions", for: .normal)
-            addTarget(self, action: #selector(conditionsTapped), for: .touchUpInside)
             configuration?.imagePadding = 100
         case .signOut:
             setTitle("Sign Out", for: .normal)
-            addTarget(self, action: #selector(SignOutTapped), for: .touchUpInside)
             configuration?.image = UIImage.signOut
         }
     }
@@ -67,51 +64,4 @@ class ProfileButton: UIButton {
             self.heightAnchor.constraint(equalToConstant: 56)
         ])
     }
-    
-    @objc private func changeLanguageTapped() {
-        print("Кнопка Language нажата!")
-    }
-    
-    @objc private func conditionsTapped() {
-        print("Кнопка Conditions нажата!")
-        
-    }
-    
-    @objc private func SignOutTapped() {
-        print("Кнопка SignOut нажата!")
-        
-    }
 }
-
-// MARK: - SwiftUI Preview for UIKit View
-struct ProfileButton_Preview: PreviewProvider {
-    static var previews: some View {
-        ProfileButtonWrapper()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct ProfileButtonWrapper: UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> UIView {
-        let button = ProfileButton(type: .conditions)
-        
-        
-        let containerView = UIView()
-
-        containerView.addSubview(button)
-        
-        
-        NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 336),
-            button.heightAnchor.constraint(equalToConstant: 56),
-        ])
-        
-        return containerView
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-    }
-}
-

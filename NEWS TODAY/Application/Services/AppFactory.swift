@@ -15,6 +15,7 @@ protocol AppFactory {
     func makeDetailModule(_ router: AppRouter) -> UIViewController
     func makeProfileModule(_ router: AppRouter) -> UIViewController
     func makeBookmarksModule(_ router: AppRouter) -> UIViewController
+    func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController
 }
 
 final class AppFactoryImpl  {
@@ -123,7 +124,7 @@ extension AppFactoryImpl: AppFactory {
         return viewController
     }
     
-    func makeOnboardingModule(_ router: any AppRouter) -> UIViewController {
+    func makeOnboardingModule(_ router: AppRouter) -> UIViewController {
         
         let presenter = OnboardingViewPresenterImpl(
             networking: networking,
@@ -135,7 +136,7 @@ extension AppFactoryImpl: AppFactory {
         return viewController
     }
     
-    func makeDetailModule(_ router: any AppRouter) -> UIViewController {
+    func makeDetailModule(_ router: AppRouter) -> UIViewController {
         let presenter = DetailViewPresenterImpl(
             networking: networking,
             router: router)
@@ -146,4 +147,11 @@ extension AppFactoryImpl: AppFactory {
         return viewController
     }
     
+    //MARK: - Create screens
+#warning("Здесь не стал делать презентер, кнопка бек через метод router.pop")
+   func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController {
+        let viewController = TermsViewController(
+            router: router)
+        return viewController
+    }
 }

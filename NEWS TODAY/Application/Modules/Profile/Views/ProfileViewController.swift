@@ -12,6 +12,9 @@ protocol ProfileViewPresenter: AnyObject {
     func showUserName() -> String
     func showUserEmail() -> String
     func showUserImage() -> String
+    func didTapConditions()
+    func didTapSignOut()
+    func didTapChangeLanguage()
 }
 
 final class ProfileViewController: UIViewController {
@@ -72,10 +75,23 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let languageButton = ProfileButton(type: .changeLanguage)
-    private let conditionsButton = ProfileButton(type: .conditions)
-    private let logoutButton = ProfileButton(type: .signOut)
-   
+    private lazy var languageButton = ProfileButton(type: .changeLanguage, target: self, action: #selector(languageButtonTapped))
+    private lazy var conditionsButton = ProfileButton(type: .conditions, target: self, action: #selector(conditionsButtonTapped))
+    private lazy var logoutButton = ProfileButton(type: .signOut, target: self, action: #selector(logoutButtonTapped))
+    
+    
+    // MARK: - Button Actions
+    @objc private func languageButtonTapped() {
+        presenter.didTapChangeLanguage()
+    }
+
+    @objc private func conditionsButtonTapped() {
+        presenter.didTapConditions()
+    }
+
+    @objc private func logoutButtonTapped() {
+        presenter.didTapSignOut()
+    }
     // MARK: - Private Methods
     private func setupViews() {
         [imageView,

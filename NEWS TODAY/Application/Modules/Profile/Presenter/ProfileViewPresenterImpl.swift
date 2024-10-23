@@ -28,6 +28,19 @@ final class ProfileViewPresenterImpl  {
 
 //MARK: - ProfileViewPresenterImpl + ProfileViewPresenter
 extension ProfileViewPresenterImpl: ProfileViewPresenter {
+    
+    func didTapConditions() {
+        router.showTermsView()
+    }
+    
+    func didTapChangeLanguage() {
+        print("didTapChangeLanguage")
+    }
+    
+    func didTapSignOut() {
+        print("didTapSignOut")
+    }
+
     func showUserName() -> String {
         "Bob"
     }

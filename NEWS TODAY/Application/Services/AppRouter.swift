@@ -13,6 +13,9 @@ protocol AppRouter: AnyObject {
     func showCategoriesView()
     func showProfileView()
     func showDetailView()
+    func showTermsView()
+    func popToRoot()
+    func back()
 }
 
 final class AppRouterImpl: AppRouter {
@@ -50,5 +53,20 @@ final class AppRouterImpl: AppRouter {
     func showDetailView() {
         let view = factory.makeDetailModule(self)
         navigation.pushViewController(view, animated: true)
+    }
+    
+    func showTermsView() {
+        let view = factory.makeTermsAndConditionsScreen(self)
+        navigation.pushViewController(view, animated: true)
+    }
+    
+    
+    //MARK: - Pop / back
+    func back() {
+        navigation.popViewController(animated: true)
+    }
+
+    func popToRoot() {
+        navigation.popToRootViewController(animated: true)
     }
 }
