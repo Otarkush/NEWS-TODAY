@@ -9,40 +9,56 @@ import UIKit
 import SwiftUI
 
 #warning("Поменять шрифты, цвета")
-
 class ProfileButton: UIButton {
     
+    //MARK: - Type
+    enum ButtonType {
+        case changeLanguage
+        case conditions
+        case signOut
+    }
+    
+    //MARK: - Properties
     
     // MARK: - Init
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(type: ButtonType) {
+        super.init(frame: .zero)
         self.configuration = .plain()
-        setupButton()
+        setupButton(type: type)
         setupConstraints()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupButton()
-        setupConstraints()
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Setup Button Appearance
-    private func setupButton() {
+    private func setupButton(type: ButtonType) {
         
-        configuration?.image = UIImage(named: "angleRight")!
+        translatesAutoresizingMaskIntoConstraints = false
+        configuration?.image = UIImage.angleRight
         configuration?.imagePlacement = .trailing
-        configuration?.imagePadding = 150
+        configuration?.imagePadding = 200
         
-        setTitle("Terms & Conditions", for: .normal)
         titleLabel?.numberOfLines = 1
         titleLabel?.font = .systemFont(ofSize: 16)
         layer.cornerRadius = 12
         backgroundColor = .greyLighter
         tintColor = .darkGray
         
-        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        switch type {
+        case .changeLanguage:
+            setTitle("Language", for: .normal)
+            addTarget(self, action: #selector(changeLanguageTapped), for: .touchUpInside)
+        case .conditions:
+            setTitle("Terms and Conditions", for: .normal)
+            addTarget(self, action: #selector(conditionsTapped), for: .touchUpInside)
+            configuration?.imagePadding = 100
+        case .signOut:
+            setTitle("Sign Out", for: .normal)
+            addTarget(self, action: #selector(SignOutTapped), for: .touchUpInside)
+            configuration?.image = UIImage.signOut
+        }
     }
     
     private func setupConstraints () {
@@ -52,20 +68,20 @@ class ProfileButton: UIButton {
         ])
     }
     
+    @objc private func changeLanguageTapped() {
+        print("Кнопка Language нажата!")
+    }
     
+    @objc private func conditionsTapped() {
+        print("Кнопка Conditions нажата!")
+        
+    }
     
-    @objc private func buttonTapped() {
-        print("Кнопка нажата!")
+    @objc private func SignOutTapped() {
+        print("Кнопка SignOut нажата!")
         
     }
 }
-
-private enum ButtonType {
-    case language
-    case terms
-    case signOut
-}
-
 
 // MARK: - SwiftUI Preview for UIKit View
 struct ProfileButton_Preview: PreviewProvider {
@@ -79,7 +95,7 @@ struct ProfileButton_Preview: PreviewProvider {
 struct ProfileButtonWrapper: UIViewRepresentable {
     
     func makeUIView(context: Context) -> UIView {
-        let button = ProfileButton()
+        let button = ProfileButton(type: .conditions)
         
         
         let containerView = UIView()
@@ -88,10 +104,8 @@ struct ProfileButtonWrapper: UIViewRepresentable {
         
         
         NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             button.widthAnchor.constraint(equalToConstant: 336),
-            button.heightAnchor.constraint(equalToConstant: 56)
+            button.heightAnchor.constraint(equalToConstant: 56),
         ])
         
         return containerView

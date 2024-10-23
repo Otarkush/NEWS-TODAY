@@ -14,23 +14,23 @@ protocol ProfileViewPresenter: AnyObject {
     func showUserImage() -> String
 }
 
-private enum Drawing {
-    static let imageSize: CGFloat = 72
-    static let imageTopPadding: CGFloat = 16
-    static let imageLeadingPadding: CGFloat = 16
-    static let nameLabelLeadingPadding: CGFloat = 24
-    static let emailLabelTopPadding: CGFloat = 8
-}
-
 final class ProfileViewController: UIViewController {
-  
+    
+    //MARK: - Drawing
+    private enum Drawing {
+        static let imageSize: CGFloat = 72
+        static let imageTopPadding: CGFloat = 16
+        static let imageLeadingPadding: CGFloat = 16
+        static let nameLabelLeadingPadding: CGFloat = 24
+        static let emailLabelTopPadding: CGFloat = 8
+        static let languageButtonTopPadding: CGFloat = 50
+        static let conditionsButtonTopPadding: CGFloat = -120
+        static let signOutButtonTopPadding: CGFloat = 30
+    }
+    
     //MARK: - Properties
     private let presenter: ProfileViewPresenter
 
-    private var name: String = .init()
-    private var email: String = .init()
-    private var profileImage: String = .init()
-    
     //MARK: - Init
     init(presenter: ProfileViewPresenter) {
         self.presenter = presenter
@@ -49,7 +49,7 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - UI Elements
-    private lazy var nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .headline)
         label.textColor = .label
@@ -57,14 +57,14 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private lazy var emailLabel: UILabel = {
+    private let emailLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.textColor = .secondaryLabel
@@ -72,10 +72,31 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
+    private let languageButton = ProfileButton(type: .changeLanguage)
+    private let conditionsButton = ProfileButton(type: .conditions)
+    private let logoutButton = ProfileButton(type: .signOut)
+   
     // MARK: - Private Methods
     private func setupViews() {
-        [imageView, nameLabel, emailLabel ].forEach { view.addSubview($0)}
+        [imageView,
+         nameLabel,
+         emailLabel,
+         languageButton,
+         conditionsButton,
+         logoutButton
+        ].forEach { view.addSubview($0)}
+        
+        view.backgroundColor = .white
         updateUI()
+    }
+}
+
+//MARK: - ProfileViewController + ProfileViewDelegate
+extension ProfileViewController: ProfileViewDelegate {
+    func updateUI() {
+        nameLabel.text = presenter.showUserName()
+        emailLabel.text = presenter.showUserEmail()
+        imageView.image = UIImage(named: presenter.showUserImage())
     }
 }
 
@@ -84,7 +105,7 @@ private extension ProfileViewController {
     
      func setUpConstraints() {
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: Drawing.imageTopPadding),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Drawing.imageTopPadding),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Drawing.imageLeadingPadding),
             imageView.widthAnchor.constraint(equalToConstant: Drawing.imageSize),
             imageView.heightAnchor.constraint(equalToConstant: Drawing.imageSize),
@@ -94,17 +115,16 @@ private extension ProfileViewController {
             
             emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: Drawing.emailLabelTopPadding),
             emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            
+            languageButton.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: Drawing.languageButtonTopPadding),
+            languageButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            conditionsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Drawing.conditionsButtonTopPadding),
+            conditionsButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            logoutButton.topAnchor.constraint(equalTo: conditionsButton.bottomAnchor, constant: Drawing.signOutButtonTopPadding),
+            logoutButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
         ])
-    }
-
-}
-
-//MARK: - ProfileViewController + ProfileViewDelegate
-extension ProfileViewController: ProfileViewDelegate {
-    func updateUI() {
-        nameLabel.text = presenter.showUserName()
-        emailLabel.text = presenter.showUserEmail()
-        imageView.image = UIImage(named: presenter.showUserImage())
     }
 }
 
