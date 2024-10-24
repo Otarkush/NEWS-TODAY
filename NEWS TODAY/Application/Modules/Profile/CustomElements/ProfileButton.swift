@@ -19,11 +19,13 @@ class ProfileButton: UIButton {
     }
 
     // MARK: - Init
-    init(type: ButtonType, target: Any?, action: Selector) {
+    init(type: ButtonType, target: AnyObject? = nil, action: Selector? = nil) {
         super.init(frame: .zero)
         self.configuration = .plain()
         setupButton(type: type)
         setupConstraints()
+        
+        guard let action else { return }
         
         addTarget(target, action: action, for: .touchUpInside)
     }

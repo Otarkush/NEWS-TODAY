@@ -56,8 +56,13 @@ final class AppRouterImpl: AppRouter {
     }
     
     func showTermsView() {
+        print("Navigating to Terms and Conditions Screen")
         let view = factory.makeTermsAndConditionsScreen(self)
-        navigation.pushViewController(view, animated: true)
+        if navigation.viewControllers.isEmpty {
+            print("Warning: UINavigationController has no view controllers.")
+        } else {
+            navigation.pushViewController(view, animated: true)
+        }
     }
     
     

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ProfileViewDelegate: AnyObject {
-    func updateUI()
+    func updateUI(_ viewModel: ProfileViewModel)
 }
 
 final class ProfileViewPresenterImpl  {
@@ -29,27 +29,43 @@ final class ProfileViewPresenterImpl  {
 //MARK: - ProfileViewPresenterImpl + ProfileViewPresenter
 extension ProfileViewPresenterImpl: ProfileViewPresenter {
     
-    func didTapConditions() {
-        router.showTermsView()
+    func viewDidLoad() {
+        view?.updateUI(
+            ProfileViewModel(
+                userName: show(credentials: .name),
+                email: show(credentials: .email),
+                imageName: show(credentials: .image)
+            )
+        )
     }
     
-    func didTapChangeLanguage() {
-        print("didTapChangeLanguage")
+    func show(credentials: Credentials) -> String {
+        switch credentials {
+        case .name:
+                .init()
+        case .email:
+                .init()
+        case .image:
+                .init()
+        }
     }
     
-    func didTapSignOut() {
-        print("didTapSignOut")
-    }
-
-    func showUserName() -> String {
-        "Bob"
-    }
-    
-    func showUserEmail() -> String {
-       "Bob1@gmail.com"
-    }
-    
-    func showUserImage() -> String {
-        "profilePhoto"
+    func didTap(button interaction: Interaction) {
+        switch interaction {
+        case .signOut:
+            router.showTermsView()
+        case .changeLanguage:
+            router.showTermsView()
+        case .conditions:
+            router.showTermsView()
+        }
     }
 }
+
+//MARK: - ViewModel experiment
+struct ProfileViewModel {
+    let userName: String
+    let email: String
+    let imageName: String
+}
+
