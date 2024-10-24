@@ -50,10 +50,7 @@ extension AppFactoryImpl: AppFactory {
         let bookmarksModule = makeBookmarksModule(router)
         let profileModule = makeProfileModule(router)
         
-        let homeNavController = UINavigationController(rootViewController: homeModule)
-        
-        
-        tabBarController.viewControllers = [homeNavController, categoriesModule,bookmarksModule ,profileModule]
+        tabBarController.viewControllers = [homeModule, categoriesModule,bookmarksModule ,profileModule]
         
         return tabBarController
     }
@@ -67,11 +64,7 @@ extension AppFactoryImpl: AppFactory {
         
         let viewController = HomeViewController(presenter: presenter)
         presenter.view = viewController
-        #warning("Норм pдесь создавать табБар итемы?")
-        viewController.tabBarItem = UITabBarItem(
-            title: "Home",
-            image: UIImage(systemName: "house"),
-            selectedImage: UIImage(systemName: "house.fill"))
+        viewController.tabBarItem = makeTabItem(.home)
         
         return viewController
     }
@@ -84,10 +77,7 @@ extension AppFactoryImpl: AppFactory {
         let viewController = CategoriesViewController(presenter: presenter)
         presenter.view = viewController
         
-        viewController.tabBarItem = UITabBarItem(
-            title: "Categories",
-            image: UIImage(systemName: "square.grid.2x2"),
-            selectedImage: UIImage(systemName: "square.grid.2x2.fill"))
+        viewController.tabBarItem = makeTabItem(.categories)
         
         return viewController
     }
@@ -100,10 +90,7 @@ extension AppFactoryImpl: AppFactory {
         let viewController = BookmarksViewController(presenter: presenter)
         presenter.view = viewController
         
-        viewController.tabBarItem = UITabBarItem(
-            title: "Bookmarks",
-            image: UIImage(systemName: "bookmark"),
-            selectedImage: UIImage(systemName: "bookmark.fill"))
+        viewController.tabBarItem = makeTabItem(.bookmarks)
         
         return viewController
     }
@@ -113,13 +100,10 @@ extension AppFactoryImpl: AppFactory {
             networking: networking,
             router: router)
         
-        let viewController = ProfileViewController(presenter: presenter)
+        let viewController = ProfileViewController(presenter: presenter, profileView: ProfileViewImpl())
         presenter.view = viewController
         
-        viewController.tabBarItem = UITabBarItem(
-            title: "Profile",
-            image: UIImage(systemName: "person"),
-            selectedImage: UIImage(systemName: "person.fill"))
+        viewController.tabBarItem = makeTabItem(.profile)
         
         return viewController
     }
@@ -148,10 +132,44 @@ extension AppFactoryImpl: AppFactory {
     }
     
     //MARK: - Create screens
-#warning("Здесь не стал делать презентер, кнопка бек через метод router.pop")
-   func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController {
-        let viewController = TermsViewController(
-            router: router)
+    func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController {
+        let viewController = TermsViewController(router: router)
         return viewController
     }
+    
+    //MARK: - create TabBarItems
+    
+    enum TabType: String {
+        case home
+        case categories
+        case bookmarks
+        case profile
+        
+        var title: String { rawValue.uppercased() }
+        
+        var imageNormal: UIImage? {
+            switch self {
+            case .home: UIImage(systemName: "house")
+            case .categories: UIImage(systemName: "square.grid.2x2")
+            case .bookmarks: UIImage(systemName: "bookmark")
+            case .profile: UIImage(systemName: "person")
+            }
+        }
+        
+        var imageSelected: UIImage? {
+            switch self {
+            case .home: UIImage(systemName: "house.fill")
+            case .categories: UIImage(systemName: "square.grid.2x2.fill")
+            case .bookmarks: UIImage(systemName: "bookmark.fill")
+            case .profile: UIImage(systemName: "person.fill")
+            }
+        }
+    }
+    
+    func makeTabItem(_ type: TabType) -> UITabBarItem {
+        UITabBarItem(title: type.title, image: type.imageNormal, selectedImage: type.imageSelected)
+    }
+   
+
+    
 }
