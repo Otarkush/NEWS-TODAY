@@ -19,7 +19,7 @@ protocol ProfileView: UIView {
 }
 
 enum Credentials { case  name, email, image }
-enum Interaction { case signOut, changeLanguage, conditions}
+enum Interaction { case signOut, changeLanguage, conditions, chooseLanguage, backButton}
 
 protocol ProfileViewPresenter: AnyObject {
     func show(credentials: Credentials) -> String
@@ -108,12 +108,6 @@ extension ProfileViewController: ProfileViewDelegate {
     }
 }
 
-//MARK: - ProfileViewController + Constraints
-private extension ProfileViewController {
-    
-     
-}
-
 // MARK: - SwiftUI Preview for UIKit View
 struct ProfileViewController_Preview: PreviewProvider {
     static var previews: some View {
@@ -131,7 +125,8 @@ struct ProfileViewWrapper: UIViewRepresentable {
                 networking: NetworkingManagerImpl(),
                 router: AppRouterImpl(
                     factory: AppFactoryImpl(),
-                    navigation: UINavigationController())),profileView: ProfileViewImpl())
+                    navigation: UINavigationController())),
+            profileView: ProfileViewImpl())
         
         return profileViewController.view
     }

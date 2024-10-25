@@ -12,7 +12,7 @@ final class ProfileViewImpl: UIView, ProfileView {
     // MARK: - UI Elements
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
+        label.font = .InterSemiBold(ofSize: 16)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -27,8 +27,8 @@ final class ProfileViewImpl: UIView, ProfileView {
     
     let emailLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .secondaryLabel
+        label.textColor = .greyPrimary
+        label.font = .InterSemiBold(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -60,21 +60,6 @@ final class ProfileViewImpl: UIView, ProfileView {
     lazy var languageButton = ProfileButton(type: .changeLanguage)
     lazy var conditionsButton = ProfileButton(type: .conditions)
     lazy var logoutButton = ProfileButton(type: .signOut)
-
-    
-    // MARK: - Button Actions
-//    @objc private func languageButtonTapped() {
-//        presenter.didTap(button: .changeLanguage)
-//    }
-//
-//    @objc private func conditionsButtonTapped() {
-//        presenter.didTap(button: .conditions)
-//    }
-//
-//    @objc private func logoutButtonTapped() {
-//        presenter.didTap(button: .signOut)
-//    }
-    
     
     //MARK: - Setup Constraints
    private func setUpConstraints() {
