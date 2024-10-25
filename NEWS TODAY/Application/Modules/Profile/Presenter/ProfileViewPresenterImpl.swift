@@ -55,9 +55,13 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
         case .signOut:
             router.showTermsView()
         case .changeLanguage:
-            router.showTermsView()
+            router.showLanguageView()
         case .conditions:
             router.showTermsView()
+        case .chooseLanguage:
+            router.popToRoot()
+        case .backButton:
+            router.back()
         }
     }
 }

@@ -14,6 +14,7 @@ protocol AppRouter: AnyObject {
     func showProfileView()
     func showDetailView()
     func showTermsView()
+    func showLanguageView()
     func popToRoot()
     func back()
 }
@@ -31,37 +32,41 @@ final class AppRouterImpl: AppRouter {
     }
     
     func showHomeView() {
-        let view = factory.makeHomeModule(self)
+        let view = factory.makeScreen(.home, self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showBookmarksView() {
-        let view = factory.makeBookmarksModule(self)
+        let view = factory.makeScreen(.bookmarks, self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showCategoriesView() {
-        let view = factory.makeCategoriesModule(self)
+        let view = factory.makeScreen(.categories,self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showProfileView() {
-        let view = factory.makeProfileModule(self)
+        let view = factory.makeScreen(.profile,self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showDetailView() {
-        let view = factory.makeDetailModule(self)
+        let view = factory.makeScreen(.detail, self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showTermsView() {
-        let view = factory.makeTermsAndConditionsScreen(self)
+        let view = factory.makeScreen(.termsAndConditions, self)
         navigation.pushViewController(view, animated: true)
     }
     
+    func showLanguageView() {
+        let view = factory.makeScreen(.languageSelection,self)
+        navigation.pushViewController(view, animated: true)
+    }
     
-    //MARK: - Pop / back
+    //MARK: - pop/back
     func back() {
         navigation.popViewController(animated: true)
     }
