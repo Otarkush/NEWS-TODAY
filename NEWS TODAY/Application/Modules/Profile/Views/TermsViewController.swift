@@ -28,7 +28,8 @@ final class TermsViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
+        navigationItem.hidesBackButton = true
     }
     
     //MARK: - UI Elements
@@ -57,7 +58,6 @@ final class TermsViewController: UIViewController {
     }()
     
     //MARK: - UI Setup
-    
     private func setupView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentLabel)
@@ -86,7 +86,6 @@ final class TermsViewController: UIViewController {
     }
     
     //MARK: - Actions
-    
     @objc private func backButtonTapped() {
         router.back()
     }

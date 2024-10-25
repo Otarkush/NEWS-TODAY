@@ -42,11 +42,11 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
     func show(credentials: Credentials) -> String {
         switch credentials {
         case .name:
-                .init()
+            "Bob"
         case .email:
-                .init()
+            "Bob@gmail.com"
         case .image:
-                .init()
+            "profilePhoto"
         }
     }
     
