@@ -53,7 +53,7 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
     func didTap(button interaction: Interaction) {
         switch interaction {
         case .signOut:
-            router.showTermsView()
+            router.showDetailView()
         case .changeLanguage:
             router.showLanguageView()
         case .conditions:

@@ -20,7 +20,7 @@ final class LanguageSelectionViewController: UIViewController {
     }
 
     // MARK: - UI Elements
-    private let backButton = BackButton()
+    private let backButton = ActionButton(.darkBack)
     private let titleLabel = TitleLabel(text: Drawing.titleText)
     
     private let englishButton = ProfileButton(type: .chooseLanguage, title: Drawing.englishTitle)

@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 
+//MARK: - Protocols
 protocol ProfileView: UIView {
     var nameLabel: UILabel { get }
     var emailLabel: UILabel { get }
@@ -27,8 +28,8 @@ protocol ProfileViewPresenter: AnyObject {
     func viewDidLoad()
 }
 
+//MARK: - ProfileViewController
 final class ProfileViewController: UIViewController {
-    
     
     //MARK: - Properties
     private let presenter: ProfileViewPresenter

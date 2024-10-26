@@ -45,7 +45,7 @@ final class TermsViewController: UIViewController {
         return textView
     }()
 
-    private let backButton = BackButton()
+    private let backButton = ActionButton(.darkBack)
     private let titleLabel = TitleLabel(text: "Terms & Conditions")
     
     // MARK: - UI Setup
