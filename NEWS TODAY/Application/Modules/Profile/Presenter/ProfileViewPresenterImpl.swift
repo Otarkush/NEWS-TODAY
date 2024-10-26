@@ -66,7 +66,7 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
     }
 }
 
-//MARK: - ViewModel experiment
+//MARK: - ViewModel 
 struct ProfileViewModel {
     let userName: String
     let email: String

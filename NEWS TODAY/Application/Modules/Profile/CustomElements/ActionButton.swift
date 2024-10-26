@@ -39,9 +39,6 @@ final class ActionButton: UIButton {
     private func setupButton(buttonType: ButtonType) {
         translatesAutoresizingMaskIntoConstraints = false
         
-        tintColor = .white
-        backgroundColor = .clear
-        
         switch buttonType {
             case .back:
             setImage(UIImage.leftIcon, for: .normal)
@@ -50,6 +47,7 @@ final class ActionButton: UIButton {
         case .favorite:
             setImage(UIImage.bookmarkIcon, for: .normal)
         case .darkBack:
+            setImage(UIImage.leftIcon.withRenderingMode(.alwaysTemplate), for: .normal)
             tintColor = .greyDarker
         }
     }

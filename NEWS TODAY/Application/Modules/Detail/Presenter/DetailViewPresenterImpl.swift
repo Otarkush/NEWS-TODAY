@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol DetailViewDelegate: AnyObject {}
+protocol DetailViewDelegate: AnyObject {
+    func updateUI(viewModel: DetailViewModel)
+}
 
 final class DetailViewPresenterImpl  {
     
@@ -24,4 +26,27 @@ final class DetailViewPresenterImpl  {
 }
 
 //MARK: - DetailViewPresenterImpl + DetailViewPresenter
-extension DetailViewPresenterImpl: DetailViewPresenter {}
+extension DetailViewPresenterImpl: DetailViewPresenter {
+    func show(data: DetailData) -> String {
+        switch data {
+        case .article:
+            Drawings.detailsText
+        case .category:
+            Drawings.categoryText
+        case .header:
+            Drawings.newsHeaderText
+        case .author:
+            Drawings.authorNameText
+        case .image:
+            "Capital"
+        }
+    }
+    
+    func didTap(button interaction: DetailViewInteraction) {
+        <#code#>
+    }
+    
+    func viewDidLoad() {
+        <#code#>
+    }
+}

@@ -19,7 +19,11 @@ final class ProfileButton: UIButton {
     }
 
     // MARK: - Init
-    init(type: ButtonType, target: AnyObject? = nil, action: Selector? = nil, title: String? = nil) {
+    init(
+        type: ButtonType,
+        target: AnyObject? = nil,
+        action: Selector? = nil,
+        title: String? = nil) {
         super.init(frame: .zero)
         self.setTitle(title, for: .normal)
         self.configuration = .plain()

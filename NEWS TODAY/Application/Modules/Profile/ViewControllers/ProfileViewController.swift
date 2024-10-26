@@ -53,6 +53,7 @@ final class ProfileViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
         presenter.viewDidLoad()
     }
     
@@ -62,7 +63,6 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - Button Actions
-    
     private func setupButtonActions() {
         profileView.languageButton.addAction(
             UIAction { [weak self] _ in

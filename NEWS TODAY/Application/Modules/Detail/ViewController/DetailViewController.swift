@@ -8,7 +8,25 @@
 import UIKit
 import SwiftUI
 
-protocol DetailViewPresenter: AnyObject {}
+enum DetailViewInteraction {
+    case back
+    case favorite
+    case share
+}
+
+enum DetailData {
+    case category
+    case header
+    case article
+    case author
+    case image
+    
+}
+protocol DetailViewPresenter: AnyObject {
+    func show(data: DetailData) -> String
+    func didTap(button interaction: DetailViewInteraction)
+    func viewDidLoad()
+}
 
 final class DetailViewController: UIViewController {
    
@@ -33,6 +51,8 @@ final class DetailViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
+        presenter.viewDidLoad()
     }
     
     override func loadView() {
@@ -41,7 +61,10 @@ final class DetailViewController: UIViewController {
 }
 
 //MARK: - DetailViewController + DetailViewDelegate
-extension DetailViewController: DetailViewDelegate {}
+extension DetailViewController: DetailViewDelegate {
+    func updateUI(viewModel: DetailViewModel) {
+    }
+}
 
 // MARK: - SwiftUI Preview for UIKit View
 struct DetailViewController_Preview: PreviewProvider {
@@ -62,4 +85,13 @@ struct DetailViewWrapper: UIViewRepresentable {
     
     func updateUIView(_ uiView: UIView, context: Context) {
     }
+}
+
+//MARK: - ViewModel experiment
+struct DetailViewModel {
+    let category: String
+    let header: String
+    let imageName: String
+    let author: String
+    let article: String
 }
