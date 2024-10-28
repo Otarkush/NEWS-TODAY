@@ -35,7 +35,6 @@ class DetailViewImpl: UIView, DetailView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage.capital
         return imageView
     }()
     
@@ -47,7 +46,6 @@ class DetailViewImpl: UIView, DetailView {
     
     let categoryLabel: UILabel = {
         let label = UILabel()
-        label.text = Drawings.categoryText
         label.backgroundColor = UIColor.purplePrimary
         label.textColor = .white
         label.font = .InterSemiBold(ofSize: 12)
@@ -60,7 +58,6 @@ class DetailViewImpl: UIView, DetailView {
     
     let detailsTextView: UITextView = {
         let textView = UITextView()
-        textView.text = Drawings.detailsText
         textView.font = .InterRegular(ofSize: 16)
         textView.textColor = .greyDarker
         textView.isEditable = false
@@ -74,12 +71,10 @@ class DetailViewImpl: UIView, DetailView {
     let favoriteButton = ActionButton(.favorite)
     
     let newsHeaderLabel = UILabel(
-        text: Drawings.newsHeaderText,
         font: UIFont.InterBold(ofSize: 20),
         numberOfLines: 2
     )
     let authorNameLabel = UILabel(
-        text: Drawings.authorNameText,
         font: UIFont.InterSemiBold(ofSize: 16)
     )
     let authorGreyLabel = UILabel(

@@ -7,6 +7,20 @@
 
 import Foundation
 
+enum DetailViewInteraction {
+    case back
+    case favorite
+    case share
+}
+
+enum DetailData {
+    case category
+    case header
+    case article
+    case author
+    case image
+}
+
 protocol DetailViewDelegate: AnyObject {
     func updateUI(viewModel: DetailViewModel)
 }
@@ -43,10 +57,25 @@ extension DetailViewPresenterImpl: DetailViewPresenter {
     }
     
     func didTap(button interaction: DetailViewInteraction) {
-        <#code#>
+        switch interaction {
+        case .back:
+            router.back()
+        case .favorite:
+            router.popToRoot()
+        case .share:
+            router.popToRoot()
+        }
     }
     
     func viewDidLoad() {
-        <#code#>
+        view?.updateUI(viewModel:
+                        DetailViewModel(
+                            category: show(data: .category),
+                            header: show(data: .header),
+                            imageName: show(data: .image),
+                            author: show(data: .author),
+                            article: show(data: .article)
+                        )
+        )
     }
 }

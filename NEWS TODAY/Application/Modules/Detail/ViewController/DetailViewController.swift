@@ -8,20 +8,6 @@
 import UIKit
 import SwiftUI
 
-enum DetailViewInteraction {
-    case back
-    case favorite
-    case share
-}
-
-enum DetailData {
-    case category
-    case header
-    case article
-    case author
-    case image
-    
-}
 protocol DetailViewPresenter: AnyObject {
     func show(data: DetailData) -> String
     func didTap(button interaction: DetailViewInteraction)
@@ -53,16 +39,35 @@ final class DetailViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         presenter.viewDidLoad()
+        setupActions()
     }
     
     override func loadView() {
         view = detailView
+    }
+    
+    private func setupActions() {
+        detailView.backButton.addAction(
+            UIAction { [weak self] _ in
+                self?.backButtonTapped()
+            },
+            for: .touchUpInside
+        )
+    }
+    
+    private func backButtonTapped() {
+        presenter.didTap(button: .back)
     }
 }
 
 //MARK: - DetailViewController + DetailViewDelegate
 extension DetailViewController: DetailViewDelegate {
     func updateUI(viewModel: DetailViewModel) {
+        detailView.imageView.image = UIImage(named: viewModel.imageName)
+        detailView.authorNameLabel.text = viewModel.author
+        detailView.newsHeaderLabel.text = viewModel.header
+        detailView.categoryLabel.text = viewModel.category
+        detailView.detailsTextView.text = viewModel.article
     }
 }
 

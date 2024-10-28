@@ -10,7 +10,7 @@ import UIKit
 extension UILabel {
 
     convenience init(
-        text: String,
+        text: String? = "",
         font: UIFont? = nil,
         textColor: UIColor = .white,
         numberOfLines: Int = 0
