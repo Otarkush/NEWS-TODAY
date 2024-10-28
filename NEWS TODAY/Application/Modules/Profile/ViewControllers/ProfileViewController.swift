@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 
+//MARK: - Protocols
 protocol ProfileView: UIView {
     var nameLabel: UILabel { get }
     var emailLabel: UILabel { get }
@@ -27,8 +28,8 @@ protocol ProfileViewPresenter: AnyObject {
     func viewDidLoad()
 }
 
+//MARK: - ProfileViewController
 final class ProfileViewController: UIViewController {
-    
     
     //MARK: - Properties
     private let presenter: ProfileViewPresenter
@@ -52,6 +53,7 @@ final class ProfileViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
         presenter.viewDidLoad()
     }
     
@@ -61,7 +63,6 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - Button Actions
-    
     private func setupButtonActions() {
         profileView.languageButton.addAction(
             UIAction { [weak self] _ in

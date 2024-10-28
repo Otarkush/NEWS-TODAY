@@ -53,7 +53,7 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
     func didTap(button interaction: Interaction) {
         switch interaction {
         case .signOut:
-            router.showTermsView()
+            router.showDetailView()
         case .changeLanguage:
             router.showLanguageView()
         case .conditions:
@@ -66,7 +66,7 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
     }
 }
 
-//MARK: - ViewModel experiment
+//MARK: - ViewModel 
 struct ProfileViewModel {
     let userName: String
     let email: String

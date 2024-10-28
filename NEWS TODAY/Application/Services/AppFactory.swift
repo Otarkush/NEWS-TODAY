@@ -62,7 +62,7 @@ extension AppFactoryImpl: AppFactory {
                 networking: networking,
                 router: router)
             
-            let viewController = DetailViewController(presenter: presenter)
+            let viewController = DetailViewController(presenter: presenter, detailView: DetailViewImpl())
             presenter.view = viewController
             return viewController
             

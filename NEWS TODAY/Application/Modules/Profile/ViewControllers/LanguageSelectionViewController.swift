@@ -20,7 +20,7 @@ final class LanguageSelectionViewController: UIViewController {
     }
 
     // MARK: - UI Elements
-    private let backButton = BackButton()
+    private let backButton = ActionButton(.darkBack)
     private let titleLabel = TitleLabel(text: Drawing.titleText)
     
     private let englishButton = ProfileButton(type: .chooseLanguage, title: Drawing.englishTitle)
@@ -108,6 +108,18 @@ final class LanguageSelectionViewController: UIViewController {
             englishButton.setTitleColor(.darkGray, for: .normal)
         }
     }
+    // MARK: - Drawing Constants
+    private enum Drawing {
+        static let titleText = "Language"
+        static let englishTitle = "English"
+        static let russianTitle = "Русский"
+        static let defaultLanguage = "English"
+        static let initError = "init(coder:) has not been implemented"
+        
+        static let sidePadding: CGFloat = 16
+        static let buttonHeight: CGFloat = 56
+        static let buttonSpacing: CGFloat = 16
+    }
 }
 
 //MARK: -  LanguageSelectionViewController + ProfileViewDelegate
@@ -140,15 +152,4 @@ struct LanguageSelectionViewControllerWrapper: UIViewRepresentable {
     }
 }
 
-// MARK: - Drawing Constants
-private enum Drawing {
-    static let titleText = "Language"
-    static let englishTitle = "English"
-    static let russianTitle = "Русский"
-    static let defaultLanguage = "English"
-    static let initError = "init(coder:) has not been implemented"
-    
-    static let sidePadding: CGFloat = 16
-    static let buttonHeight: CGFloat = 56
-    static let buttonSpacing: CGFloat = 16
-}
+
