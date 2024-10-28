@@ -125,34 +125,32 @@ extension AppFactoryImpl: AppFactory {
     }
     
     //MARK: - create TabBarItems
-    enum TabType: String {
+    enum TabType {
         case home
         case categories
         case bookmarks
         case profile
         
-        var title: String { rawValue.uppercased() }
-        
         var imageNormal: UIImage? {
             switch self {
-            case .home: UIImage(systemName: "house")
-            case .categories: UIImage(systemName: "square.grid.2x2")
-            case .bookmarks: UIImage(systemName: "bookmark")
-            case .profile: UIImage(systemName: "person")
+            case .home: UIImage.home
+            case .categories: UIImage.categories
+            case .bookmarks: UIImage.bookmarks
+            case .profile: UIImage.profile
             }
         }
         
         var imageSelected: UIImage? {
             switch self {
-            case .home: UIImage(systemName: "house.fill")
-            case .categories: UIImage(systemName: "square.grid.2x2.fill")
-            case .bookmarks: UIImage(systemName: "bookmark.fill")
-            case .profile: UIImage(systemName: "person.fill")
+            case .home: UIImage.homeSelected
+            case .categories: UIImage.categoriesSelected
+            case .bookmarks: UIImage.bookmarksSelected
+            case .profile: UIImage.profileSelected
             }
         }
     }
     
     func makeTabItem(_ type: TabType) -> UITabBarItem {
-        UITabBarItem(title: type.title, image: type.imageNormal, selectedImage: type.imageSelected)
+        UITabBarItem(title: nil, image: type.imageNormal, selectedImage: type.imageSelected)
     }
 }
