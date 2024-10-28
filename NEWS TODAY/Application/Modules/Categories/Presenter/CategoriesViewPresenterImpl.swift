@@ -8,7 +8,9 @@
 
 import Foundation
 
-protocol CategoriesViewDelegate: AnyObject {}
+protocol CategoriesViewDelegate: AnyObject {
+    func updateUI(with categories: [Category])
+}
 
 final class CategoriesViewPresenterImpl  {
   
@@ -26,4 +28,13 @@ final class CategoriesViewPresenterImpl  {
 }
 
 //MARK: - CategoriesViewPresenterImpl + CategoriesViewPresenter
-extension CategoriesViewPresenterImpl: CategoriesViewPresenter {}
+extension CategoriesViewPresenterImpl: CategoriesViewPresenter {
+    
+    func fetchCategories() -> [Category] {
+        Categories.all
+    }
+    
+    func viewDidLoad() {
+        view?.updateUI(with: fetchCategories())
+    }
+}
