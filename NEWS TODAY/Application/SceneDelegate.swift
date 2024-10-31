@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Repository
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,6 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
     
         window = UIWindow(windowScene: windowScene)
+        
+        Task { await NewsRepository.shared.register() }
         
         let navigationController = UINavigationController()
         let factory = AppFactoryImpl()
