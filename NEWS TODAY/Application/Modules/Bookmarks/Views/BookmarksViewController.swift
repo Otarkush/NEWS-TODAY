@@ -64,15 +64,17 @@ final class BookmarksViewController: UIViewController, BookmarksViewControllerPr
         presenter.viewDidLoad()
     }
     
-//    func viewWillAppear() {
-//        super.viewWillAppear()
-//
-//        presenter.viewWillAppear()
-//    }
-//    
-//    override func viewdiddisappear
-//        
-//    }
+    func viewWillAppear() {
+        super.viewWillAppear()
+        
+        presenter.viewWillAppear()
+    }
+    
+    func viewDidDisappear() {
+        super.viewDidDisappear()
+        
+        presenter.viewDidDisappear()
+    }
     //MARK: - Public Methods
     
     func updateEmptyViewVisibility() {
