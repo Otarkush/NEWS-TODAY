@@ -23,8 +23,6 @@ final class OnboardingViewPresenterImpl {
         self.networking = networking
         self.router = router
     }
-    
-    
 }
 
 //MARK: - OnboardingPresenterImpl + OnboardingViewPresenter
