@@ -69,11 +69,21 @@ class OnboardingViewImpl: UIView, OnboardingView {
         [imageView, firstToKnowLabel, descriptionLabel, nextButton].forEach(addSubview)
     }
 
-    func setupSlideUI(image: String, title: String?, description: String, nextButtonTitle: String) {
+    func setupSlideUI(
+        image: String,
+        title: String?,
+        description: String,
+        nextButtonTitle: String,
+        target: AnyObject?,
+        action: Selector?
+    ) {
+            
         imageView.image = UIImage(named: image)
         firstToKnowLabel.text = title
         descriptionLabel.text = description
         nextButton.setTitle(nextButtonTitle, for: .normal)
+        guard let action else { return }
+        nextButton.addTarget(target, action: action, for: .touchUpInside)
     }
     
     public func setPageLabelTransform(transform: CGAffineTransform) {

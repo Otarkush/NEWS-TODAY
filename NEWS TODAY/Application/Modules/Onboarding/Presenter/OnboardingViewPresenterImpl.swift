@@ -23,21 +23,15 @@ final class OnboardingViewPresenterImpl {
         self.networking = networking
         self.router = router
     }
+    
+    
 }
 
 //MARK: - OnboardingPresenterImpl + OnboardingViewPresenter
 extension OnboardingViewPresenterImpl: OnboardingViewPresenter {
-    func setUpSlidesScrollView(slides: [OnboardingView]) {
+
+    func didTapNext() {
         
     }
-
     
-    
-//    func setUpSlidesScrollView(slides: [OnboardingView]) {
-//        view.onboardingView.scrollView.contentSize = CGSize(width: view.frame.width * CGFloat(slides.count), height: view.frame.height)
-//    }
-
-    
-    func setupUI() {
-    }
 }
