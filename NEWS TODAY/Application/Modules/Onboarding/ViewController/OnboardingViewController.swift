@@ -9,10 +9,10 @@ import UIKit
 import SwiftUI
 
 protocol OnboardingViewPresenter: AnyObject {
-    func setupUI()
+   
 }
 
-final class OnboardingViewController: UIViewController, UIScrollViewDelegate {
+final class OnboardingViewController: UIViewController {
     
     //MARK: - Properties
     private let presenter: OnboardingViewPresenter?
@@ -52,9 +52,9 @@ final class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         scrollView.delegate = self
         setupView()
-        setupConstraints()
         slides = createSlides()
         setUpSlidesScrollView(slides: slides)
+        setupConstraints()
     }
     
     // MARK: - Methods
@@ -67,23 +67,23 @@ final class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         slide1.setupSlideUI(
             image: "onb1",
             title: "First to know",
-            description: "Save articles to your library",
+            description: "All news in one place, be the first to know last news",
             nextButtonTitle: "Next"
         )
         
         let slide2 = OnboardingViewImpl()
         slide2.setupSlideUI(
             image: "onb2",
-            title: nil,
-            description: "Save articles to your library",
+            title: "Customize Your Feed",
+            description: "Choose topics , so you only see the news that matters.",
             nextButtonTitle: "Next"
         )
         
         let slide3 = OnboardingViewImpl()
         slide3.setupSlideUI(
             image: "onb3",
-            title: nil ,
-            description: "Select your favorite topics" ,
+            title: "Ready to Begin?" ,
+            description: "Explore the latest stories, customize your experience!" ,
             nextButtonTitle: "Get Started"
         )
         
@@ -104,11 +104,34 @@ final class OnboardingViewController: UIViewController, UIScrollViewDelegate {
             scrollView.addSubview(slides[i])
         }
     }
-    
+}
+
+extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-         let pageIndex = round(scrollView.contentOffset.x / view.frame.width)
-         pageControl.currentPage = Int(pageIndex)
-     }
+        let pageIndex = round(scrollView.contentOffset.x / view.frame.width)
+        pageControl.currentPage = Int(pageIndex)
+        
+        let maxHorizontalOffset = scrollView.contentSize.width - view.frame.width
+        let percentHorizontalOffset = scrollView.contentOffset.x / maxHorizontalOffset
+        
+        if percentHorizontalOffset <= 0.5 {
+            let firstTransform = CGAffineTransform(scaleX: (0.5 - percentHorizontalOffset) / 0.5,
+                                                   y: (0.5 - percentHorizontalOffset) / 0.5)
+            let secondTransform = CGAffineTransform(scaleX: percentHorizontalOffset / 0.5,
+                                                    y: percentHorizontalOffset / 0.5)
+            
+            slides[0].setPageLabelTransform(transform: firstTransform)
+            slides[1].setPageLabelTransform(transform: secondTransform)
+        } else {
+            let secondTransform = CGAffineTransform(scaleX: (1 - percentHorizontalOffset) / 0.5,
+                                                    y: (1 - percentHorizontalOffset) / 0.5)
+            let thirdTransform = CGAffineTransform(scaleX: percentHorizontalOffset,
+                                                   y: percentHorizontalOffset)
+            
+            slides[1].setPageLabelTransform(transform: secondTransform)
+            slides[2].setPageLabelTransform(transform: thirdTransform)
+        }
+    }
 }
 
 //MARK: - OnboardingViewController + OnboardingViewDelegate
@@ -127,31 +150,28 @@ extension OnboardingViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            pageControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 490),
+            pageControl.topAnchor.constraint(equalTo: slides[0].imageView.bottomAnchor, constant: 40),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
+}
+
+// MARK: - SwiftUI Preview for UIKit View
+struct OnbViewController_Preview: PreviewProvider {
+    static var previews: some View {
+        OnboardingViewWrapper()
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}
+
+struct OnboardingViewWrapper: UIViewRepresentable {
     
-    
-    // MARK: - SwiftUI Preview for UIKit View
-    struct OnbViewController_Preview: PreviewProvider {
-        static var previews: some View {
-            OnboardingViewWrapper()
-                .previewLayout(.sizeThatFits)
-                .padding()
-        }
+    func makeUIView(context: Context) -> UIView {
+        let onboardingViewController = OnboardingViewController(presenter: OnboardingViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        
+        return onboardingViewController.view
     }
     
-    struct OnboardingViewWrapper: UIViewRepresentable {
-        
-        func makeUIView(context: Context) -> UIView {
-            let onboardingViewController = OnboardingViewController(presenter: OnboardingViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
-            
-            return onboardingViewController.view
-        }
-        
-        func updateUIView(_ uiView: UIView, context: Context) {
-            
-        }
-    }
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }

@@ -10,7 +10,8 @@ import SwiftUI
 
 //MARK: - Protocols
 protocol OnboardingView: UIView {
- 
+    func setPageLabelTransform(transform: CGAffineTransform)
+    var imageView: UIImageView { get }
 }
 
 class OnboardingViewImpl: UIView, OnboardingView {
@@ -34,9 +35,11 @@ class OnboardingViewImpl: UIView, OnboardingView {
     
     internal let descriptionLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 2
         label.font = .InterRegular(ofSize: 16)
         label.textColor = .greyPrimary
         label.numberOfLines = 2
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -73,6 +76,10 @@ class OnboardingViewImpl: UIView, OnboardingView {
         nextButton.setTitle(nextButtonTitle, for: .normal)
     }
     
+    public func setPageLabelTransform(transform: CGAffineTransform) {
+        imageView.transform = transform
+    }
+    
     // MARK: - setupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -80,18 +87,19 @@ class OnboardingViewImpl: UIView, OnboardingView {
             imageView.topAnchor.constraint(equalTo: topAnchor),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 400),
+            imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.55),
             
-            firstToKnowLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 82),
+            firstToKnowLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 100),
             firstToKnowLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: firstToKnowLabel.bottomAnchor, constant: 15),
-            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
+            descriptionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 50),
+            descriptionLabel.widthAnchor.constraint(equalToConstant: 220),
             
-            nextButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
+            nextButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
             nextButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            nextButton.widthAnchor.constraint(equalToConstant: 250),
+            nextButton.widthAnchor.constraint(equalToConstant: 330),
             nextButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
