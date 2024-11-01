@@ -15,6 +15,7 @@ protocol AppRouter: AnyObject {
     func showDetailView()
     func showTermsView()
     func showLanguageView()
+    func showOnboarding()
     func popToRoot()
     func back()
 }
@@ -63,6 +64,11 @@ final class AppRouterImpl: AppRouter {
     
     func showLanguageView() {
         let view = factory.makeScreen(.languageSelection,self)
+        navigation.pushViewController(view, animated: true)
+    }
+    
+    func showOnboarding() {
+        let view = factory.makeScreen(.onboarding, self)
         navigation.pushViewController(view, animated: true)
     }
     

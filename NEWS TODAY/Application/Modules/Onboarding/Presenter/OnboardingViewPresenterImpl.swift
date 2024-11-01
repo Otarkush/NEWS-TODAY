@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol OnboardingViewDelegate: AnyObject {}
+protocol OnboardingViewDelegate: AnyObject {
+    func updateUI()
+}
 
 final class OnboardingViewPresenterImpl {
     
@@ -21,7 +23,15 @@ final class OnboardingViewPresenterImpl {
         self.networking = networking
         self.router = router
     }
+    
+    
 }
 
 //MARK: - OnboardingPresenterImpl + OnboardingViewPresenter
-extension OnboardingViewPresenterImpl: OnboardingViewPresenter {}
+extension OnboardingViewPresenterImpl: OnboardingViewPresenter {
+
+    func didTapNext() {
+        
+    }
+    
+}

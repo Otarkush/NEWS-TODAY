@@ -159,7 +159,7 @@ final class CategoriesViewController: UIViewController {
             }
             self.selectedCategories.append(category)
         }
-        let selectedCategoryNames = self.selectedCategories.map { $0.name }
+        _ = self.selectedCategories.map { $0.name }
     }
     }
 
