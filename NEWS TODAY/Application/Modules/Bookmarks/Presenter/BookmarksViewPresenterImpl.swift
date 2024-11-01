@@ -1,48 +1,73 @@
-import Foundation
 import UIKit
+import NetworkManager
+import PersistenceManager
+import Repository
+import Models
 
-protocol BookmarksViewDelegate: AnyObject {
-    var bookmarkCount: Int { get }
-    func getBookmark(at index: Int) -> Article
-    func viewDidLoad()
-    func didEditingDelete(at indexPath: IndexPath)
+protocol BookmarkViewDelegate: AnyObject {
+    
 }
 
-final class BookmarksViewPresenterImpl: BookmarksViewDelegate {
+final class BookmarksViewPresenterImpl {
     
     //MARK: - Properties
-    weak var BookmarksViewControllerProtocol: BookmarksViewDelegate?
+    
+    private var news: [Article] = .init()
     private let networking: AppNetworking
     private let router: AppRouter
-    
-    var bookmarks: [Article] = []
+    weak var view: BookmarkViewDelegate?
     
     //MARK: - Init
     init(networking: AppNetworking,
          router: AppRouter) {
         self.networking = networking
         self.router = router
+        Task { await fetchArticles() }
     }
     
-    var bookmarkCount: Int {
-        return bookmarks.count
+    func fetchArticles() async {
+        let result = await NewsRepository.shared.loadArticles()
+        
+        switch result {
+        case .success(let articles): self.news = articles
+            print("Загруженные статьи: \(articles)")
+        case .failure(let error):
+            print("Ошибка при загрузке статей: \(error)")
+        }
+    }
+        
     }
     
-    func getBookmark(at index: Int) -> Article {
-        return getBookmark[index]
-    }
-    
-    func viewDidLoad() {
-        BookmarksViewPresenter?.reloadTableView()
-    }
-    
-    func didEditingDelete(at indexPath: IndexPath) {
-        self.bookmarks.remove(at: indexPath.row)
-        self.BookmarksViewControllerProtocol?.reloadTableView()
-    }
-  
-  
-}
+    //    var bookmarkCount: Int {
+    //        return bookmarks.count
+    //    }
+    //
+    //    func getBookmark(at index: Int) -> Article {
+    //        return getBookmark[index]
+    //    }
+    //
+    //    func viewDidLoad() {
+    //        BookmarksViewPresenterImpl.reloadTableView()
+    //    }
+    //
+    //    func didEditingDelete(at indexPath: IndexPath) {
+    //        self.bookmarks.remove(at: indexPath.row)
+    //        self.BookmarksViewPresenterProtocol?.reloadTableView()
+    //    }
+    //
+    //
+    //}
 
 //MARK: - BookmarksViewPresenterImpl + BookmarksViewPresenter
-//extension BookmarksViewPresenterImpl: BookmarksViewPresenter? {}
+extension BookmarksViewPresenterImpl: BookmarksViewPresenter {
+    func newsCount() -> Int {
+        news.count
+    }
+    
+    func didTapCell() {
+        router.showDetailView()
+    }
+    
+        
+ 
+}

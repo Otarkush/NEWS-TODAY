@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import NetworkManager
+import PersistenceManager
+import Repository
 
 enum Screens {case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection}
 

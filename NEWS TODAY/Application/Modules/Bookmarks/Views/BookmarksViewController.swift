@@ -9,19 +9,15 @@
 import UIKit
 
 protocol BookmarksViewPresenter: AnyObject {
-    func viewDidLoad()
-    func viewWillAppear()
-    func viewDidDisappear()
-    func reloadTableView()
+    
+    func newsCount() -> Int
+    func didTapCell()
 }
 
-protocol BookmarksViewControllerProtocol: AnyObject {
-    func reloadTableView()
-}
-
-final class BookmarksViewController: UIViewController, BookmarksViewControllerProtocol {
+class BookmarksViewController: UIViewController {
   
     //MARK: - Properties
+    
     private let tableView = UITableView()
     private let presenter: BookmarksViewPresenter
     
@@ -60,33 +56,20 @@ final class BookmarksViewController: UIViewController, BookmarksViewControllerPr
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .blue
-        
-        presenter.viewDidLoad()
     }
     
-    func viewWillAppear() {
-        super.viewWillAppear()
+    override func viewDidDisappear(_ animated: Bool) {
         
-        presenter.viewWillAppear()
-    }
-    
-    func viewDidDisappear() {
-        super.viewDidDisappear()
-        
-        presenter.viewDidDisappear()
     }
     //MARK: - Public Methods
     
-    func updateEmptyViewVisibility() {
-            emptyView.isHidden = presenter.bookmarkCount > 0
-        }
-    
+//    func updateEmptyViewVisibility() {
+//            emptyView.isHidden = presenter.bookmarkCount > 0
+//        }
+//    
     func configureTableView() {
         tableView.rowHeight = 96
         tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(BookmarkCell.self, forCellReuseIdentifier: BookmarkCell.reuseID)
     }
     
     func setupViews() {
@@ -96,16 +79,23 @@ final class BookmarksViewController: UIViewController, BookmarksViewControllerPr
 
 
 //MARK: - BookmarksViewController + BookmarksViewDelegate
-extension BookmarksViewController: BookmarksViewPresenter {
-    @nonobjc func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+extension BookmarksViewController: BookmarkViewDelegate {
     
-    @objc(tableView:cellForRowAtIndexPath:) func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+}
+
+extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        presenter.newsCount()
     }
     
-    func reloadTableView() {
-        tableView.reloadData()
-        updateEmptyViewVisibility()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.
+        return
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        presenter.didTapCell()
     }
 }
+
 
