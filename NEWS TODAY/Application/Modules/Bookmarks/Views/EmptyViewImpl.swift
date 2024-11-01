@@ -43,7 +43,7 @@ final class EmptyView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-        setupConstraints()
+//        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -57,21 +57,21 @@ final class EmptyView: UIView {
 }
 
 extension EmptyView {
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabelBig.topAnchor.constraint(equalTo: self.topAnchor, constant: 72),
-            titleLabelBig.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            
-            messageLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
-            messageLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            
-            greyImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
-            greyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            
-            bookImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
-            bookImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            
-        ])
-    }
+//    func setupConstraints() {
+//        NSLayoutConstraint.activate([
+//            titleLabelBig.topAnchor.constraint(equalTo: self.topAnchor, constant: 72),
+//            titleLabelBig.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+//            
+//            messageLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
+//            messageLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            
+//            greyImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
+//            greyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            
+//            bookImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 418),
+//            bookImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            
+//        ])
+//    }
     
 }
