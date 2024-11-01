@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Category {
+struct Category: Hashable {
     let name: String
     let emoji: String
     let id: Int
