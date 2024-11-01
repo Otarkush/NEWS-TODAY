@@ -10,31 +10,13 @@ import SwiftUI
 
 //MARK: - Protocols
 protocol OnboardingView: UIView {
-    var scrollView: UIScrollView { get }
-    var pageControl: UIPageControl { get }
+ 
 }
 
 class OnboardingViewImpl: UIView, OnboardingView {
     
-    //MARK: - UI
-    internal let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-    
-    internal let pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.numberOfPages = 3
-        pageControl.pageIndicatorTintColor = .greyLighter
-        pageControl.currentPageIndicatorTintColor = .purplePrimary
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        return pageControl
-    }()
-    
     internal let imageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage.onb1
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -42,108 +24,75 @@ class OnboardingViewImpl: UIView, OnboardingView {
         return image
     }()
     
-    internal let firstToKnowLabel = UILabel(
-        text: "First to know",
-        font: .InterSemiBold(ofSize: 24),
-        textColor: .blackPrimary
-    )
+    internal let firstToKnowLabel: UILabel = {
+        let label = UILabel()
+        label.font = .InterSemiBold(ofSize: 24)
+        label.textColor = .blackPrimary
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    internal let descriptionLabel = UILabel(
-        text: "Get the latest news and updates from our team",
-        font: .InterRegular(ofSize: 16),
-        textColor: .greyPrimary,
-        numberOfLines: 2
-    )
+    internal let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = .InterRegular(ofSize: 16)
+        label.textColor = .greyPrimary
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    internal let nextButton = UIButton(initPurpleButton: .purplePrimary, text: "Next"
-        )
+    internal let nextButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .purplePrimary
+        button.layer.cornerRadius = 10
+        button.setTitleColor(.white, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
-    //MARK: - Init
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupConstraints()
+        backgroundColor = .white
     }
-        
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Methods
-    private func setupView(){
-        [scrollView,
-         pageControl,
-         imageView,
-         firstToKnowLabel,
-         descriptionLabel,
-         nextButton
-        ].forEach(addSubview)
+    private func setupView() {
+        [imageView, firstToKnowLabel, descriptionLabel, nextButton].forEach(addSubview)
     }
-    
-    func configureView(
-        firstText: String?,
-        descriptionText: String,
-        nextText: String,
-        image: String
-    ) {
-        firstToKnowLabel.text = firstText
-        descriptionLabel.text = descriptionText
-        nextButton.titleLabel?.text = nextText
+
+    func setupSlideUI(image: String, title: String?, description: String, nextButtonTitle: String) {
         imageView.image = UIImage(named: image)
+        firstToKnowLabel.text = title
+        descriptionLabel.text = description
+        nextButton.setTitle(nextButtonTitle, for: .normal)
     }
     
-    func setUpSlidesScrollView(slides: [OnboardingView]) {
-        scrollView.contentSize = CGSize(width: frame.width * CGFloat(slides.count), height: frame.height)
-    }
-
-    //MARK: - setupConstraints
-    private func setupConstraints(){
-        
+    // MARK: - setupConstraints
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 336),
             
-            pageControl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 30),
-            pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 400),
             
-            firstToKnowLabel.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 30),
+            firstToKnowLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 82),
             firstToKnowLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            descriptionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: firstToKnowLabel.bottomAnchor, constant: 30),
-            descriptionLabel.heightAnchor.constraint(equalToConstant: 40),
-            descriptionLabel.widthAnchor.constraint(equalToConstant: 200),
+            descriptionLabel.topAnchor.constraint(equalTo: firstToKnowLabel.bottomAnchor, constant: 15),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             
-            nextButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 50),
+            nextButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             nextButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            nextButton.widthAnchor.constraint(equalToConstant: 250),
+            nextButton.heightAnchor.constraint(equalToConstant: 50)
         ])
-    }
-}
-
-// MARK: - SwiftUI Preview for UIKit View
-struct OnbView_Preview: PreviewProvider {
-    static var previews: some View {
-        OnboardingViewWrapper1()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct OnboardingViewWrapper1: UIViewRepresentable {
-  
-    func makeUIView(context: Context) -> UIView {
-        let onboardingViewController = OnboardingViewImpl()
-        return onboardingViewController
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        
     }
 }

@@ -27,30 +27,10 @@ final class OnboardingViewPresenterImpl {
 
 //MARK: - OnboardingPresenterImpl + OnboardingViewPresenter
 extension OnboardingViewPresenterImpl: OnboardingViewPresenter {
-    func setUpSlidesScrollView(slides: [any OnboardingView]) {
+    func setUpSlidesScrollView(slides: [OnboardingView]) {
         
     }
-    
-#warning("Может лучше на вью этот метод отдать?")
-    func createSlides() -> [OnboardingView] {
-        let firstOnboardingView = OnboardingViewImpl()
-        let secondOnboardingView = OnboardingViewImpl()
-        secondOnboardingView.configureView(
-            firstText: nil,
-            descriptionText: "Save articles to your library",
-            nextText: "Next",
-            image: "onb2"
-        )
-        let thirdOnboardingView = OnboardingViewImpl()
-        thirdOnboardingView.configureView(
-            firstText: nil,
-            descriptionText: "Select your favorite topics",
-            nextText: "Get Started",
-            image: "onb3"
-        )
-        
-        return [firstOnboardingView, secondOnboardingView, thirdOnboardingView]
-    }
+
     
     
 //    func setUpSlidesScrollView(slides: [OnboardingView]) {

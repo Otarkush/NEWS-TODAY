@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBarController = factory.makeTabBar(appRouter)
         navigationController.viewControllers = [tabBarController]
 
-        window?.rootViewController = navigationController
+        window?.rootViewController = factory.makeScreen(.onboarding, appRouter)
         window?.makeKeyAndVisible()
     }
 }

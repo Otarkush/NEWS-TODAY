@@ -91,7 +91,7 @@ extension AppFactoryImpl: AppFactory {
                 networking: networking,
                 router: router)
             
-            let viewController = OnboardingViewController(presenter: presenter, view: OnboardingViewImpl())
+            let viewController = OnboardingViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
             
