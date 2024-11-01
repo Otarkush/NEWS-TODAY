@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 protocol OnboardingViewPresenter: AnyObject {
-   
+    func didTapNext()
 }
 
 final class OnboardingViewController: UIViewController {
@@ -57,6 +57,10 @@ final class OnboardingViewController: UIViewController {
         setupConstraints()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+    
     // MARK: - Methods
     private func setupView() {
         [scrollView, pageControl].forEach(view.addSubview)
@@ -68,15 +72,20 @@ final class OnboardingViewController: UIViewController {
             image: "onb1",
             title: "First to know",
             description: "All news in one place, be the first to know last news",
-            nextButtonTitle: "Next"
+            nextButtonTitle: "Next",
+            target: self,
+            action: #selector(handleNextButtonTap)
         )
+       
         
         let slide2 = OnboardingViewImpl()
         slide2.setupSlideUI(
             image: "onb2",
             title: "Customize Your Feed",
             description: "Choose topics , so you only see the news that matters.",
-            nextButtonTitle: "Next"
+            nextButtonTitle: "Next",
+            target: self,
+            action: #selector(handleNextButtonTap)
         )
         
         let slide3 = OnboardingViewImpl()
@@ -84,7 +93,9 @@ final class OnboardingViewController: UIViewController {
             image: "onb3",
             title: "Ready to Begin?" ,
             description: "Explore the latest stories, customize your experience!" ,
-            nextButtonTitle: "Get Started"
+            nextButtonTitle: "Get Started",
+            target: self,
+            action: #selector(handleNextButtonTap)
         )
         
         return [slide1, slide2, slide3]
@@ -104,7 +115,14 @@ final class OnboardingViewController: UIViewController {
             scrollView.addSubview(slides[i])
         }
     }
+    
+    @objc private func handleNextButtonTap() {
+        presenter?.didTapNext()
+    }
+    
 }
+
+
 
 extension OnboardingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -139,6 +157,14 @@ extension OnboardingViewController: OnboardingViewDelegate {
     func updateUI() {
         
     }
+    
+    
+    func scrollToNextSlide() {
+          let nextPage = min(pageControl.currentPage + 1, slides.count - 1)
+          let offsetX = CGFloat(nextPage) * view.frame.width
+          scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+          pageControl.currentPage = nextPage
+      }
 }
 
 extension OnboardingViewController {
