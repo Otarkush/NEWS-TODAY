@@ -9,6 +9,7 @@ import Foundation
 
 protocol OnboardingViewDelegate: AnyObject {
     func updateUI()
+    func scrollToNextSlide()
 }
 
 final class OnboardingViewPresenterImpl {
@@ -23,15 +24,17 @@ final class OnboardingViewPresenterImpl {
         self.networking = networking
         self.router = router
     }
-    
-    
 }
 
 //MARK: - OnboardingPresenterImpl + OnboardingViewPresenter
 extension OnboardingViewPresenterImpl: OnboardingViewPresenter {
-
+    func didTapStart() {
+        router.showTabBar()
+        UserDefaults.standard.set(true, forKey: "isFirstLaunchCompleted")
+    }
+    
     func didTapNext() {
-        
+        view?.scrollToNextSlide()
     }
     
 }
