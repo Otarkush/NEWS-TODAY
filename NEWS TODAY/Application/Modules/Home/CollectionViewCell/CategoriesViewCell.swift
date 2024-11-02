@@ -27,7 +27,11 @@ class CategoriesViewCell: UICollectionViewCell {
     
     private func commonInit() {
         textLabelConstraints()
-      }
+    }
+    
+    func configure(category: /*NewsCategory*/Category) {
+        button.setTitle(category.name, for: .normal)
+    }
       
     private func textLabelConstraints() {
         addSubview(button)

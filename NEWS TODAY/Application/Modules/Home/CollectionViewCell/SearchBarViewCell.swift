@@ -49,11 +49,15 @@ class SearchBarViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
-      }
+    }
     
     private func commonInit() {
         searchBarConstraints()
-      }
+    }
+    
+    func configure(searchBar: NewSearchBar) {
+        
+    }
       
     private func searchBarConstraints() {
         addSubview(searchBlockStackView)

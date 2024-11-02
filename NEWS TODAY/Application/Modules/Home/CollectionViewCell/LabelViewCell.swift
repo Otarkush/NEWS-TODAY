@@ -27,6 +27,12 @@ class LabelViewCell: UICollectionViewCell {
     private func commonInit() {
         textLabelConstraints()
       }
+    
+    func configure(label: NewHeadersTitles) {
+        titleLabel.text = label.title
+        titleLabel.font = label.font
+        titleLabel.textColor = label.textColor
+    }
       
     private func textLabelConstraints() {
         addSubview(titleLabel)

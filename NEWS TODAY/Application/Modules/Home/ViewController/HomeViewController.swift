@@ -3,7 +3,7 @@
 //  NEWS TODAY
 //
 //  Created by Daniil Murzin on 22.10.2024.
-//
+//  Modifyed by Aria Arisova (relied to my fucked up mental)
 
 import UIKit
 import SwiftUI
@@ -17,19 +17,10 @@ final class HomeViewController: UIViewController {
   
     //MARK: - Properties
     private let presenter: HomeViewPresenter
-    
-    let sections = [
-        "browse",
-        "discover",
-        "searchBar",
-        "categories"
-    ]
-    var categories = [Category]()
-    enum SectionKind {
-        case main
-    }
-    typealias DataSource = UICollectionViewDiffableDataSource<SectionKind, Int>
-    private var dataSource: DataSource!
+    var categoriesArray = [Category]()
+    var browseArray = [NewHeadersTitles]()
+    var discoverArray = [NewHeadersTitles]()
+    var searchBarArray = [NewSearchBar]()
     
     //MARK: - Init
     init(presenter: HomeViewPresenter) {
@@ -44,6 +35,7 @@ final class HomeViewController: UIViewController {
     // MARK: - UI
     
     private var collectionView: UICollectionView!
+    private var dataSource: DataSource!
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -56,185 +48,104 @@ final class HomeViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
-        
-//        [titleLabel, subtitleLabel].forEach(view.addSubview)
-//        view.addSubview(searchBlockStackView)
-//        searchBlockStackView.addArrangedSubview(searchButton)
-//        searchBlockStackView.addArrangedSubview(searchTextField)
-//        collectionCategoriesView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        
-        
-//        collectionView.collectionViewLayout = createLayout()
-        
-        for (_, sectionTitle) in sections.enumerated() {
-            collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-            setupCollection(sectionTitle: sectionTitle)
-            view.addSubview(collectionView)
-            configureCategoriesDataSource(sectionTitle: sectionTitle)
-        }
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.register(LabelViewCell.self, forCellWithReuseIdentifier: LabelViewCell.identifier)
+        collectionView.register(SearchBarViewCell.self, forCellWithReuseIdentifier: SearchBarViewCell.identifier)
+        collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
+        addElements()
+        dataSource = makeDataSource()
+//        collectionView.dataSource = dataSource //??? wtf эта строка ни на что не влияет???????!!!!!!!1
+        view.addSubview(collectionView)
+    }
+    
+    func addElements() {
+        browseArray = [
+            NewHeadersTitles(id: "", title: "Browse", font: UIFont.InterSemiBold(ofSize: 24)!, textColor: UIColor.blackPrimary)
+        ]
+        discoverArray = [
+            NewHeadersTitles(id: "", title: "Discover things of this world", font: UIFont.InterRegular(ofSize: 16)!, textColor: UIColor.greyPrimary)
+        ]
+        searchBarArray = [
+            NewSearchBar(id: "")
+        ]
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-//            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-//            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 72),
-//
-//            subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-//            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-//
-//            searchBlockStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            searchBlockStackView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 32),
-//            searchBlockStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-//            searchBlockStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-//            searchBlockStackView.heightAnchor.constraint(equalToConstant: 56),
-//
-//            searchButton.leadingAnchor.constraint(equalTo: searchBlockStackView.leadingAnchor, constant: 16),
-//            searchButton.widthAnchor.constraint(equalToConstant: 24),
-//            searchButton.heightAnchor.constraint(equalToConstant: 24),
-//
-//            searchTextField.trailingAnchor.constraint(equalTo: searchBlockStackView.trailingAnchor, constant: -16),
-            
         ])
     }
     
-    private func setupCollection(sectionTitle: String) {
-        switch sectionTitle {
-        case "browse":
-            collectionView.register(LabelViewCell.self, forCellWithReuseIdentifier: LabelViewCell.identifier)
-        case "discover":
-            collectionView.register(LabelViewCell.self, forCellWithReuseIdentifier: LabelViewCell.identifier)
-        case "searchBar":
-            collectionView.register(SearchBarViewCell.self, forCellWithReuseIdentifier: SearchBarViewCell.identifier)
-        case "categories":
-            collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
-        default:
-            print("default")
-        }
+    enum Section: Int {
+        case browser = 0
+        case discover
+        case searchBar
+        case categories
+//        case topHeadlines
+//        case recommended
     }
     
     private func createLayout() -> UICollectionViewLayout {
+        print("createLayout")
+        
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let spacing: CGFloat = 5
-            item.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
-          
-            let containerWidth = layoutEnvironment.container.effectiveContentSize.width
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(85.0), heightDimension: .absolute(42.0))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+            switch Section(rawValue: sectionIndex) {
+            case .browser:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.1))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+            case .discover:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.1))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+            case .searchBar:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.1))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+            case .categories:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.1))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                return section
                 
-            let section = NSCollectionLayoutSection(group: group)
-            
-            section.orthogonalScrollingBehavior = .continuous
-          
-            return section
+//            case .topHeadlines:
+//                #warning("TO DO: Make section")
+//                return nil
+//                
+//            case .recommended:
+//                #warning("TO DO: Make section")
+//                return nil
+                
+            default:
+                assertionFailure()
+                return nil
+            }
         }
+        
         return layout
-    }
-        
-    private func configureCategoriesDataSource(sectionTitle: String) {
-        switch sectionTitle {
-        case "browse":
-            dataSource = UICollectionViewDiffableDataSource<SectionKind, Int>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> UICollectionViewCell? in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LabelViewCell.identifier, for: indexPath) as? LabelViewCell else {
-                fatalError("could not dequeue a LabelViewCell")
-              }
-                
-                cell.titleLabel.text = "Browse"
-                cell.titleLabel.font = UIFont.InterSemiBold(ofSize: 24)
-                cell.titleLabel.textColor = UIColor.blackPrimary
-                
-                cell.backgroundColor = .systemPurple
-                return cell
-            })
-            
-            var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Int>()
-            snapshot.appendSections([.main])
-            snapshot.appendItems(Array(arrayLiteral: 1))
-            dataSource.apply(snapshot, animatingDifferences: false)
-        case "discover":
-            dataSource = UICollectionViewDiffableDataSource<SectionKind, Int>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> UICollectionViewCell? in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LabelViewCell.identifier, for: indexPath) as? LabelViewCell else {
-                fatalError("could not dequeue a LabelViewCell")
-              }
-                
-                cell.titleLabel.text = "Discover things of this world"
-                cell.titleLabel.font = UIFont.InterRegular(ofSize: 16)
-                cell.titleLabel.textColor = UIColor.greyPrimary
-                
-                cell.backgroundColor = .systemYellow
-                return cell
-            })
-            
-            var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Int>()
-            snapshot.appendSections([.main])
-            snapshot.appendItems(Array(arrayLiteral: 1))
-            dataSource.apply(snapshot, animatingDifferences: false)
-        case "searchBar":
-            dataSource = UICollectionViewDiffableDataSource<SectionKind, Int>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> UICollectionViewCell? in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchBarViewCell.identifier, for: indexPath) as? SearchBarViewCell else {
-                fatalError("could not dequeue a SearchBarViewCell")
-              }
-                
-                cell.backgroundColor = .systemCyan
-                return cell
-            })
-            
-            var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Int>()
-            snapshot.appendSections([.main])
-            snapshot.appendItems(Array(arrayLiteral: 1))
-            dataSource.apply(snapshot, animatingDifferences: false)
-        case "categories":
-            dataSource = UICollectionViewDiffableDataSource<SectionKind, Int>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> UICollectionViewCell? in
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoriesViewCell.identifier, for: indexPath) as? CategoriesViewCell else {
-                fatalError("could not dequeue a CategoriesViewCell")
-              }
-                
-                cell.button.setTitle("\(self.categories[item - 1].name)", for: .normal)
-                //TODO
-    //            cell.button.addTarget(<#T##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
-                cell.backgroundColor = .systemOrange
-                return cell
-            })
-            
-            var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Int>()
-            let countOfItems = Categories.all.count + 1
-            snapshot.appendSections([.main])
-            snapshot.appendItems(Array(1...countOfItems))
-            dataSource.apply(snapshot, animatingDifferences: false)
-        default:
-            print("default")
-        }
-        
-//        dataSource = UICollectionViewDiffableDataSource<SectionKind, Int>(collectionView: collectionCategoriesView, cellProvider: { (collectionView, indexPath, item) -> UICollectionViewCell? in
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoriesViewCell.identifier, for: indexPath) as? CategoriesViewCell else {
-//            fatalError("could not dequeue a CategoriesViewCell")
-//          }
-//            
-//            cell.button.setTitle("\(self.categories[item - 1].name)", for: .normal)
-//            //TODO
-//            cell.button.addTarget(<#T##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
-//            cell.backgroundColor = .systemOrange
-//            return cell
-//        })
-//        
-//        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Int>()
-//        let countOfItems = Categories.all.count + 1
-//        snapshot.appendSections([.main])
-//        snapshot.appendItems(Array(1...countOfItems))
-//        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
 //MARK: - HomeViewController + HomeViewDelegate
 extension HomeViewController: HomeViewDelegate {
     func updateUIForCategories(with categories: [Category]) {
-        self.categories = [
+        self.categoriesArray = [
             Category(name: "Random", emoji: "", id: -1)
         ]
         
         for (index, element) in categories.enumerated() {
-            self.categories.append(element)
+            self.categoriesArray.append(element)
         }
     }
     
@@ -261,11 +172,177 @@ struct HomeViewWrapper: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
         
-        
         return homeViewController.view
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
+        
+    }
+}
+
+struct HomeViewModel {
+    let browser: [NewHeadersTitles]
+    let discover: [NewHeadersTitles]
+    let searchBar: [NewSearchBar]
+    let categories: [Category]
+//    let topHeadlines: [NewsArticle]
+//    let header: Header
+//    let recommended: [NewsArticle]
+    
+    struct Header {
+        let title: String
+        let buttonText: String
+        let action: () -> Void
+    }
+}
+
+struct NewHeadersTitles: Hashable {
+    let id: String
+    let title: String
+    let font: UIFont
+    let textColor: UIColor
+}
+
+struct NewSearchBar: Hashable {
+    let id: String
+}
+
+struct NewsArticle: Hashable {
+    let id: String
+}
+
+private extension HomeViewController {
+    
+    enum UISection: Int, Hashable, CaseIterable {
+        case browser = 0, discover, searchBar, category/*, topHeadline, recommended*/
+    }
+    
+    enum UIItem: Hashable {
+        case browser(NewHeadersTitles)
+        case discover(NewHeadersTitles)
+        case searchBar(NewSearchBar)
+        case category(Category)
+//        case topHeadline(NewsArticle)
+//        case recommended(NewsArticle)
+        
+        var identifier: String {
+            switch self {
+            case .browser: LabelViewCell.identifier
+            case .discover: LabelViewCell.identifier
+            case .searchBar: SearchBarViewCell.identifier
+            case .category: CategoriesViewCell.identifier
+//            case .topHeadline: "headlineIdentifier"
+//            case .recommended: "recommendedIdentifier"
+            }
+        }
+    }
+    
+    typealias DataSource = UICollectionViewDiffableDataSource<UISection, UIItem>
+    typealias DataSnapshot = NSDiffableDataSourceSnapshot<UISection, UIItem>
+    
+    func dataSource(render viewModel: HomeViewModel) {
+//        let header = collectionView.supplementaryView(
+//            forElementKind: UICollectionView.elementKindSectionHeader,
+//            at: IndexPath(
+//                item: 0,
+//                section: UISection.recommended.rawValue
+//            )
+//        ) as? CollectionHeader
+//        header?.configure(viewModel.header)
+        Task(priority: .high) {
+            var snapshot = DataSnapshot()
+            snapshot.appendSections(UISection.allCases)
+            snapshot.appendItems(
+                Categories.all.map(UIItem.category),
+//                viewModel.categories.map(UIItem.category),
+                toSection: .category
+            )
+//            snapshot.appendItems(
+//                viewModel.topHeadlines.map(UIItem.topHeadline),
+//                toSection: .topHeadline
+//            )
+//            snapshot.appendItems(
+//                viewModel.recommended.map(UIItem.recommended),
+//                toSection: .recommended
+//            )
+//            dataSource.supplementaryViewProvider = makeSupplementaryProvider(viewModel)
+            dataSource.apply(snapshot)
+        }
+    }
+    
+    func makeDataSource() -> DataSource {
+        dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            print("makeDataSource")
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.identifier, for: indexPath)
+            
+            switch item {
+            case let .browser(model):
+                (cell as? LabelViewCell)?.configure(label: model)
+            case let .discover(model):
+                (cell as? LabelViewCell)?.configure(label: model)
+            case let .searchBar(model):
+                (cell as? SearchBarViewCell)?.configure(searchBar: model)
+            case let .category(model):
+                (cell as? CategoriesViewCell)?.configure(category: model)
+                
+                //            case let .topHeadline(model):
+                //                break
+                //
+                //            case let .recommended(model):
+                //                break
+                //            }
+            }
+            
+            return cell
+        }
+        
+        Task(priority: .high) {
+            var snapshot = DataSnapshot()
+            snapshot.appendSections(UISection.allCases)
+            snapshot.appendItems(
+                browseArray.map(UIItem.browser),
+                toSection: .browser
+            )
+            snapshot.appendItems(
+                discoverArray.map(UIItem.discover),
+                toSection: .discover
+            )
+            snapshot.appendItems(
+                searchBarArray.map(UIItem.searchBar),
+                toSection: .searchBar
+            )
+            snapshot.appendItems(
+//                Categories.all.map(UIItem.category),
+                categoriesArray.map(UIItem.category),
+                toSection: .category
+            )
+            dataSource.apply(snapshot)
+        }
+        
+        return dataSource
+    }
+    
+//    func makeSupplementaryProvider(_ viewModel: HomeViewModel) -> DataSource.SupplementaryViewProvider {
+//        { collectionView, kind, indexPath in
+//            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+//            switch Section(rawValue: indexPath.section) {
+//            case .recommended:
+//                let header = collectionView.dequeueReusableSupplementaryView(
+//                    ofKind: kind,
+//                    withReuseIdentifier: "headerIdentifier",
+//                    for: indexPath
+//                ) as? CollectionHeader
+//                header?.configure(viewModel.header)
+//                return header
+//            default: return nil
+//            }
+//        }
+//    }
+}
+
+final class CollectionHeader: UICollectionReusableView {
+    func configure(_ model: HomeViewModel.Header) {
         
     }
 }
