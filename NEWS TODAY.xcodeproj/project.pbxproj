@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		92373F3B2CD53C240092FD76 /* NewsNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 92373F3A2CD53C240092FD76 /* NewsNetwork */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NEWS TODAY.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -40,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92373F3B2CD53C240092FD76 /* NewsNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +78,6 @@
 			);
 			name = "NEWS TODAY";
 			packageProductDependencies = (
-				92373F3A2CD53C240092FD76 /* NewsNetwork */,
 			);
 			productName = "NEWS TODAY";
 			productReference = 0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */;
@@ -114,7 +108,7 @@
 			mainGroup = 0BA1A96B2CC58DE900A0A5B1;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				92373F392CD53C240092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */,
+				0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0BA1A9752CC58DE900A0A5B1 /* Products */;
@@ -350,23 +344,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		92373F392CD53C240092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
+		0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork.git";
+			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork";
 			requirement = {
 				branch = main;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		92373F3A2CD53C240092FD76 /* NewsNetwork */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 92373F392CD53C240092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */;
-			productName = NewsNetwork;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0BA1A96C2CC58DE900A0A5B1 /* Project object */;
 }

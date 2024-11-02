@@ -55,7 +55,6 @@ class BookmarksViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -63,10 +62,10 @@ class BookmarksViewController: UIViewController {
     }
     //MARK: - Public Methods
     
-//    func updateEmptyViewVisibility() {
-//            emptyView.isHidden = presenter.bookmarkCount > 0
-//        }
-//    
+    func updateEmptyViewVisibility() {
+        emptyView.isHidden = presenter.newsCount() > 0
+        }
+    
     func configureTableView() {
         tableView.rowHeight = 96
         tableView.separatorStyle = .none

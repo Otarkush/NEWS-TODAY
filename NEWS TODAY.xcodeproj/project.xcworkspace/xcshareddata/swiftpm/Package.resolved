@@ -1,13 +1,13 @@
 {
-  "originHash" : "26ae64d58293e494718a2083186658bbd46fdebe4530375f4285724220cce54c",
+  "originHash" : "2b050afd4b117856feccffac43e8085a07a61e31a0a1c1579ec3220e1a817312",
   "pins" : [
     {
       "identity" : "newsnetwork",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ShapovalovIlya/NewsNetwork.git",
+      "location" : "https://github.com/ShapovalovIlya/NewsNetwork",
       "state" : {
         "branch" : "main",
-        "revision" : "a6eff95092b278c185bddaaf7ded12e841a9a7ac"
+        "revision" : "eeb214567163be7b390cd50b35ae296db15d7352"
       }
     },
     {
