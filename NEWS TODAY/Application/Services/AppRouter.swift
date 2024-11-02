@@ -16,22 +16,42 @@ protocol AppRouter: AnyObject {
     func showTermsView()
     func showLanguageView()
     func showOnboarding()
+    func showTabBar()
+    func start()
     func popToRoot()
     func back()
 }
 
 final class AppRouterImpl: AppRouter {
     
-    //MARK: - Properties
+    // MARK: - Properties
     private let factory: AppFactory
     private let navigation: UINavigationController
+    private let window: UIWindow?
     
-    //MARK: - Init
-    init(factory: AppFactory, navigation: UINavigationController) {
+    // MARK: - Init
+    init(factory: AppFactory, navigation: UINavigationController, window: UIWindow? = nil) {
         self.factory = factory
         self.navigation = navigation
+        self.window = window
     }
     
+    // MARK: - Start Method
+    func start() {
+        let isLaunchedBefore = UserDefaults.standard.bool(forKey: "isLaunchedBefore")
+        
+        if isLaunchedBefore {
+            showTabBar()
+        } else {
+            showOnboarding()
+        }
+        
+        window?.rootViewController = navigation
+        window?.backgroundColor = .clear
+        window?.makeKeyAndVisible()
+    }
+    
+    // MARK: - Navigation Methods
     func showHomeView() {
         let view = factory.makeScreen(.home, self)
         navigation.pushViewController(view, animated: true)
@@ -43,12 +63,12 @@ final class AppRouterImpl: AppRouter {
     }
     
     func showCategoriesView() {
-        let view = factory.makeScreen(.categories,self)
+        let view = factory.makeScreen(.categories, self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showProfileView() {
-        let view = factory.makeScreen(.profile,self)
+        let view = factory.makeScreen(.profile, self)
         navigation.pushViewController(view, animated: true)
     }
     
@@ -63,16 +83,28 @@ final class AppRouterImpl: AppRouter {
     }
     
     func showLanguageView() {
-        let view = factory.makeScreen(.languageSelection,self)
+        let view = factory.makeScreen(.languageSelection, self)
         navigation.pushViewController(view, animated: true)
     }
     
     func showOnboarding() {
-        let view = factory.makeScreen(.onboarding, self)
-        navigation.pushViewController(view, animated: true)
+        let onboardingViewController = factory.makeScreen(.onboarding, self)
+        navigation.isNavigationBarHidden = true
+        navigation.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigation.navigationBar.shadowImage = UIImage()
+        navigation.navigationBar.isTranslucent = true
+        navigation.view.backgroundColor = .clear
+        navigation.setViewControllers([onboardingViewController], animated: false)
     }
     
-    //MARK: - pop/back
+    func showTabBar() {
+        let tabBarController = factory.makeTabBar(self)
+        navigation.isNavigationBarHidden = true
+        navigation.setViewControllers([tabBarController], animated: true)
+        
+    }
+    
+    // MARK: - Back Navigation
     func back() {
         navigation.popViewController(animated: true)
     }

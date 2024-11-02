@@ -10,6 +10,7 @@ import SwiftUI
 
 protocol OnboardingViewPresenter: AnyObject {
     func didTapNext()
+    func didTapStart()
 }
 
 final class OnboardingViewController: UIViewController {
@@ -23,6 +24,7 @@ final class OnboardingViewController: UIViewController {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
+         scrollView.isDirectionalLockEnabled = true
         return scrollView
     }()
     
@@ -40,6 +42,7 @@ final class OnboardingViewController: UIViewController {
     init(presenter: OnboardingViewPresenter?) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        view.backgroundColor = .white
     }
     
     @available(*, unavailable)
@@ -50,6 +53,7 @@ final class OnboardingViewController: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.setNavigationBarHidden(true, animated: false)
         scrollView.delegate = self
         setupView()
         slides = createSlides()
@@ -58,7 +62,10 @@ final class OnboardingViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        scrollView.layoutIfNeeded()
+        scrollView.setContentOffset(.zero, animated: false)
     }
     
     // MARK: - Methods
@@ -95,7 +102,7 @@ final class OnboardingViewController: UIViewController {
             description: "Explore the latest stories, customize your experience!" ,
             nextButtonTitle: "Get Started",
             target: self,
-            action: #selector(handleNextButtonTap)
+            action: #selector(handleGetReadyButtonTap)
         )
         
         return [slide1, slide2, slide3]
@@ -103,21 +110,24 @@ final class OnboardingViewController: UIViewController {
     
     func setUpSlidesScrollView(slides: [OnboardingView]) {
         scrollView.contentSize = CGSize(width: view.frame.width * CGFloat(slides.count), height: view.frame.height)
-        
-        for i in 0..<slides.count {
-            slides[i].frame = CGRect(
-                x: view.frame.width * CGFloat(i),
+
+        for (index, slide) in slides.enumerated() {
+            slide.frame = CGRect(
+                x: view.frame.width * CGFloat(index),
                 y: 0,
                 width: view.frame.width,
                 height: view.frame.height
             )
-            
-            scrollView.addSubview(slides[i])
+            scrollView.addSubview(slide)
         }
     }
     
     @objc private func handleNextButtonTap() {
         presenter?.didTapNext()
+    }
+    
+    @objc private func handleGetReadyButtonTap() {
+        presenter?.didTapStart()
     }
     
 }
@@ -168,7 +178,6 @@ extension OnboardingViewController: OnboardingViewDelegate {
 }
 
 extension OnboardingViewController {
-    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
