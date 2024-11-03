@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		923745E22CD773B50092FD76 /* NewsNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 923745E12CD773B50092FD76 /* NewsNetwork */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NEWS TODAY.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -40,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				923745E22CD773B50092FD76 /* NewsNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +78,6 @@
 			);
 			name = "NEWS TODAY";
 			packageProductDependencies = (
-				923745E12CD773B50092FD76 /* NewsNetwork */,
 			);
 			productName = "NEWS TODAY";
 			productReference = 0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */;
@@ -113,9 +107,6 @@
 			);
 			mainGroup = 0BA1A96B2CC58DE900A0A5B1;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */,
-			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0BA1A9752CC58DE900A0A5B1 /* Products */;
 			projectDirPath = "";
@@ -154,22 +145,20 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4YW4KD9KAN;
+				DEVELOPMENT_TEAM = H955NK8X7Y;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
+				INFOPLIST_FILE = "NEWS TODAY/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewli-nk.NEWS-TODAY";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewlink.NEWS-TODAY";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -184,22 +173,20 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4YW4KD9KAN;
+				DEVELOPMENT_TEAM = H955NK8X7Y;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
+				INFOPLIST_FILE = "NEWS TODAY/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewli-nk.NEWS-TODAY";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewlink.NEWS-TODAY";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -348,25 +335,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		923745E12CD773B50092FD76 /* NewsNetwork */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */;
-			productName = NewsNetwork;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0BA1A96C2CC58DE900A0A5B1 /* Project object */;
 }
