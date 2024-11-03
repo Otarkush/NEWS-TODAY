@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import NetworkManager
+import PersistenceManager
+import Repository
 
 enum Screens {case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection}
 
 protocol AppFactory {
     func makeScreen(_ screen: Screens, _ router: AppRouter) -> UIViewController
+    func makeTabBar(_ router: AppRouter) -> UITabBarController 
 }
 
 final class AppFactoryImpl  {
@@ -24,11 +28,13 @@ final class AppFactoryImpl  {
     }
     
     //MARK: - Methods
-    static func makeAppRouter(_ navigationController: UINavigationController) -> AppRouter {
+    static func makeAppRouter(_ navigationController: UINavigationController,
+                              _ window: UIWindow?) -> AppRouter {
         
         AppRouterImpl(
             factory: AppFactoryImpl(),
-            navigation: navigationController)
+            navigation: navigationController,
+            window: window)
     }
 }
 
