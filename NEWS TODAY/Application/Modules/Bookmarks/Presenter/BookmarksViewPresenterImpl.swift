@@ -1,6 +1,4 @@
 import UIKit
-import NetworkManager
-import PersistenceManager
 import Repository
 import Models
 
@@ -36,27 +34,7 @@ final class BookmarksViewPresenterImpl {
         }
     }
         
-    }
-    
-    //    var bookmarkCount: Int {
-    //        return bookmarks.count
-    //    }
-    //
-    //    func getBookmark(at index: Int) -> Article {
-    //        return getBookmark[index]
-    //    }
-    //
-    //    func viewDidLoad() {
-    //        BookmarksViewPresenterImpl.reloadTableView()
-    //    }
-    //
-    //    func didEditingDelete(at indexPath: IndexPath) {
-    //        self.bookmarks.remove(at: indexPath.row)
-    //        self.BookmarksViewPresenterProtocol?.reloadTableView()
-    //    }
-    //
-    //
-    //}
+}
 
 //MARK: - BookmarksViewPresenterImpl + BookmarksViewPresenter
 extension BookmarksViewPresenterImpl: BookmarksViewPresenter {
