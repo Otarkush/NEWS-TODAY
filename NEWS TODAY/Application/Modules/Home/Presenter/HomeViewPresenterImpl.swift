@@ -9,8 +9,8 @@ import Foundation
 
 protocol HomeViewDelegate: AnyObject {
     func updateUIForCategories(with categories: [Category])
-    func updateUIForNewsByCategory(with categories: [Category])
-    func updateUIForRecommendedNews(with categories: [Category])
+    func updateUIForNewsByCategory(with news: [News])
+    func updateUIForRecommendedNews(with news: [News])
 }
 
 final class HomeViewPresenterImpl  {
@@ -38,5 +38,7 @@ extension HomeViewPresenterImpl: HomeViewPresenter {
     
     func viewDidLoad() {
         view?.updateUIForCategories(with: fetchCategories())
+        view?.updateUIForNewsByCategory(with: [])
+        view?.updateUIForRecommendedNews(with: [])
     }
 }

@@ -21,6 +21,10 @@ final class HomeViewController: UIViewController {
     var browseArray = [NewHeadersTitles]()
     var discoverArray = [NewHeadersTitles]()
     var searchBarArray = [NewSearchBar]()
+    var topHeadlinesArray = [News]()
+//    var recommendedSeeAll = [NewRecommendedTitles]()
+//    var recommendedHeadlines = [News]()
+    
     
     //MARK: - Init
     init(presenter: HomeViewPresenter) {
@@ -52,6 +56,9 @@ final class HomeViewController: UIViewController {
         collectionView.register(LabelViewCell.self, forCellWithReuseIdentifier: LabelViewCell.identifier)
         collectionView.register(SearchBarViewCell.self, forCellWithReuseIdentifier: SearchBarViewCell.identifier)
         collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
+        collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
+//        collectionView.register(LabelButtonViewCell.self, forCellWithReuseIdentifier: LabelButtonViewCell.identifier)
+//        collectionView.register(RecommendedBookmarksViewCell.self, forCellWithReuseIdentifier: RecommendedBookmarksViewCell.identifier)
         addElements()
         dataSource = makeDataSource()
 //        collectionView.dataSource = dataSource //??? wtf эта строка ни на что не влияет???????!!!!!!!1
@@ -80,13 +87,11 @@ final class HomeViewController: UIViewController {
         case discover
         case searchBar
         case categories
-//        case topHeadlines
+        case topHeadlines
 //        case recommended
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        print("createLayout")
-        
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             switch Section(rawValue: sectionIndex) {
             case .browser:
@@ -118,11 +123,15 @@ final class HomeViewController: UIViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
                 return section
-                
-//            case .topHeadlines:
-//                #warning("TO DO: Make section")
-//                return nil
-//                
+            case .topHeadlines:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(256), heightDimension: .absolute(256))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 8, bottom: 24, trailing: 8)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(272), heightDimension: .absolute(296))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                return section
 //            case .recommended:
 //                #warning("TO DO: Make section")
 //                return nil
@@ -144,16 +153,30 @@ extension HomeViewController: HomeViewDelegate {
             Category(name: "Random", emoji: "", id: -1)
         ]
         
-        for (index, element) in categories.enumerated() {
+        for (_, element) in categories.enumerated() {
             self.categoriesArray.append(element)
         }
     }
     
-    func updateUIForNewsByCategory(with categories: [Category]) {
-        
+    func updateUIForNewsByCategory(with news: [News]) {
+        #warning("TO DO: fill array for top news")
+        self.topHeadlinesArray.append(News(
+            id: 0,
+            category: "POLITICS",
+            title: "The latest situation in presidential selection",
+            img: #imageLiteral(resourceName: "Capital"),
+            favorite: false
+        ))
+        self.topHeadlinesArray.append(News(
+            id: 1,
+            category: "Art",
+            title: "Six steps to creating a color palette",
+            img: #imageLiteral(resourceName: "Capital"),
+            favorite: false
+        ))
     }
     
-    func updateUIForRecommendedNews(with categories: [Category]) {
+    func updateUIForRecommendedNews(with news: [News]) {
         
     }
 }
@@ -185,7 +208,7 @@ struct HomeViewModel {
     let discover: [NewHeadersTitles]
     let searchBar: [NewSearchBar]
     let categories: [Category]
-//    let topHeadlines: [NewsArticle]
+    let topHeadlines: [News]
 //    let header: Header
 //    let recommended: [NewsArticle]
     
@@ -207,14 +230,14 @@ struct NewSearchBar: Hashable {
     let id: String
 }
 
-struct NewsArticle: Hashable {
-    let id: String
-}
+//struct NewsArticle: Hashable {
+//    let id: String
+//}
 
 private extension HomeViewController {
     
     enum UISection: Int, Hashable, CaseIterable {
-        case browser = 0, discover, searchBar, category/*, topHeadline, recommended*/
+        case browser = 0, discover, searchBar, category, topHeadline/*, recommended*/
     }
     
     enum UIItem: Hashable {
@@ -222,7 +245,7 @@ private extension HomeViewController {
         case discover(NewHeadersTitles)
         case searchBar(NewSearchBar)
         case category(Category)
-//        case topHeadline(NewsArticle)
+        case topHeadline(News)
 //        case recommended(NewsArticle)
         
         var identifier: String {
@@ -231,7 +254,7 @@ private extension HomeViewController {
             case .discover: LabelViewCell.identifier
             case .searchBar: SearchBarViewCell.identifier
             case .category: CategoriesViewCell.identifier
-//            case .topHeadline: "headlineIdentifier"
+            case .topHeadline: TopHeadlinesViewCell.identifier
 //            case .recommended: "recommendedIdentifier"
             }
         }
@@ -272,8 +295,6 @@ private extension HomeViewController {
     
     func makeDataSource() -> DataSource {
         dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
-            print("makeDataSource")
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.identifier, for: indexPath)
             
             switch item {
@@ -285,13 +306,10 @@ private extension HomeViewController {
                 (cell as? SearchBarViewCell)?.configure(searchBar: model)
             case let .category(model):
                 (cell as? CategoriesViewCell)?.configure(category: model)
-                
-                //            case let .topHeadline(model):
-                //                break
-                //
-                //            case let .recommended(model):
-                //                break
-                //            }
+            case let .topHeadline(model):
+                (cell as? TopHeadlinesViewCell)?.configure(topHeadlines: model)
+            //case let .recommended(model):
+            //  break
             }
             
             return cell
@@ -313,9 +331,13 @@ private extension HomeViewController {
                 toSection: .searchBar
             )
             snapshot.appendItems(
-//                Categories.all.map(UIItem.category),
                 categoriesArray.map(UIItem.category),
                 toSection: .category
+            )
+            print("topHeadlinesArray", topHeadlinesArray)
+            snapshot.appendItems(
+                topHeadlinesArray.map(UIItem.topHeadline),
+                toSection: .topHeadline
             )
             dataSource.apply(snapshot)
         }

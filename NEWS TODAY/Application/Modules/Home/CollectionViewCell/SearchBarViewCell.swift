@@ -63,19 +63,19 @@ class SearchBarViewCell: UICollectionViewCell {
         addSubview(searchBlockStackView)
         searchBlockStackView.addArrangedSubview(searchButton)
         searchBlockStackView.addArrangedSubview(searchTextField)
-//        textLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             searchBlockStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             searchBlockStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-//            searchBlockStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-//            searchBlockStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            searchBlockStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            searchBlockStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             searchBlockStackView.heightAnchor.constraint(equalToConstant: 56),
             
             searchButton.leadingAnchor.constraint(equalTo: searchBlockStackView.leadingAnchor, constant: 16),
             searchButton.widthAnchor.constraint(equalToConstant: 24),
-            searchButton.heightAnchor.constraint(equalToConstant: 24),
+//            searchButton.heightAnchor.constraint(equalToConstant: 24),
             
+            searchTextField.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor, constant: 24),
             searchTextField.trailingAnchor.constraint(equalTo: searchBlockStackView.trailingAnchor, constant: -16),
         ])
     }
