@@ -126,7 +126,8 @@ struct ProfileViewWrapper: UIViewRepresentable {
                 networking: NetworkingManagerImpl(),
                 router: AppRouterImpl(
                     factory: AppFactoryImpl(),
-                    navigation: UINavigationController())),
+                    navigation: UINavigationController())
+                     ),
             profileView: ProfileViewImpl())
         
         return profileViewController.view
