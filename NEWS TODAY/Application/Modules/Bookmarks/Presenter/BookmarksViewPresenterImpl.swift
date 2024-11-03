@@ -1,6 +1,4 @@
 import UIKit
-import NetworkManager
-import PersistenceManager
 import Repository
 import Models
 
