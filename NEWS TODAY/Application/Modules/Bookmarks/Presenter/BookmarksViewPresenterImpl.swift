@@ -1,51 +1,38 @@
 import UIKit
-import Repository
-import Models
+
 
 protocol BookmarkViewDelegate: AnyObject {
     
 }
 
-final class BookmarksViewPresenterImpl {
-    
-    //MARK: - Properties
-    
-    private var news: [Article] = .init()
-    private let networking: AppNetworking
-    private let router: AppRouter
-    weak var view: BookmarkViewDelegate?
-    
-    //MARK: - Init
-    init(networking: AppNetworking,
-         router: AppRouter) {
-        self.networking = networking
-        self.router = router
-        Task { await fetchArticles() }
-    }
-    
-    func fetchArticles() async {
-        let result = await NewsRepository.shared.loadArticles()
-        
-        switch result {
-        case .success(let articles): self.news = articles
-            print("Загруженные статьи: \(articles)")
-        case .failure(let error):
-            print("Ошибка при загрузке статей: \(error)")
-        }
-    }
-        
+struct Article {
+    let category: String
+    let header: String
+    let imageName: String
+    let author: String
+    let article: String
 }
 
-//MARK: - BookmarksViewPresenterImpl + BookmarksViewPresenter
-extension BookmarksViewPresenterImpl: BookmarksViewPresenter {
-    func newsCount() -> Int {
-        news.count
+final class BookmarksViewPresenterImpl: BookmarksViewPresenter {
+    private let networking: AppNetworking
+    private let router: AppRouter
+    private var news: [Article] = []
+    weak var view: BookmarkViewDelegate?
+    
+    init(networking: AppNetworking, router: AppRouter) {
+        self.networking = networking
+        self.router = router
     }
     
-    func didTapCell() {
-        router.showDetailView()
-    }
-    
+    func fetchNews() {
         
- 
+    }
+
+    func newsCount() -> Int {
+        return news.count
+    }
+
+    func didTapCell(at index: Int, with articles: [Article]) {
+        router.showDetailView(for: articles, selectedIndex: index)
+    }
 }

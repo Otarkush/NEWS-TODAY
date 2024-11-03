@@ -195,7 +195,6 @@ enum Drawings {
     For more detailed state results, click on the States A-Z links at the bottom of this page. Results source: NEP/Edison via Reuters.
     """
     
-    // Числовые константы
     static let imageHeight: CGFloat = 350
     static let buttonTopOffset: CGFloat = 52
     static let buttonLeadingOffset: CGFloat = 20

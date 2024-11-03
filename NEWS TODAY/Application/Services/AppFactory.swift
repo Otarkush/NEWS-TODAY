@@ -6,48 +6,47 @@
 //
 
 import UIKit
-import NetworkManager
-import PersistenceManager
 import Repository
 
-enum Screens {case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection}
+enum Screens { case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection }
 
 protocol AppFactory {
-    func makeScreen(_ screen: Screens, _ router: AppRouter) -> UIViewController
-    func makeTabBar(_ router: AppRouter) -> UITabBarController 
+    func makeScreen(_ screen: Screens, _ router: AppRouter, articles: [Article]?, selectedIndex: Int?) -> UIViewController
+    func makeTabBar(_ router: AppRouter) -> UITabBarController
 }
 
-final class AppFactoryImpl  {
+final class AppFactoryImpl {
     
-    //MARK: - Properties
+    // MARK: - Properties
     private let networking: AppNetworking
     
-    //MARK: - Init
+    // MARK: - Init
     init() {
         self.networking = NetworkingManagerImpl()
     }
     
-    //MARK: - Methods
+    // MARK: - Methods
     static func makeAppRouter(_ navigationController: UINavigationController,
                               _ window: UIWindow?) -> AppRouter {
         
         AppRouterImpl(
             factory: AppFactoryImpl(),
             navigation: navigationController,
-            window: window)
+            window: window
+        )
     }
 }
 
-//MARK: - AppFactoryImpl + AppFactory
+// MARK: - AppFactoryImpl + AppFactory
 extension AppFactoryImpl: AppFactory {
-    func makeScreen(_ screen: Screens, _ router: any AppRouter) -> UIViewController {
+    func makeScreen(_ screen: Screens, _ router: AppRouter, articles: [Article]?, selectedIndex: Int?) -> UIViewController {
         
         switch screen {
         case .home:
             let presenter = HomeViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
+                router: router
+            )
             let viewController = HomeViewController(presenter: presenter)
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.home)
@@ -56,27 +55,35 @@ extension AppFactoryImpl: AppFactory {
         case .categories:
             let presenter = CategoriesViewPresenterImpl(
                 networking: networking,
-                router: router)
-
+                router: router
+            )
             let viewController = CategoriesViewController(presenter: presenter)
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.categories)
             return viewController
             
         case .detail:
+            guard let articles = articles, let selectedIndex = selectedIndex else {
+                fatalError("Articles and selectedIndex must be provided for the detail screen")
+            }
             let presenter = DetailViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
-            let viewController = DetailViewController(presenter: presenter, detailView: DetailViewImpl())
+                router: router,
+                articles: articles,
+                selectedIndex: selectedIndex
+            )
+            let viewController = DetailViewController(
+                presenter: presenter,
+                detailView: DetailViewImpl()
+            )
             presenter.view = viewController
             return viewController
             
         case .profile:
             let presenter = ProfileViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
+                router: router
+            )
             let viewController = ProfileViewController(presenter: presenter, profileView: ProfileViewImpl())
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.profile)
@@ -85,8 +92,8 @@ extension AppFactoryImpl: AppFactory {
         case .bookmarks:
             let presenter = BookmarksViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
+                router: router
+            )
             let viewController = BookmarksViewController(presenter: presenter)
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.bookmarks)
@@ -95,28 +102,27 @@ extension AppFactoryImpl: AppFactory {
         case .onboarding:
             let presenter = OnboardingViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
+                router: router
+            )
             let viewController = OnboardingViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
             
         case .termsAndConditions:
-            let viewController = TermsViewController(router: router)
-            return viewController
+            return TermsViewController(router: router)
             
         case .languageSelection:
             let presenter = ProfileViewPresenterImpl(
                 networking: networking,
-                router: router)
-            
+                router: router
+            )
             let viewController = LanguageSelectionViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
         }
     }
     
-    //MARK: - Create TabBar
+    // MARK: - Create TabBar
     func makeTabBar(_ router: AppRouter) -> UITabBarController {
         let tabBarController = MainTabBarController()
         
@@ -125,12 +131,12 @@ extension AppFactoryImpl: AppFactory {
         let bookmarksModule = makeScreen(.bookmarks, router)
         let profileModule = makeScreen(.profile, router)
         
-        tabBarController.viewControllers = [homeModule, categoriesModule,bookmarksModule ,profileModule]
+        tabBarController.viewControllers = [homeModule, categoriesModule, bookmarksModule, profileModule]
         
         return tabBarController
     }
     
-    //MARK: - create TabBarItems
+    // MARK: - create TabBarItems
     enum TabType {
         case home
         case categories
@@ -139,24 +145,31 @@ extension AppFactoryImpl: AppFactory {
         
         var imageNormal: UIImage? {
             switch self {
-            case .home: UIImage.home
-            case .categories: UIImage.categories
-            case .bookmarks: UIImage.bookmarks
-            case .profile: UIImage.profile
+            case .home: return UIImage.home
+            case .categories: return UIImage.categories
+            case .bookmarks: return UIImage.bookmarks
+            case .profile: return UIImage.profile
             }
         }
         
         var imageSelected: UIImage? {
             switch self {
-            case .home: UIImage.homeSelected
-            case .categories: UIImage.categoriesSelected
-            case .bookmarks: UIImage.bookmarksSelected
-            case .profile: UIImage.profileSelected
+            case .home: return UIImage.homeSelected
+            case .categories: return UIImage.categoriesSelected
+            case .bookmarks: return UIImage.bookmarksSelected
+            case .profile: return UIImage.profileSelected
             }
         }
     }
     
     func makeTabItem(_ type: TabType) -> UITabBarItem {
-        UITabBarItem(title: nil, image: type.imageNormal, selectedImage: type.imageSelected)
+        return UITabBarItem(title: nil, image: type.imageNormal, selectedImage: type.imageSelected)
     }
 }
+
+extension AppFactory {
+    func makeScreen(_ screen: Screens, _ router: AppRouter) -> UIViewController {
+        return makeScreen(screen, router, articles: nil, selectedIndex: nil)
+    }
+}
+

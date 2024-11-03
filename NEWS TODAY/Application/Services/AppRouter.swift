@@ -12,7 +12,7 @@ protocol AppRouter: AnyObject {
     func showBookmarksView()
     func showCategoriesView()
     func showProfileView()
-    func showDetailView()
+    func showDetailView(for articles: [Article], selectedIndex: Int)
     func showTermsView()
     func showLanguageView()
     func showOnboarding()
@@ -72,8 +72,8 @@ final class AppRouterImpl: AppRouter {
         navigation.pushViewController(view, animated: true)
     }
     
-    func showDetailView() {
-        let view = factory.makeScreen(.detail, self)
+    func showDetailView(for articles: [Article], selectedIndex: Int) {
+        let view = factory.makeScreen(.detail, self, articles: articles, selectedIndex: selectedIndex)
         navigation.pushViewController(view, animated: true)
     }
     
