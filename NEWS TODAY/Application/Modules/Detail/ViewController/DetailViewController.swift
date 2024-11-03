@@ -16,17 +16,17 @@ protocol DetailViewPresenter: AnyObject {
 
 final class DetailViewController: UIViewController {
    
-    //MARK: - Properties
+    // MARK: - Properties
     private let presenter: DetailViewPresenter
     private let detailView: DetailView
 
-    //MARK: - Init
+    // MARK: - Init
     init(
         presenter: DetailViewPresenter,
         detailView: DetailView
     ) {
-        self.detailView = detailView
         self.presenter = presenter
+        self.detailView = detailView
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,11 +34,11 @@ final class DetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Lifecycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
-        presenter.viewDidLoad()
+        presenter.viewDidLoad()  
         setupActions()
     }
     
@@ -60,35 +60,14 @@ final class DetailViewController: UIViewController {
     }
 }
 
-//MARK: - DetailViewController + DetailViewDelegate
+// MARK: - DetailViewController + DetailViewDelegate
 extension DetailViewController: DetailViewDelegate {
-    func updateUI(viewModel: DetailViewModel) {
+    func updateUI(viewModel: Article) {
         detailView.imageView.image = UIImage(named: viewModel.imageName)
         detailView.authorNameLabel.text = viewModel.author
         detailView.newsHeaderLabel.text = viewModel.header
         detailView.categoryLabel.text = viewModel.category
         detailView.detailsTextView.text = viewModel.article
-    }
-}
-
-// MARK: - SwiftUI Preview for UIKit View
-struct DetailViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        DetailViewWrapper()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct DetailViewWrapper: UIViewRepresentable {
-    
-    func makeUIView(context: Context) -> UIView {
-        let profileViewController = DetailViewController(presenter: DetailViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())), detailView: DetailViewImpl())
-        
-        return profileViewController.view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
     }
 }
 

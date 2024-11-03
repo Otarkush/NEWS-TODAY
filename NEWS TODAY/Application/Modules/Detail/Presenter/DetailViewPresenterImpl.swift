@@ -22,37 +22,50 @@ enum DetailData {
 }
 
 protocol DetailViewDelegate: AnyObject {
-    func updateUI(viewModel: DetailViewModel)
+    func updateUI(viewModel: Article)
 }
 
-final class DetailViewPresenterImpl  {
+final class DetailViewPresenterImpl {
     
-    //MARK: - Properties
+    // MARK: - Properties
     weak var view: DetailViewDelegate?
     private let networking: AppNetworking
     private let router: AppRouter
+    private let articles: [Article]
+    private var selectedIndex: Int
     
-    //MARK: - Init
-    init(networking: AppNetworking, router: AppRouter) {
+    // MARK: - Init
+    init(networking: AppNetworking, router: AppRouter, articles: [Article], selectedIndex: Int) {
         self.networking = networking
         self.router = router
+        self.articles = articles
+        self.selectedIndex = selectedIndex
+    }
+    
+    private func currentArticle() -> Article {
+        return articles[selectedIndex]
     }
 }
 
-//MARK: - DetailViewPresenterImpl + DetailViewPresenter
+// MARK: - DetailViewPresenterImpl + DetailViewPresenter
 extension DetailViewPresenterImpl: DetailViewPresenter {
+    func viewDidLoad() {
+        view?.updateUI(viewModel: currentArticle())
+    }
+    
     func show(data: DetailData) -> String {
+        let article = currentArticle()
         switch data {
         case .article:
-            Drawings.detailsText
+            return article.article
         case .category:
-            Drawings.categoryText
+            return article.category
         case .header:
-            Drawings.newsHeaderText
+            return article.header
         case .author:
-            Drawings.authorNameText
+            return article.author
         case .image:
-            "Capital"
+            return article.imageName
         }
     }
     
@@ -61,21 +74,10 @@ extension DetailViewPresenterImpl: DetailViewPresenter {
         case .back:
             router.back()
         case .favorite:
-            router.popToRoot()
+            print("Added to favorites")
         case .share:
-            router.popToRoot()
+            print("Shared article")
         }
     }
-    
-    func viewDidLoad() {
-        view?.updateUI(viewModel:
-                        DetailViewModel(
-                            category: show(data: .category),
-                            header: show(data: .header),
-                            imageName: show(data: .image),
-                            author: show(data: .author),
-                            article: show(data: .article)
-                        )
-        )
-    }
 }
+
