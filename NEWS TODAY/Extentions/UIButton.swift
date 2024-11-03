@@ -37,4 +37,18 @@ extension UIButton {
         backgroundColor = UIColor.purplePrimary
         translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    convenience init(initBrowsecategoriesButton: UIColor) {
+        
+        self.init(type: .system)
+        
+//        setTitle(text, for: .normal)
+        layer.cornerRadius = 16
+        titleLabel?.font = .InterSemiBold(ofSize: 12)
+        tintColor = UIColor.greyPrimary
+        widthAnchor.constraint(equalToConstant: 75).isActive = true
+        heightAnchor.constraint(equalToConstant: 32).isActive = true
+        backgroundColor = UIColor.greyLighter
+        translatesAutoresizingMaskIntoConstraints = false
+    }
 }

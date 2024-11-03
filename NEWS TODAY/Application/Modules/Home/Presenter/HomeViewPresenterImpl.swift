@@ -7,7 +7,11 @@
 
 import Foundation
 
-protocol HomeViewDelegate: AnyObject {}
+protocol HomeViewDelegate: AnyObject {
+    func updateUIForCategories(with categories: [Category])
+    func updateUIForNewsByCategory(with categories: [Category])
+    func updateUIForRecommendedNews(with categories: [Category])
+}
 
 final class HomeViewPresenterImpl  {
   
@@ -26,4 +30,13 @@ final class HomeViewPresenterImpl  {
 }
 
 //MARK: - HomeViewPresenterImpl + HomeViewPresenter
-extension HomeViewPresenterImpl: HomeViewPresenter {}
+extension HomeViewPresenterImpl: HomeViewPresenter {
+    
+    func fetchCategories() -> [Category] {
+        Categories.all
+    }
+    
+    func viewDidLoad() {
+        view?.updateUIForCategories(with: fetchCategories())
+    }
+}
