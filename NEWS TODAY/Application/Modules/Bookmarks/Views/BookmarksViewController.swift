@@ -12,15 +12,19 @@ import SwiftUI
 protocol BookmarksViewPresenter: AnyObject {
     
     func newsCount() -> Int
-    func didTapCell()
+    func fetchNews()
+    func didTapCell(at index: Int, with articles: [Article])
 }
 
 class BookmarksViewController: UIViewController {
   
     //MARK: - Properties
-    
-    private let tableView = UITableView()
     private let presenter: BookmarksViewPresenter
+    private var news: [Article] =  [
+        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb1", author: "dasdas", article: "Stringdadsa"),
+        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb2", author: "dasdas", article: "Stringdadsa")
+    ]
+
     
     //MARK: - Init
     init(presenter: BookmarksViewPresenter) {
@@ -33,13 +37,14 @@ class BookmarksViewController: UIViewController {
     }
     
     //MARK: - UI Components
-    private lazy var table: UITableView = {
+    private lazy var tableView: UITableView = {
         let table = UITableView()
         table.register(BookmarkCell.self, forCellReuseIdentifier: BookmarkCell.reuseID)
         table.delegate = self
         table.dataSource = self
         table.translatesAutoresizingMaskIntoConstraints = false
         table.separatorStyle = .none
+        table.rowHeight = 105
         return table
     }()
     
@@ -63,14 +68,13 @@ class BookmarksViewController: UIViewController {
         return label
     }()
         
-    private let emptyView = EmptyView()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        
+        print("News count: \(news.count)")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -84,6 +88,10 @@ class BookmarksViewController: UIViewController {
     
     func setupViews() {
         [titleLabelBig, titleLabelSmall, tableView].forEach(view.addSubview)
+    }
+    
+    private func fetchArticles() {
+        presenter.fetchNews()
     }
 }
 
@@ -111,36 +119,42 @@ extension BookmarksViewController: BookmarkViewDelegate {
 
 extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter.newsCount()
+        return news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkCell.reuseID)
-        return cell!
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkCell.reuseID, for: indexPath) as? BookmarkCell else {
+            fatalError("Unable to dequeue BookmarkCell")
+        }
+        cell.set(info: news[indexPath.row])
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter.didTapCell()
+        tableView.deselectRow(at: indexPath, animated: true)
+        presenter.didTapCell(at: indexPath.row, with: news)
     }
 }
 
-// MARK: - SwiftUI Preview for UIKit View
-struct BookmarksViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        OnboardingViewWrapper1()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct OnboardingViewWrapper1: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> UIView {
-        let onboardingViewController = OnboardingViewController(presenter: OnboardingViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+    // MARK: - SwiftUI Preview for UIKit View
+    struct BookmarksViewController_Preview: PreviewProvider {
+        static var previews: some View {
+            BookmarkViewWrapper1()
+                .previewLayout(.sizeThatFits)
+                .padding()
+        }
+    }
+    
+    struct BookmarkViewWrapper1: UIViewRepresentable {
         
-        return onboardingViewController.view
+        func makeUIView(context: Context) -> UIView {
+            let bookmarkViewController = BookmarksViewController(presenter: BookmarksViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+            
+            return bookmarkViewController.view
+        }
+        
+        func updateUIView(_ uiView: UIView, context: Context) {
+        }
     }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-    }
-}
+

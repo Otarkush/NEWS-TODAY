@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0BADF31D2CD6E88B005C358B /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 0BADF31C2CD6E88B005C358B /* Models */; };
-		0BADF31F2CD6E88B005C358B /* NetworkManager in Frameworks */ = {isa = PBXBuildFile; productRef = 0BADF31E2CD6E88B005C358B /* NetworkManager */; };
-		0BADF3212CD6E88B005C358B /* NewsNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 0BADF3202CD6E88B005C358B /* NewsNetwork */; };
-		0BADF3232CD6E88B005C358B /* PersistenceManager in Frameworks */ = {isa = PBXBuildFile; productRef = 0BADF3222CD6E88B005C358B /* PersistenceManager */; };
+		923745E22CD773B50092FD76 /* NewsNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 923745E12CD773B50092FD76 /* NewsNetwork */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,10 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BADF31D2CD6E88B005C358B /* Models in Frameworks */,
-				0BADF3212CD6E88B005C358B /* NewsNetwork in Frameworks */,
-				0BADF3232CD6E88B005C358B /* PersistenceManager in Frameworks */,
-				0BADF31F2CD6E88B005C358B /* NetworkManager in Frameworks */,
+				923745E22CD773B50092FD76 /* NewsNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,10 +83,7 @@
 			);
 			name = "NEWS TODAY";
 			packageProductDependencies = (
-				0BADF31C2CD6E88B005C358B /* Models */,
-				0BADF31E2CD6E88B005C358B /* NetworkManager */,
-				0BADF3202CD6E88B005C358B /* NewsNetwork */,
-				0BADF3222CD6E88B005C358B /* PersistenceManager */,
+				923745E12CD773B50092FD76 /* NewsNetwork */,
 			);
 			productName = "NEWS TODAY";
 			productReference = 0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */;
@@ -123,7 +114,7 @@
 			mainGroup = 0BA1A96B2CC58DE900A0A5B1;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */,
+				923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0BA1A9752CC58DE900A0A5B1 /* Products */;
@@ -163,7 +154,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H955NK8X7Y;
+				DEVELOPMENT_TEAM = 4YW4KD9KAN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -178,7 +169,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewlink.NEWS-TODAY";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewli-nk.NEWS-TODAY";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -193,7 +184,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H955NK8X7Y;
+				DEVELOPMENT_TEAM = 4YW4KD9KAN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -208,7 +199,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewlink.NEWS-TODAY";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.andrewli-nk.NEWS-TODAY";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -359,9 +350,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
+		923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork";
+			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -370,25 +361,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0BADF31C2CD6E88B005C358B /* Models */ = {
+		923745E12CD773B50092FD76 /* NewsNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */;
-			productName = Models;
-		};
-		0BADF31E2CD6E88B005C358B /* NetworkManager */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */;
-			productName = NetworkManager;
-		};
-		0BADF3202CD6E88B005C358B /* NewsNetwork */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */;
+			package = 923745E02CD773B50092FD76 /* XCRemoteSwiftPackageReference "NewsNetwork" */;
 			productName = NewsNetwork;
-		};
-		0BADF3222CD6E88B005C358B /* PersistenceManager */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0BF2C8E22CD6AC82006A118F /* XCRemoteSwiftPackageReference "NewsNetwork" */;
-			productName = PersistenceManager;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
