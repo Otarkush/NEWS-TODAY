@@ -136,7 +136,6 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-    
     // MARK: - SwiftUI Preview for UIKit View
     struct BookmarksViewController_Preview: PreviewProvider {
         static var previews: some View {

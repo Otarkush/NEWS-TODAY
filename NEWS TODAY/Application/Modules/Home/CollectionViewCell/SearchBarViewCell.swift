@@ -9,6 +9,7 @@ import UIKit
 
 class SearchBarViewCell: UICollectionViewCell {
     static let identifier = "SearchBarViewCell"
+    weak var delegate: SearchBarViewCellDelegate?
     
     public lazy var searchBlockStackView: UIStackView = {
         let element = UIStackView()
@@ -36,8 +37,8 @@ class SearchBarViewCell: UICollectionViewCell {
         element.placeholder = "Search"
         element.textColor = UIColor.greyPrimary
         element.font = UIFont.InterBold(ofSize: 16)
-    
         element.translatesAutoresizingMaskIntoConstraints = false
+        element.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return element
     }()
     
@@ -50,6 +51,11 @@ class SearchBarViewCell: UICollectionViewCell {
         super.init(coder: coder)
         commonInit()
     }
+     
+     @objc private func textFieldDidChange(_ textField: UITextField) {
+         guard let text = textField.text else { return }
+         delegate?.didUpdateSearchQuery(text)
+     }
     
     private func commonInit() {
         searchBarConstraints()

@@ -8,7 +8,7 @@
 import UIKit
 import Repository
 
-enum Screens { case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection }
+enum Screens { case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection, search }
 
 protocol AppFactory {
     func makeScreen(_ screen: Screens, _ router: AppRouter, articles: [Article]?, selectedIndex: Int?) -> UIViewController
@@ -112,6 +112,14 @@ extension AppFactoryImpl: AppFactory {
             return TermsViewController(router: router)
             
         case .languageSelection:
+            let presenter = ProfileViewPresenterImpl(
+                networking: networking,
+                router: router
+            )
+            let viewController = LanguageSelectionViewController(presenter: presenter)
+            presenter.view = viewController
+            return viewController
+        case .search:
             let presenter = ProfileViewPresenterImpl(
                 networking: networking,
                 router: router

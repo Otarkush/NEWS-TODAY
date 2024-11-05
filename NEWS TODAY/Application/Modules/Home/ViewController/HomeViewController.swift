@@ -13,6 +13,10 @@ protocol HomeViewPresenter: AnyObject {
     func viewDidLoad()
 }
 
+protocol SearchBarViewCellDelegate: AnyObject {
+    func didUpdateSearchQuery(_ query: String)
+}
+
 final class HomeViewController: UIViewController {
   
     //MARK: - Properties
@@ -146,6 +150,14 @@ final class HomeViewController: UIViewController {
     }
 }
 
+//MARK: - HomeViewController + SearchBarViewCellDelegate
+extension HomeViewController: SearchBarViewCellDelegate {
+    func didUpdateSearchQuery(_ query: String) {
+        
+        print("Поисковый запрос в HomeViewController: \(query)")
+    }
+}
+
 //MARK: - HomeViewController + HomeViewDelegate
 extension HomeViewController: HomeViewDelegate {
     func updateUIForCategories(with categories: [Category]) {
@@ -180,29 +192,6 @@ extension HomeViewController: HomeViewDelegate {
         
     }
 }
-
-// MARK: - SwiftUI Preview for UIKit View
-struct HomeViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        HomeViewWrapper()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct HomeViewWrapper: UIViewRepresentable {
-  
-    func makeUIView(context: Context) -> UIView {
-        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
-        
-        return homeViewController.view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        
-    }
-}
-
 struct HomeViewModel {
     let browser: [NewHeadersTitles]
     let discover: [NewHeadersTitles]
@@ -303,7 +292,10 @@ private extension HomeViewController {
             case let .discover(model):
                 (cell as? LabelViewCell)?.configure(label: model)
             case let .searchBar(model):
-                (cell as? SearchBarViewCell)?.configure(searchBar: model)
+                if let searchBarCell = cell as? SearchBarViewCell {
+                    searchBarCell.configure(searchBar: model)
+                    searchBarCell.delegate = self  
+                }
             case let .category(model):
                 (cell as? CategoriesViewCell)?.configure(category: model)
             case let .topHeadline(model):
@@ -365,6 +357,28 @@ private extension HomeViewController {
 
 final class CollectionHeader: UICollectionReusableView {
     func configure(_ model: HomeViewModel.Header) {
+        
+    }
+}
+ 
+// MARK: - SwiftUI Preview for UIKit View
+struct HomeViewController_Preview: PreviewProvider {
+    static var previews: some View {
+        HomeViewWrapper()
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}
+
+struct HomeViewWrapper: UIViewRepresentable {
+  
+    func makeUIView(context: Context) -> UIView {
+        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        
+        return homeViewController.view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
         
     }
 }
