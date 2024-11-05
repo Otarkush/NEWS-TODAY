@@ -1,4 +1,5 @@
 import UIKit
+import Repository
 
 
 protocol BookmarkViewDelegate: AnyObject {
@@ -14,12 +15,12 @@ struct Article {
 }
 
 final class BookmarksViewPresenterImpl: BookmarksViewPresenter {
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
     private var news: [Article] = []
     weak var view: BookmarkViewDelegate?
     
-    init(networking: AppNetworking, router: AppRouter) {
+    init(networking: NewsRepository, router: AppRouter) {
         self.networking = networking
         self.router = router
     }

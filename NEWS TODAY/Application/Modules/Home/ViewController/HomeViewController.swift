@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 protocol HomeViewPresenter: AnyObject {
     func fetchCategories() -> [Category]
@@ -373,7 +374,7 @@ struct HomeViewController_Preview: PreviewProvider {
 struct HomeViewWrapper: UIViewRepresentable {
   
     func makeUIView(context: Context) -> UIView {
-        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
         
         return homeViewController.view
     }

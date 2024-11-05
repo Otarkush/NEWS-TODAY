@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Models
+import Repository
 
 protocol HomeViewDelegate: AnyObject {
     func updateUIForCategories(with categories: [Category])
@@ -17,12 +19,12 @@ final class HomeViewPresenterImpl  {
   
     //MARK: - Properties
     weak var view: HomeViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
   
     
     //MARK: - Init
-    init(networking: AppNetworking,
+    init(networking: NewsRepository,
          router: AppRouter) {
         self.networking = networking
         self.router = router

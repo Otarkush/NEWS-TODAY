@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Repository
+
 
 enum DetailViewInteraction {
     case back
@@ -29,13 +31,13 @@ final class DetailViewPresenterImpl {
     
     // MARK: - Properties
     weak var view: DetailViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
     private let articles: [Article]
     private var selectedIndex: Int
     
     // MARK: - Init
-    init(networking: AppNetworking, router: AppRouter, articles: [Article], selectedIndex: Int) {
+    init(networking: NewsRepository, router: AppRouter, articles: [Article], selectedIndex: Int) {
         self.networking = networking
         self.router = router
         self.articles = articles

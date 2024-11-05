@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 protocol BookmarksViewPresenter: AnyObject {
     
@@ -148,7 +149,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     struct BookmarkViewWrapper1: UIViewRepresentable {
         
         func makeUIView(context: Context) -> UIView {
-            let bookmarkViewController = BookmarksViewController(presenter: BookmarksViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+            let bookmarkViewController = BookmarksViewController(presenter: BookmarksViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
             
             return bookmarkViewController.view
         }

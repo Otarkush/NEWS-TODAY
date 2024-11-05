@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Repository
+
 
 protocol OnboardingViewDelegate: AnyObject {
     func updateUI()
@@ -16,11 +18,11 @@ final class OnboardingViewPresenterImpl {
     
     //MARK: - Properties
     weak var view: OnboardingViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
     
     //MARK: - Init
-    init(networking: AppNetworking, router: AppRouter) {
+    init(networking: NewsRepository, router: AppRouter) {
         self.networking = networking
         self.router = router
     }

@@ -7,6 +7,7 @@
 
 import UIKit
 import Repository
+import Models
 
 enum Screens { case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection, search }
 
@@ -18,11 +19,11 @@ protocol AppFactory {
 final class AppFactoryImpl {
     
     // MARK: - Properties
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     
     // MARK: - Init
     init() {
-        self.networking = NetworkingManagerImpl()
+        self.networking = NewsRepository.shared
     }
     
     // MARK: - Methods
@@ -39,7 +40,12 @@ final class AppFactoryImpl {
 
 // MARK: - AppFactoryImpl + AppFactory
 extension AppFactoryImpl: AppFactory {
-    func makeScreen(_ screen: Screens, _ router: AppRouter, articles: [Article]?, selectedIndex: Int?) -> UIViewController {
+    func makeScreen(
+        _ screen: Screens,
+        _ router: AppRouter,
+        articles: [Article]?,
+        selectedIndex: Int?
+    ) -> UIViewController {
         
         switch screen {
         case .home:
@@ -120,11 +126,11 @@ extension AppFactoryImpl: AppFactory {
             presenter.view = viewController
             return viewController
         case .search:
-            let presenter = ProfileViewPresenterImpl(
+            let presenter = SearchViewPresenterImpl(
                 networking: networking,
                 router: router
             )
-            let viewController = LanguageSelectionViewController(presenter: presenter)
+            let viewController = SearchViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
         }
