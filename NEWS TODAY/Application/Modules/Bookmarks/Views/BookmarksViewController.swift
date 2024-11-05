@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import Repository
+import Models
 
 protocol BookmarksViewPresenter: AnyObject {
     
@@ -21,10 +22,7 @@ class BookmarksViewController: UIViewController {
   
     //MARK: - Properties
     private let presenter: BookmarksViewPresenter
-    private var news: [Article] =  [
-        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb1", author: "dasdas", article: "Stringdadsa"),
-        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb2", author: "dasdas", article: "Stringdadsa")
-    ]
+    private var news: [Article] =  []
 
     
     //MARK: - Init

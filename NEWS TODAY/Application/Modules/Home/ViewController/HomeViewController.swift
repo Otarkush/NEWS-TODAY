@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import Repository
+import Models
 
 protocol HomeViewPresenter: AnyObject {
     func fetchCategories() -> [Category]
@@ -26,7 +27,7 @@ final class HomeViewController: UIViewController {
     var browseArray = [NewHeadersTitles]()
     var discoverArray = [NewHeadersTitles]()
     var searchBarArray = [NewSearchBar]()
-    var topHeadlinesArray = [News]()
+    var topHeadlinesArray = [Article]()
 //    var recommendedSeeAll = [NewRecommendedTitles]()
 //    var recommendedHeadlines = [News]()
     
@@ -94,6 +95,18 @@ final class HomeViewController: UIViewController {
         case categories
         case topHeadlines
 //        case recommended
+    }
+    
+    private func applySnapshot() {
+        var snapshot = DataSnapshot()
+        snapshot.appendSections(UISection.allCases)
+        snapshot.appendItems(browseArray.map(UIItem.browser), toSection: .browser)
+        snapshot.appendItems(discoverArray.map(UIItem.discover), toSection: .discover)
+        snapshot.appendItems(searchBarArray.map(UIItem.searchBar), toSection: .searchBar)
+        snapshot.appendItems(categoriesArray.map(UIItem.category), toSection: .category)
+        snapshot.appendItems(topHeadlinesArray.map(UIItem.topHeadline), toSection: .topHeadline)
+        
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -171,25 +184,12 @@ extension HomeViewController: HomeViewDelegate {
         }
     }
     
-    func updateUIForNewsByCategory(with news: [News]) {
-        #warning("TO DO: fill array for top news")
-        self.topHeadlinesArray.append(News(
-            id: 0,
-            category: "POLITICS",
-            title: "The latest situation in presidential selection",
-            img: #imageLiteral(resourceName: "Capital"),
-            favorite: false
-        ))
-        self.topHeadlinesArray.append(News(
-            id: 1,
-            category: "Art",
-            title: "Six steps to creating a color palette",
-            img: #imageLiteral(resourceName: "Capital"),
-            favorite: false
-        ))
+    func updateUIForNewsByCategory(with news: [Article]) {
+        self.topHeadlinesArray = news
+        applySnapshot()
     }
     
-    func updateUIForRecommendedNews(with news: [News]) {
+    func updateUIForRecommendedNews(with news: [Article]) {
         
     }
 }
@@ -198,7 +198,7 @@ struct HomeViewModel {
     let discover: [NewHeadersTitles]
     let searchBar: [NewSearchBar]
     let categories: [Category]
-    let topHeadlines: [News]
+    let topHeadlines: [Article]
 //    let header: Header
 //    let recommended: [NewsArticle]
     
@@ -235,7 +235,7 @@ private extension HomeViewController {
         case discover(NewHeadersTitles)
         case searchBar(NewSearchBar)
         case category(Category)
-        case topHeadline(News)
+        case topHeadline(Article)
 //        case recommended(NewsArticle)
         
         var identifier: String {
@@ -361,6 +361,7 @@ final class CollectionHeader: UICollectionReusableView {
         
     }
 }
+
  
 // MARK: - SwiftUI Preview for UIKit View
 struct HomeViewController_Preview: PreviewProvider {

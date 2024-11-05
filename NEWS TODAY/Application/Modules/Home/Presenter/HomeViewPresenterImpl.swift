@@ -11,8 +11,8 @@ import Repository
 
 protocol HomeViewDelegate: AnyObject {
     func updateUIForCategories(with categories: [Category])
-    func updateUIForNewsByCategory(with news: [News])
-    func updateUIForRecommendedNews(with news: [News])
+    func updateUIForNewsByCategory(with news: [Article])
+    func updateUIForRecommendedNews(with news: [Article])
 }
 
 final class HomeViewPresenterImpl  {
@@ -40,7 +40,22 @@ extension HomeViewPresenterImpl: HomeViewPresenter {
     
     func viewDidLoad() {
         view?.updateUIForCategories(with: fetchCategories())
-        view?.updateUIForNewsByCategory(with: [])
+        
+        Task {
+            let result = await networking.search("Trump", size: 10)
+            
+            await MainActor.run {
+                switch result {
+                case .success(let news):
+                    view?.updateUIForNewsByCategory(with: news)
+                    print("Данные новостей:", news)
+                case .failure(let error):
+                    print("Failed to load news: \(error)")
+                }
+            }
+        }
+        
         view?.updateUIForRecommendedNews(with: [])
     }
+
 }

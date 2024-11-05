@@ -7,10 +7,3 @@
 
 import UIKit
 
-struct News: Hashable {
-    let id: Int
-    let category: String
-    let title: String
-    let img: UIImage
-    let favorite: Bool
-}

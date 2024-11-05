@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import Repository
+import Models
 
 protocol SearchViewPresenter: AnyObject {
 }
@@ -16,10 +17,7 @@ final class SearchViewController: UIViewController {
     
     //MARK: - Properties
     private let presenter: SearchViewPresenter
-    private var news: [Article] = [
-        Article(category: "News", header: "Headline 1", imageName: "onb1", author: "Author 1", article: "Content 1"),
-        Article(category: "News", header: "Headline 2", imageName: "onb2", author: "Author 2", article: "Content 2")
-    ]
+    private var news: [Article] = []
     
     //MARK: - UI Components
     private lazy var searchBar: UISearchBar = {

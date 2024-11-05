@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Models
 
 protocol DetailViewPresenter: AnyObject {
     func show(data: DetailData) -> String
@@ -63,12 +64,17 @@ final class DetailViewController: UIViewController {
 // MARK: - DetailViewController + DetailViewDelegate
 extension DetailViewController: DetailViewDelegate {
     func updateUI(viewModel: Article) {
-        detailView.imageView.image = UIImage(named: viewModel.imageName)
-        detailView.authorNameLabel.text = viewModel.author
-        detailView.newsHeaderLabel.text = viewModel.header
-        detailView.categoryLabel.text = viewModel.category
-        detailView.detailsTextView.text = viewModel.article
-    }
+            if let imageUrl = viewModel.urlToImage, let imageData = try? Data(contentsOf: imageUrl) {
+                detailView.imageView.image = UIImage(data: imageData)
+            } else {
+                detailView.imageView.image = UIImage(named: "onb2") 
+            }
+            
+            detailView.authorNameLabel.text = viewModel.author ?? "Unknown author"
+            detailView.newsHeaderLabel.text = viewModel.title
+            detailView.categoryLabel.text = viewModel.source.name
+            detailView.detailsTextView.text = viewModel.content ?? "No content available"
+        }
 }
 
 //MARK: - ViewModel experiment

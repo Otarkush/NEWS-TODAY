@@ -1,18 +1,12 @@
 import UIKit
 import Repository
+import Models
 
 
 protocol BookmarkViewDelegate: AnyObject {
     
 }
 
-struct Article {
-    let category: String
-    let header: String
-    let imageName: String
-    let author: String
-    let article: String
-}
 
 final class BookmarksViewPresenterImpl: BookmarksViewPresenter {
     private let networking: NewsRepository

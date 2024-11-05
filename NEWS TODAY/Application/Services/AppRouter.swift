@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Models
 
 protocol AppRouter: AnyObject {
     func showHomeView()

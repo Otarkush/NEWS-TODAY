@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Models
 
 class TopHeadlinesViewCell: UICollectionViewCell {
     static let identifier = "TopHeadlinesViewCell"
@@ -54,15 +55,27 @@ class TopHeadlinesViewCell: UICollectionViewCell {
         searchBarConstraints()
     }
     
-    func configure(topHeadlines: News) {
-        imageView.image = topHeadlines.img
-        categoryLabel.text = topHeadlines.category
-        titleLabel.text = topHeadlines.title
-//        let searchImage = topHeadlines.favorite ? "" : ""
-//        let searchImageAlwaysOriginal = searchImage.withRenderingMode(.alwaysOriginal)
-//        imageView.setImage(searchImageAlwaysOriginal, for: .normal)
-//        favoriteButton.addTarget(<#T##target: Any?##Any?#>, action: <#T##Selector#>, for: <#T##UIControl.Event#>)
+    func configure(topHeadlines: Article) {
+        Task {
+            if let imageUrl = topHeadlines.urlToImage {
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: imageUrl)
+                    if let image = UIImage(data: data) {
+                        imageView.image = image
+                    } else {
+                        imageView.image = UIImage(named: "onb2")
+                    }
+                } catch {
+                    imageView.image = UIImage(named: "onb1")
+                }
+            } else {
+                imageView.image = UIImage(named: "onb2")
+            }
+            categoryLabel.text = topHeadlines.source.name
+            titleLabel.text = topHeadlines.title
+        }
     }
+
       
     private func searchBarConstraints() {
         addSubview(headlineView)

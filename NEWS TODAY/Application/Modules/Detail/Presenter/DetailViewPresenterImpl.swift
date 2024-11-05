@@ -7,6 +7,7 @@
 
 import Foundation
 import Repository
+import Models
 
 
 enum DetailViewInteraction {
@@ -59,15 +60,15 @@ extension DetailViewPresenterImpl: DetailViewPresenter {
         let article = currentArticle()
         switch data {
         case .article:
-            return article.article
+            return article.content ?? ""
         case .category:
-            return article.category
+            return article.source.name
         case .header:
-            return article.header
+            return article.title
         case .author:
-            return article.author
+            return article.author ?? "No author"
         case .image:
-            return article.imageName
+            return article.urlToImage?.absoluteString ?? "No image available"
         }
     }
     

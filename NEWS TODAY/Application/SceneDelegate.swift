@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
-//        Task { await NewsRepository.shared.register() }
+        Task { await NewsRepository.shared.register() }
 
         let navigationController = UINavigationController()
         let factory = AppFactoryImpl()
