@@ -7,10 +7,16 @@
 
 import UIKit
 import SwiftUI
+import Repository
+import Models
 
 protocol HomeViewPresenter: AnyObject {
     func fetchCategories() -> [Category]
     func viewDidLoad()
+}
+
+protocol SearchBarViewCellDelegate: AnyObject {
+    func didUpdateSearchQuery(_ query: String)
 }
 
 final class HomeViewController: UIViewController {
@@ -21,6 +27,10 @@ final class HomeViewController: UIViewController {
     var browseArray = [NewHeadersTitles]()
     var discoverArray = [NewHeadersTitles]()
     var searchBarArray = [NewSearchBar]()
+    var topHeadlinesArray = [Article]()
+//    var recommendedSeeAll = [NewRecommendedTitles]()
+//    var recommendedHeadlines = [News]()
+    
     
     //MARK: - Init
     init(presenter: HomeViewPresenter) {
@@ -52,6 +62,9 @@ final class HomeViewController: UIViewController {
         collectionView.register(LabelViewCell.self, forCellWithReuseIdentifier: LabelViewCell.identifier)
         collectionView.register(SearchBarViewCell.self, forCellWithReuseIdentifier: SearchBarViewCell.identifier)
         collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
+        collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
+//        collectionView.register(LabelButtonViewCell.self, forCellWithReuseIdentifier: LabelButtonViewCell.identifier)
+//        collectionView.register(RecommendedBookmarksViewCell.self, forCellWithReuseIdentifier: RecommendedBookmarksViewCell.identifier)
         addElements()
         dataSource = makeDataSource()
 //        collectionView.dataSource = dataSource //??? wtf эта строка ни на что не влияет???????!!!!!!!1
@@ -80,13 +93,23 @@ final class HomeViewController: UIViewController {
         case discover
         case searchBar
         case categories
-//        case topHeadlines
+        case topHeadlines
 //        case recommended
     }
     
-    private func createLayout() -> UICollectionViewLayout {
-        print("createLayout")
+    private func applySnapshot() {
+        var snapshot = DataSnapshot()
+        snapshot.appendSections(UISection.allCases)
+        snapshot.appendItems(browseArray.map(UIItem.browser), toSection: .browser)
+        snapshot.appendItems(discoverArray.map(UIItem.discover), toSection: .discover)
+        snapshot.appendItems(searchBarArray.map(UIItem.searchBar), toSection: .searchBar)
+        snapshot.appendItems(categoriesArray.map(UIItem.category), toSection: .category)
+        snapshot.appendItems(topHeadlinesArray.map(UIItem.topHeadline), toSection: .topHeadline)
         
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             switch Section(rawValue: sectionIndex) {
             case .browser:
@@ -118,11 +141,15 @@ final class HomeViewController: UIViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
                 return section
-                
-//            case .topHeadlines:
-//                #warning("TO DO: Make section")
-//                return nil
-//                
+            case .topHeadlines:
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(256), heightDimension: .absolute(256))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 8, bottom: 24, trailing: 8)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(272), heightDimension: .absolute(296))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                return section
 //            case .recommended:
 //                #warning("TO DO: Make section")
 //                return nil
@@ -137,6 +164,14 @@ final class HomeViewController: UIViewController {
     }
 }
 
+//MARK: - HomeViewController + SearchBarViewCellDelegate
+extension HomeViewController: SearchBarViewCellDelegate {
+    func didUpdateSearchQuery(_ query: String) {
+        
+        print("Поисковый запрос в HomeViewController: \(query)")
+    }
+}
+
 //MARK: - HomeViewController + HomeViewDelegate
 extension HomeViewController: HomeViewDelegate {
     func updateUIForCategories(with categories: [Category]) {
@@ -144,48 +179,26 @@ extension HomeViewController: HomeViewDelegate {
             Category(name: "Random", emoji: "", id: -1)
         ]
         
-        for (index, element) in categories.enumerated() {
+        for (_, element) in categories.enumerated() {
             self.categoriesArray.append(element)
         }
     }
     
-    func updateUIForNewsByCategory(with categories: [Category]) {
-        
+    func updateUIForNewsByCategory(with news: [Article]) {
+        self.topHeadlinesArray = news
+        applySnapshot()
     }
     
-    func updateUIForRecommendedNews(with categories: [Category]) {
+    func updateUIForRecommendedNews(with news: [Article]) {
         
     }
 }
-
-// MARK: - SwiftUI Preview for UIKit View
-struct HomeViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        HomeViewWrapper()
-            .previewLayout(.sizeThatFits)
-            .padding()
-    }
-}
-
-struct HomeViewWrapper: UIViewRepresentable {
-  
-    func makeUIView(context: Context) -> UIView {
-        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
-        
-        return homeViewController.view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-        
-    }
-}
-
 struct HomeViewModel {
     let browser: [NewHeadersTitles]
     let discover: [NewHeadersTitles]
     let searchBar: [NewSearchBar]
     let categories: [Category]
-//    let topHeadlines: [NewsArticle]
+    let topHeadlines: [Article]
 //    let header: Header
 //    let recommended: [NewsArticle]
     
@@ -207,14 +220,14 @@ struct NewSearchBar: Hashable {
     let id: String
 }
 
-struct NewsArticle: Hashable {
-    let id: String
-}
+//struct NewsArticle: Hashable {
+//    let id: String
+//}
 
 private extension HomeViewController {
     
     enum UISection: Int, Hashable, CaseIterable {
-        case browser = 0, discover, searchBar, category/*, topHeadline, recommended*/
+        case browser = 0, discover, searchBar, category, topHeadline/*, recommended*/
     }
     
     enum UIItem: Hashable {
@@ -222,7 +235,7 @@ private extension HomeViewController {
         case discover(NewHeadersTitles)
         case searchBar(NewSearchBar)
         case category(Category)
-//        case topHeadline(NewsArticle)
+        case topHeadline(Article)
 //        case recommended(NewsArticle)
         
         var identifier: String {
@@ -231,7 +244,7 @@ private extension HomeViewController {
             case .discover: LabelViewCell.identifier
             case .searchBar: SearchBarViewCell.identifier
             case .category: CategoriesViewCell.identifier
-//            case .topHeadline: "headlineIdentifier"
+            case .topHeadline: TopHeadlinesViewCell.identifier
 //            case .recommended: "recommendedIdentifier"
             }
         }
@@ -272,8 +285,6 @@ private extension HomeViewController {
     
     func makeDataSource() -> DataSource {
         dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
-            print("makeDataSource")
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.identifier, for: indexPath)
             
             switch item {
@@ -282,16 +293,16 @@ private extension HomeViewController {
             case let .discover(model):
                 (cell as? LabelViewCell)?.configure(label: model)
             case let .searchBar(model):
-                (cell as? SearchBarViewCell)?.configure(searchBar: model)
+                if let searchBarCell = cell as? SearchBarViewCell {
+                    searchBarCell.configure(searchBar: model)
+                    searchBarCell.delegate = self  
+                }
             case let .category(model):
                 (cell as? CategoriesViewCell)?.configure(category: model)
-                
-                //            case let .topHeadline(model):
-                //                break
-                //
-                //            case let .recommended(model):
-                //                break
-                //            }
+            case let .topHeadline(model):
+                (cell as? TopHeadlinesViewCell)?.configure(topHeadlines: model)
+            //case let .recommended(model):
+            //  break
             }
             
             return cell
@@ -313,9 +324,13 @@ private extension HomeViewController {
                 toSection: .searchBar
             )
             snapshot.appendItems(
-//                Categories.all.map(UIItem.category),
                 categoriesArray.map(UIItem.category),
                 toSection: .category
+            )
+            print("topHeadlinesArray", topHeadlinesArray)
+            snapshot.appendItems(
+                topHeadlinesArray.map(UIItem.topHeadline),
+                toSection: .topHeadline
             )
             dataSource.apply(snapshot)
         }
@@ -343,6 +358,29 @@ private extension HomeViewController {
 
 final class CollectionHeader: UICollectionReusableView {
     func configure(_ model: HomeViewModel.Header) {
+        
+    }
+}
+
+ 
+// MARK: - SwiftUI Preview for UIKit View
+struct HomeViewController_Preview: PreviewProvider {
+    static var previews: some View {
+        HomeViewWrapper()
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}
+
+struct HomeViewWrapper: UIViewRepresentable {
+  
+    func makeUIView(context: Context) -> UIView {
+        let homeViewController = HomeViewController(presenter: HomeViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        
+        return homeViewController.view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
         
     }
 }

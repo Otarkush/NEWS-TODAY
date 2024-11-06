@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftUI
+import Repository
+import Models
 
 protocol BookmarksViewPresenter: AnyObject {
     
@@ -20,10 +22,7 @@ class BookmarksViewController: UIViewController {
   
     //MARK: - Properties
     private let presenter: BookmarksViewPresenter
-    private var news: [Article] =  [
-        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb1", author: "dasdas", article: "Stringdadsa"),
-        Article(category: "sadasdsada", header: "dadsasad", imageName: "onb2", author: "dasdas", article: "Stringdadsa")
-    ]
+    private var news: [Article] =  []
 
     
     //MARK: - Init
@@ -136,7 +135,6 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-    
     // MARK: - SwiftUI Preview for UIKit View
     struct BookmarksViewController_Preview: PreviewProvider {
         static var previews: some View {
@@ -149,7 +147,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     struct BookmarkViewWrapper1: UIViewRepresentable {
         
         func makeUIView(context: Context) -> UIView {
-            let bookmarkViewController = BookmarksViewController(presenter: BookmarksViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+            let bookmarkViewController = BookmarksViewController(presenter: BookmarksViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
             
             return bookmarkViewController.view
         }

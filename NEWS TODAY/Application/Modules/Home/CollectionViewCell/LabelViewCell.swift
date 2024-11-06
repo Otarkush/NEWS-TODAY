@@ -36,12 +36,10 @@ class LabelViewCell: UICollectionViewCell {
       
     private func textLabelConstraints() {
         addSubview(titleLabel)
-//        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-//            button.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-//            textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
         ])
     }
 }

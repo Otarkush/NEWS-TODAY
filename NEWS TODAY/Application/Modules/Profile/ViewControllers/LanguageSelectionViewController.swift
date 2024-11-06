@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 final class LanguageSelectionViewController: UIViewController {
 
@@ -144,7 +145,7 @@ struct LanguageSelectionViewControllerWrapper: UIViewRepresentable {
         let languageViewController = LanguageSelectionViewController(
             presenter:
                 ProfileViewPresenterImpl(
-                    networking: NetworkingManagerImpl(), router: router))
+                    networking: NewsRepository.shared, router: router))
         return languageViewController.view
     }
     

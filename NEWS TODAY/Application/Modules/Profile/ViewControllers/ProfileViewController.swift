@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 //MARK: - Protocols
 protocol ProfileView: UIView {
@@ -123,7 +124,7 @@ struct ProfileViewWrapper: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let profileViewController = ProfileViewController(
             presenter: ProfileViewPresenterImpl(
-                networking: NetworkingManagerImpl(),
+                networking: NewsRepository.shared,
                 router: AppRouterImpl(
                     factory: AppFactoryImpl(),
                     navigation: UINavigationController())

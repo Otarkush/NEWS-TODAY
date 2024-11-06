@@ -60,9 +60,14 @@ class BookmarkCell: UITableViewCell {
 
     // MARK: - Public Methods
     func set(info: Article) {
-        bookmarkImage.image = UIImage(systemName: info.imageName)
-        categoryLabel.text = info.author
-        mainLabel.text = info.article
+        if let imageUrl = info.urlToImage, let imageData = try? Data(contentsOf: imageUrl) {
+            bookmarkImage.image = UIImage(data: imageData)
+        } else {
+            bookmarkImage.image = UIImage(systemName: "onb2")
+        }
+        
+        categoryLabel.text = info.source.name
+        mainLabel.text = info.title
     }
 
     // MARK: - Private Methods

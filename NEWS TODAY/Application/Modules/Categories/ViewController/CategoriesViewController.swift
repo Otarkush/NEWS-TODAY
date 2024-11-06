@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 //TODO: Рефактор под нашу архитектуру
 
@@ -182,7 +183,7 @@ struct CategoriesViewController_Preview: PreviewProvider {
 struct CategoriesViewWrapper: UIViewRepresentable {
   
     func makeUIView(context: Context) -> UIView {
-        let categoriesViewController = CategoriesViewController(presenter: CategoriesViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        let categoriesViewController = CategoriesViewController(presenter: CategoriesViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
         
         
         return categoriesViewController.view
