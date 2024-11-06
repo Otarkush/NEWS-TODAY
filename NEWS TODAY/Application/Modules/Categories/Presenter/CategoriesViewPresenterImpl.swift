@@ -7,6 +7,8 @@
 
 
 import Foundation
+import Repository
+
 
 protocol CategoriesViewDelegate: AnyObject {
     func updateUI(with categories: [Category])
@@ -16,11 +18,11 @@ final class CategoriesViewPresenterImpl  {
   
     //MARK: - Properties
     weak var view: CategoriesViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
   
     //MARK: - Init
-    init(networking: AppNetworking,
+    init(networking: NewsRepository,
          router: AppRouter) {
         self.networking = networking
         self.router = router

@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import Repository
+import Models
+
 
 enum DetailViewInteraction {
     case back
@@ -29,13 +32,13 @@ final class DetailViewPresenterImpl {
     
     // MARK: - Properties
     weak var view: DetailViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
     private let articles: [Article]
     private var selectedIndex: Int
     
     // MARK: - Init
-    init(networking: AppNetworking, router: AppRouter, articles: [Article], selectedIndex: Int) {
+    init(networking: NewsRepository, router: AppRouter, articles: [Article], selectedIndex: Int) {
         self.networking = networking
         self.router = router
         self.articles = articles
@@ -57,15 +60,15 @@ extension DetailViewPresenterImpl: DetailViewPresenter {
         let article = currentArticle()
         switch data {
         case .article:
-            return article.article
+            return article.content ?? ""
         case .category:
-            return article.category
+            return article.source.name
         case .header:
-            return article.header
+            return article.title
         case .author:
-            return article.author
+            return article.author ?? "No author"
         case .image:
-            return article.imageName
+            return article.urlToImage?.absoluteString ?? "No image available"
         }
     }
     

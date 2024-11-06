@@ -39,8 +39,8 @@ class CategoriesViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             button.centerYAnchor.constraint(equalTo: centerYAnchor),
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-//            textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+//            button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+//            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         ])
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Repository
 
 protocol OnboardingViewPresenter: AnyObject {
     func didTapNext()
@@ -203,7 +204,7 @@ struct OnbViewController_Preview: PreviewProvider {
 struct OnboardingViewWrapper: UIViewRepresentable {
     
     func makeUIView(context: Context) -> UIView {
-        let onboardingViewController = OnboardingViewController(presenter: OnboardingViewPresenterImpl(networking: NetworkingManagerImpl(), router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
+        let onboardingViewController = OnboardingViewController(presenter: OnboardingViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController())))
         
         return onboardingViewController.view
     }

@@ -9,6 +9,7 @@ import UIKit
 
 class SearchBarViewCell: UICollectionViewCell {
     static let identifier = "SearchBarViewCell"
+    weak var delegate: SearchBarViewCellDelegate?
     
     public lazy var searchBlockStackView: UIStackView = {
         let element = UIStackView()
@@ -36,8 +37,8 @@ class SearchBarViewCell: UICollectionViewCell {
         element.placeholder = "Search"
         element.textColor = UIColor.greyPrimary
         element.font = UIFont.InterBold(ofSize: 16)
-    
         element.translatesAutoresizingMaskIntoConstraints = false
+        element.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return element
     }()
     
@@ -50,6 +51,11 @@ class SearchBarViewCell: UICollectionViewCell {
         super.init(coder: coder)
         commonInit()
     }
+     
+     @objc private func textFieldDidChange(_ textField: UITextField) {
+         guard let text = textField.text else { return }
+         delegate?.didUpdateSearchQuery(text)
+     }
     
     private func commonInit() {
         searchBarConstraints()
@@ -63,19 +69,19 @@ class SearchBarViewCell: UICollectionViewCell {
         addSubview(searchBlockStackView)
         searchBlockStackView.addArrangedSubview(searchButton)
         searchBlockStackView.addArrangedSubview(searchTextField)
-//        textLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             searchBlockStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             searchBlockStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-//            searchBlockStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-//            searchBlockStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            searchBlockStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            searchBlockStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             searchBlockStackView.heightAnchor.constraint(equalToConstant: 56),
             
             searchButton.leadingAnchor.constraint(equalTo: searchBlockStackView.leadingAnchor, constant: 16),
             searchButton.widthAnchor.constraint(equalToConstant: 24),
-            searchButton.heightAnchor.constraint(equalToConstant: 24),
+//            searchButton.heightAnchor.constraint(equalToConstant: 24),
             
+            searchTextField.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor, constant: 24),
             searchTextField.trailingAnchor.constraint(equalTo: searchBlockStackView.trailingAnchor, constant: -16),
         ])
     }

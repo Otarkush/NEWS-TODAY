@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Repository
+
 
 protocol ProfileViewDelegate: AnyObject {
     func updateUI(_ viewModel: ProfileViewModel)
@@ -15,11 +17,11 @@ final class ProfileViewPresenterImpl  {
   
     //MARK: - Properties
     weak var view: ProfileViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
   
     //MARK: - Init
-    init(networking: AppNetworking,
+    init(networking: NewsRepository,
          router: AppRouter) {
         self.networking = networking
         self.router = router
