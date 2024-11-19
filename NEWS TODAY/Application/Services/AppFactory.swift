@@ -49,11 +49,11 @@ extension AppFactoryImpl: AppFactory {
         
         switch screen {
         case .home:
-            let presenter = HomeViewPresenterImpl(
+            let presenter = MainViewPresenterImpl(
                 networking: networking,
                 router: router
             )
-            let viewController = HomeViewController(presenter: presenter)
+            let viewController = MainViewController(presenter: presenter)
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.home)
             return viewController
