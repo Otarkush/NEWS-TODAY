@@ -1,20 +1,19 @@
+//////
+//////  SearchBarViewCell.swift
+//////  NEWS TODAY
+//////
+//////  Created by Daria Arisova on 31.10.2024.
+//////
 ////
-////  SearchBarViewCell.swift
-////  NEWS TODAY
-////
-////  Created by Daria Arisova on 31.10.2024.
-////
-//
 //import UIKit
 //
 //class SearchBarViewCell: UICollectionViewCell {
 //    static let identifier = "SearchBarViewCell"
-//    weak var delegate: SearchBarViewCellDelegate?
 //    
 //    public lazy var searchBlockStackView: UIStackView = {
 //        let element = UIStackView()
 //        element.axis = .horizontal
-//        element.backgroundColor = UIColor.greyLighter
+//        element.backgroundColor = UIColor.grayLighter
 //        element.layer.cornerRadius = 12.0
 //        element.spacing = 24
 //        element.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +22,7 @@
 //    
 //    public lazy var searchButton: UIButton = {
 //        let element = UIButton(type: .system)
-//        element.tintColor = UIColor.greyPrimary
+//        element.tintColor = UIColor.grayPrimary
 //        let searchImage = #imageLiteral(resourceName: "search")
 //        let searchImageAlwaysOriginal = searchImage.withRenderingMode(.alwaysOriginal)
 //        element.setImage(searchImageAlwaysOriginal, for: .normal)
@@ -35,7 +34,7 @@
 //    public lazy var searchTextField: UITextField = {
 //        let element = UITextField()
 //        element.placeholder = "Search"
-//        element.textColor = UIColor.greyPrimary
+//        element.textColor = UIColor.grayPrimary
 //        element.font = UIFont.InterBold(ofSize: 16)
 //        element.translatesAutoresizingMaskIntoConstraints = false
 //        element.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)

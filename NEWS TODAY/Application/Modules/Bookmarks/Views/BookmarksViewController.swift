@@ -61,7 +61,7 @@ class BookmarksViewController: UIViewController {
         let label = UILabel()
         label.text = "Saved articles to the library"
         label.font = .InterRegular(ofSize: 16)
-        label.textColor = .greyPrimary
+        label.textColor = .grayPrimary
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

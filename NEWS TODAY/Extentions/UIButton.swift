@@ -13,13 +13,13 @@ extension UIButton {
         
         self.init(type: .custom)
         
-        setTitleColor(.greyDarker, for: .normal)
+        setTitleColor(.grayDarker, for: .normal)
         backgroundColor = initBackgroundColor
         titleLabel?.font = .InterSemiBold(ofSize: 20)
         layer.cornerRadius = 12
         layer.borderWidth = 0.5
         layer.borderColor = UIColor.lightGray.cgColor
-        layer.borderColor = UIColor.greyLight.cgColor
+        layer.borderColor = UIColor.grayLight.cgColor
         layer.masksToBounds = true
         translatesAutoresizingMaskIntoConstraints = false 
     }
@@ -45,10 +45,10 @@ extension UIButton {
 //        setTitle(text, for: .normal)
         layer.cornerRadius = 16
         titleLabel?.font = .InterSemiBold(ofSize: 12)
-        tintColor = UIColor.greyPrimary
+        tintColor = UIColor.grayPrimary
         widthAnchor.constraint(equalToConstant: 75).isActive = true
         heightAnchor.constraint(equalToConstant: 32).isActive = true
-        backgroundColor = UIColor.greyLighter
+        backgroundColor = UIColor.grayLighter
         translatesAutoresizingMaskIntoConstraints = false
     }
 }

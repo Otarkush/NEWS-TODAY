@@ -37,7 +37,7 @@ class OnboardingViewImpl: UIView, OnboardingView {
         let label = UILabel()
         label.numberOfLines = 2
         label.font = .InterRegular(ofSize: 16)
-        label.textColor = .greyPrimary
+        label.textColor = .grayPrimary
         label.numberOfLines = 2
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -100,12 +100,12 @@ final class LanguageSelectionViewController: UIViewController {
         if selectedLanguage == Drawing.englishTitle {
             englishButton.backgroundColor = .blue
             englishButton.setTitleColor(.white, for: .normal)
-            russianButton.backgroundColor = .greyLighter
+            russianButton.backgroundColor = .grayLighter
             russianButton.setTitleColor(.darkGray, for: .normal)
         } else {
             russianButton.backgroundColor = .blue
             russianButton.setTitleColor(.white, for: .normal)
-            englishButton.backgroundColor = .greyLighter
+            englishButton.backgroundColor = .grayLighter
             englishButton.setTitleColor(.darkGray, for: .normal)
         }
     }

@@ -18,9 +18,9 @@ final class MainViewController: UIViewController {
     
     // MARK: - Properties
     private let presenter: MainViewPresenter
-    private var collectionView: UICollectionView
-    private var headerView: HeaderView
-    private var dataSource: any MainViewDataSource
+    private let collectionView: UICollectionView
+    private let headerView: HeaderView
+    private let dataSource: any MainViewDataSource
     
     private var categoriesArray = [Category]()
     private var topHeadlinesArray = [Article]()
@@ -46,32 +46,42 @@ final class MainViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollectionView()
         setupUI()
         presenter.viewDidLoad()
         setupConstraints()
     }
     
-    // MARK: - Setup UI
-    private func setupUI() {
-        view.backgroundColor = .white
-        view.addSubview(headerView)
+    // MARK: - private funcs
+    private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
         collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .white
+        view.addSubview(headerView)
         view.addSubview(collectionView)
     }
 }
 
-// MARK: - MainViewDelegate
+// MARK: - MainViewController + MainViewDelegate
 extension MainViewController: MainViewDelegate {
-    func updateUI(categories: [Category], headlines: [Article]) {
+    func updateUI(
+        categories: [Category],
+        headlines: [Article]
+    ) {
         self.categoriesArray = categories
         self.topHeadlinesArray = headlines
-        dataSource.updateSnapshot(categories: categoriesArray, topHeadlines: topHeadlinesArray)
+        dataSource.updateSnapshot(
+            categories: categoriesArray,
+            topHeadlines: topHeadlinesArray)
     }
 }
-//MARK: - Setup Constraints
+
+//MARK: - MainViewController + setupConstraints
 extension MainViewController {
     func setupConstraints() {
         NSLayoutConstraint.activate([

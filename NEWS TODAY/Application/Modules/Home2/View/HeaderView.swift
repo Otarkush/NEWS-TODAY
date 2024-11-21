@@ -14,8 +14,8 @@ final class HeaderView: UIView {
     private let browseLabel: UILabel = {
         let label = UILabel()
         label.text = "Browse"
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .black
+        label.font = UIFont.InterSemiBold(ofSize: 24)
+        label.textColor = .blackPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,8 +23,8 @@ final class HeaderView: UIView {
     private let discoverLabel: UILabel = {
         let label = UILabel()
         label.text = "Discover things of this world"
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .gray
+        label.font = .InterRegular(ofSize: 16)
+        label.textColor = .grayPrimary
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,11 +41,14 @@ final class HeaderView: UIView {
         return stackView
     }()
     
-    private let searchIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        imageView.tintColor = .gray
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private lazy var searchButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .gray
+        let searchImage = UIImage.search
+        button.setImage(searchImage, for: .normal)
+        button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     private lazy var searchTextField: UITextField = {
@@ -75,7 +78,7 @@ final class HeaderView: UIView {
         addSubview(discoverLabel)
         addSubview(searchBlockStackView)
         
-        searchBlockStackView.addArrangedSubview(searchIcon)
+        searchBlockStackView.addArrangedSubview(searchButton)
         searchBlockStackView.addArrangedSubview(searchTextField)
         
         NSLayoutConstraint.activate([
@@ -91,11 +94,19 @@ final class HeaderView: UIView {
             searchBlockStackView.topAnchor.constraint(equalTo: discoverLabel.bottomAnchor, constant: 16),
             searchBlockStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             searchBlockStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            searchBlockStackView.heightAnchor.constraint(equalToConstant: 56)
+            searchBlockStackView.heightAnchor.constraint(equalToConstant: 56),
+            
+            // Search Button
+            searchButton.widthAnchor.constraint(equalToConstant: 24),
+            searchButton.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
     
-    // MARK: - Search Field Logic
+    // MARK: - Button Actions
+    @objc private func searchButtonTapped() {
+        print("Search button tapped")
+    }
+    
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard let query = textField.text else { return }
         print("Search query: \(query)")

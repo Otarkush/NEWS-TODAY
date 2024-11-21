@@ -11,7 +11,7 @@ class CategoriesViewCell: UICollectionViewCell {
     static let identifier = "CategoriesViewCell"
     
     public lazy var button: UIButton = {
-        let element = UIButton(initBrowsecategoriesButton: .greyLighter)
+        let element = UIButton(initBrowsecategoriesButton: .grayLighter)
         return element
     }()
     

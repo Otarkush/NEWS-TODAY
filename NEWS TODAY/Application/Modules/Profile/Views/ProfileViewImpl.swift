@@ -27,7 +27,7 @@ final class ProfileViewImpl: UIView, ProfileView {
     
     let emailLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .greyPrimary
+        label.textColor = .grayPrimary
         label.font = .InterSemiBold(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

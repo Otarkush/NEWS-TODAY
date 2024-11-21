@@ -47,11 +47,13 @@ final class MainViewDataSourceImpl: MainViewDataSource {
     
     internal func makeDataSource() -> DataSource {
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+            
             switch item {
             case .category(let category):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoriesViewCell.identifier, for: indexPath) as! CategoriesViewCell
                 cell.configure(category: category)
                 return cell
+                
             case .topHeadline(let article):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopHeadlinesViewCell.identifier, for: indexPath) as! TopHeadlinesViewCell
                 cell.configure(topHeadlines: article)

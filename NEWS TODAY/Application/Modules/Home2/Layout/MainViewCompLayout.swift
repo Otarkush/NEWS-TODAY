@@ -10,7 +10,8 @@ import UIKit
 final class MainViewCompLayout {
     
     func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout {
+            (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
             switch Section(rawValue: sectionIndex) {
             case .categories:
