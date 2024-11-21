@@ -9,7 +9,7 @@ import UIKit
 import Models
 
 protocol MainViewDataSource: AnyObject {
-    #warning("Может убрать ассоц знаечния? Чтобы any не использовать при имплементации")
+    #warning("Может убрать ассоц значения? Чтобы any не использовать при имплементации")
     associatedtype Section: Hashable, CaseIterable
     associatedtype Item: Hashable
     
