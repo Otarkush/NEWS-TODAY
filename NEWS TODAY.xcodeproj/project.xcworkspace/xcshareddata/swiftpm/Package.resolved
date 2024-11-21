@@ -1,0 +1,24 @@
+{
+  "originHash" : "26ae64d58293e494718a2083186658bbd46fdebe4530375f4285724220cce54c",
+  "pins" : [
+    {
+      "identity" : "newsnetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ShapovalovIlya/NewsNetwork.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e742ac3f8f2b3b076d8d4e632f7cd405640e91fe"
+      }
+    },
+    {
+      "identity" : "swiftfp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ShapovalovIlya/SwiftFP.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "225f7347ed92f897aca45e3861f90693535de3bc"
+      }
+    }
+  ],
+  "version" : 3
+}

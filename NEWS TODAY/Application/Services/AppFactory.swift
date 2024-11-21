@@ -49,11 +49,23 @@ extension AppFactoryImpl: AppFactory {
         
         switch screen {
         case .home:
-            let presenter = HomeViewPresenterImpl(
+            let presenter = MainViewPresenterImpl(
                 networking: networking,
                 router: router
             )
-            let viewController = HomeViewController(presenter: presenter)
+            
+            let collectionView = UICollectionView(
+                           frame: .zero,
+                           collectionViewLayout: MainViewCompLayout().createLayout()
+                       )
+            
+            let viewController = MainViewController(
+                presenter: presenter,
+                dataSource: MainViewDataSourceImpl(collectionView: collectionView),
+                collectionView: collectionView,
+                headerView: HeaderView()
+            )
+            
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.home)
             return viewController

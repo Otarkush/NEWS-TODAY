@@ -59,7 +59,7 @@ class DetailViewImpl: UIView, DetailView {
     let detailsTextView: UITextView = {
         let textView = UITextView()
         textView.font = .InterRegular(ofSize: 16)
-        textView.textColor = .greyDarker
+        textView.textColor = .grayDarker
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false

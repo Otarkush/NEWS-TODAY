@@ -32,7 +32,7 @@ final class OnboardingViewController: UIViewController {
     internal let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = 3
-        pageControl.pageIndicatorTintColor = .greyLighter
+        pageControl.pageIndicatorTintColor = .grayLighter
         pageControl.currentPageIndicatorTintColor = .purplePrimary
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl

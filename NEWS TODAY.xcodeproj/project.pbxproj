@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		92418D102CEC74B500AC964B /* NewsNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = 92418D0F2CEC74B500AC964B /* NewsNetwork */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NEWS TODAY.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92418D102CEC74B500AC964B /* NewsNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "NEWS TODAY";
 			packageProductDependencies = (
+				92418D0F2CEC74B500AC964B /* NewsNetwork */,
 			);
 			productName = "NEWS TODAY";
 			productReference = 0BA1A9742CC58DE900A0A5B1 /* NEWS TODAY.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 0BA1A96B2CC58DE900A0A5B1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				92418D0E2CEC74B500AC964B /* XCRemoteSwiftPackageReference "NewsNetwork" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0BA1A9752CC58DE900A0A5B1 /* Products */;
 			projectDirPath = "";
@@ -145,12 +154,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H955NK8X7Y;
+				DEVELOPMENT_TEAM = 4YW4KD9KAN;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "NEWS TODAY/Info.plist";
+				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -173,12 +181,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = H955NK8X7Y;
+				DEVELOPMENT_TEAM = 4YW4KD9KAN;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "NEWS TODAY/Info.plist";
+				INFOPLIST_FILE = "NEWS TODAY/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -335,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		92418D0E2CEC74B500AC964B /* XCRemoteSwiftPackageReference "NewsNetwork" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ShapovalovIlya/NewsNetwork.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		92418D0F2CEC74B500AC964B /* NewsNetwork */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92418D0E2CEC74B500AC964B /* XCRemoteSwiftPackageReference "NewsNetwork" */;
+			productName = NewsNetwork;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0BA1A96C2CC58DE900A0A5B1 /* Project object */;
 }
