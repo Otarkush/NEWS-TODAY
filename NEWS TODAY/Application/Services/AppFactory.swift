@@ -53,7 +53,19 @@ extension AppFactoryImpl: AppFactory {
                 networking: networking,
                 router: router
             )
-            let viewController = MainViewController(presenter: presenter)
+            
+            let collectionView = UICollectionView(
+                           frame: .zero,
+                           collectionViewLayout: MainViewCompLayout().createLayout()
+                       )
+            
+            let viewController = MainViewController(
+                presenter: presenter,
+                dataSource: MainViewDataSourceImpl(collectionView: collectionView),
+                collectionView: collectionView,
+                headerView: HeaderView()
+            )
+            
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.home)
             return viewController

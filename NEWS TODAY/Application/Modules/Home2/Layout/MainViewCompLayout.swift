@@ -71,7 +71,6 @@ final class MainViewCompLayout {
                 return nil
             }
         }
-        
         return layout
     }
 }

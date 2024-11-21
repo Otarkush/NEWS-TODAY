@@ -8,13 +8,28 @@
 import UIKit
 import Models
 
-final class MainViewDataSource {
+protocol MainViewDataSource: AnyObject {
+    #warning("Может убрать ассоц знаечния? Чтобы any не использовать при имплементации")
+    associatedtype Section: Hashable, CaseIterable
+    associatedtype Item: Hashable
     
     typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     
-    private let collectionView: UICollectionView
-    private lazy var dataSource: DataSource = makeDataSource()
+    var collectionView: UICollectionView { get }
+    var dataSource: DataSource { get }
+    
+    func makeDataSource() -> DataSource
+    func updateSnapshot(categories: [Category], topHeadlines: [Article])
+}
+
+final class MainViewDataSourceImpl: MainViewDataSource {
+    
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
+    
+    let collectionView: UICollectionView
+    lazy var dataSource: DataSource = makeDataSource()
     
     enum Section: Int, CaseIterable {
         case categories, topHeadlines
@@ -30,7 +45,7 @@ final class MainViewDataSource {
         self.collectionView.dataSource = dataSource
     }
     
-    private func makeDataSource() -> DataSource {
+    internal func makeDataSource() -> DataSource {
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .category(let category):
@@ -45,7 +60,7 @@ final class MainViewDataSource {
         }
     }
     
-    func updateSnapshot(categories: [Category], topHeadlines: [Article]) {
+    internal func updateSnapshot(categories: [Category], topHeadlines: [Article]) {
         var snapshot = Snapshot()
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(categories.map { Item.category($0) }, toSection: .categories)

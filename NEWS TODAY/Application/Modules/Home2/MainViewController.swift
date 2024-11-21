@@ -2,8 +2,8 @@
 //  MainViewController.swift
 //  NEWS TODAY
 //
-//  Created by Daniil Murzin on 18.11.2024.
-//
+//  Created by Aria Arisova on 22.10.2024.
+//  Modified by Daniil Murzin
 
 import UIKit
 import SwiftUI
@@ -18,16 +18,24 @@ final class MainViewController: UIViewController {
     
     // MARK: - Properties
     private let presenter: MainViewPresenter
-    private var collectionView: UICollectionView!
-    private var headerView: HeaderView!
-    private var dataSource: MainViewDataSource!
+    private var collectionView: UICollectionView
+    private var headerView: HeaderView
+    private var dataSource: any MainViewDataSource
     
     private var categoriesArray = [Category]()
     private var topHeadlinesArray = [Article]()
     
     // MARK: - Init
-    init(presenter: MainViewPresenter) {
+    init(
+        presenter: MainViewPresenter,
+        dataSource: any MainViewDataSource,
+        collectionView: UICollectionView,
+        headerView: HeaderView
+    ) {
         self.presenter = presenter
+        self.dataSource = dataSource
+        self.collectionView = collectionView
+        self.headerView = headerView
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -39,45 +47,19 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupDataSource()
         presenter.viewDidLoad()
+        setupConstraints()
     }
     
     // MARK: - Setup UI
     private func setupUI() {
         view.backgroundColor = .white
-        
-        // Header View
-        headerView = HeaderView()
-        headerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(headerView)
-        
-        // Collection View
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: MainViewCompLayout().createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
         collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
         view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            // Header View Constraints
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 150), // Высота для HeaderView
-            
-            // Collection View Constraints
-            collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-
-    
-    private func setupDataSource() {
-        dataSource = MainViewDataSource(collectionView: collectionView)
     }
 }
 
@@ -89,6 +71,22 @@ extension MainViewController: MainViewDelegate {
         dataSource.updateSnapshot(categories: categoriesArray, topHeadlines: topHeadlinesArray)
     }
 }
+//MARK: - Setup Constraints
+extension MainViewController {
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 150),
+            
+            collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
 
 
 //MARK: - SwiftUi preview
@@ -98,8 +96,25 @@ struct ContentView_Previews: PreviewProvider {
     }
     
     struct Container: UIViewControllerRepresentable {
+        
         func makeUIViewController(context: Context) -> UIViewController {
-            UINavigationController(rootViewController: MainViewController(presenter: MainViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController()) )))
+            let collectionView = UICollectionView(
+                           frame: .zero,
+                           collectionViewLayout: MainViewCompLayout().createLayout()
+                       )
+                       collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
+                       collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
+            
+            return UINavigationController(
+                rootViewController: MainViewController(
+                    presenter: MainViewPresenterImpl(
+                        networking: NewsRepository.shared,
+                        router: AppRouterImpl(
+                            factory: AppFactoryImpl(),
+                            navigation: UINavigationController())),
+                    dataSource: MainViewDataSourceImpl(collectionView: collectionView),
+                    collectionView: collectionView,
+                    headerView: HeaderView()))
             
         }
         
