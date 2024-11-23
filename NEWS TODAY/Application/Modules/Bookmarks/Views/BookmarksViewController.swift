@@ -15,7 +15,7 @@ protocol BookmarksViewPresenter: AnyObject {
     
     func newsCount() -> Int
     func fetchNews()
-    func didTapCell(at index: Int, with articles: [Article])
+    func didTapCell(at index: Int)
 }
 
 class BookmarksViewController: UIViewController {
@@ -61,7 +61,7 @@ class BookmarksViewController: UIViewController {
         let label = UILabel()
         label.text = "Saved articles to the library"
         label.font = .InterRegular(ofSize: 16)
-        label.textColor = .greyPrimary
+        label.textColor = .grayPrimary
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -131,7 +131,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        presenter.didTapCell(at: indexPath.row, with: news)
+        presenter.didTapCell(at: indexPath.row)
     }
 }
 

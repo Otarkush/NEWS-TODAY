@@ -27,7 +27,8 @@ final class BookmarksViewPresenterImpl: BookmarksViewPresenter {
         return news.count
     }
 
-    func didTapCell(at index: Int, with articles: [Article]) {
-        router.showDetailView(for: articles, selectedIndex: index)
+    func didTapCell(at index: Int) {
+        guard let article = news[safe: index] else { return }
+        router.showDetailView(for: article)
     }
 }

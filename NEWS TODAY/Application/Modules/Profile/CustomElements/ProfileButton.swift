@@ -49,7 +49,7 @@ final class ProfileButton: UIButton {
         titleLabel?.numberOfLines = 1
         titleLabel?.font = .InterSemiBold(ofSize: 16)
         layer.cornerRadius = 12
-        backgroundColor = .greyLighter
+        backgroundColor = .grayLighter
         tintColor = .darkGray
         
         switch type {

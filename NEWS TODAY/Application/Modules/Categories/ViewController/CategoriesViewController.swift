@@ -45,7 +45,7 @@ final class CategoriesViewController: UIViewController {
         text:
             "Thousands of articles in each category",
         font: UIFont.InterRegular(ofSize: 16),
-        textColor: UIColor.greyPrimary,
+        textColor: UIColor.grayPrimary,
         numberOfLines: 1)
     
     private let horizontalStackView = UIStackView(axis: .horizontal)
@@ -100,7 +100,7 @@ final class CategoriesViewController: UIViewController {
     private func setupStackView(_ stackView: UIStackView, with categories: [Category]) {
         categories.forEach { category in
             
-            let button = UIButton(initBackgroundColor: .greyLighter)
+            let button = UIButton(initBackgroundColor: .grayLighter)
             
             button.setTitle("\(category.emoji) \(category.name)",
                             for: .normal)
@@ -112,16 +112,16 @@ final class CategoriesViewController: UIViewController {
                 button.backgroundColor = .purplePrimary
                 button.setTitleColor(.white, for: .normal)
             } else {
-                button.backgroundColor = .greyLighter
-                button.setTitleColor(.greyDarker, for: .normal)
+                button.backgroundColor = .grayLighter
+                button.setTitleColor(.grayDarker, for: .normal)
             }
             
             if selectedCategories.contains(where: { $0.name == category.name }) {
                 button.backgroundColor = .purplePrimary
                 button.setTitleColor(.white, for: .normal)
             } else {
-                button.backgroundColor = .greyLighter
-                button.setTitleColor(.greyDarker, for: .normal)
+                button.backgroundColor = .grayLighter
+                button.setTitleColor(.grayDarker, for: .normal)
             }
             
             stackView.addArrangedSubview(button)
@@ -149,8 +149,8 @@ final class CategoriesViewController: UIViewController {
         if let selectedIndex = self.selectedCategories.firstIndex(where: { $0.id == category.id }) {
             
             UIView.animate(withDuration: 0.3) {
-                sender.backgroundColor = .greyLighter
-                sender.setTitleColor(.greyDarker, for: .normal)
+                sender.backgroundColor = .grayLighter
+                sender.setTitleColor(.grayDarker, for: .normal)
             }
             self.selectedCategories.remove(at: selectedIndex)
         } else {

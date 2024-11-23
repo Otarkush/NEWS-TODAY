@@ -4,7 +4,6 @@
 //
 //  Created by Daniil Murzin on 22.10.2024.
 //
-
 import UIKit
 import Models
 
@@ -13,18 +12,19 @@ protocol AppRouter: AnyObject {
     func showBookmarksView()
     func showCategoriesView()
     func showProfileView()
-    func showDetailView(for articles: [Article], selectedIndex: Int)
+    func showDetailView(for article: Article)
     func showTermsView()
     func showLanguageView()
     func showOnboarding()
     func showTabBar()
+    func showSearch(for articles: [Article])
     func start()
     func popToRoot()
     func back()
 }
 
 final class AppRouterImpl: AppRouter {
-    
+  
     // MARK: - Properties
     private let factory: AppFactory
     private let navigation: UINavigationController
@@ -73,8 +73,8 @@ final class AppRouterImpl: AppRouter {
         navigation.pushViewController(view, animated: true)
     }
     
-    func showDetailView(for articles: [Article], selectedIndex: Int) {
-        let view = factory.makeScreen(.detail, self, articles: articles, selectedIndex: selectedIndex)
+    func showSearch(for articles: [Article]) {
+        let view = factory.makeScreen(.search, self, articles: articles, selectedIndex: nil)
         navigation.pushViewController(view, animated: true)
     }
     
@@ -85,6 +85,11 @@ final class AppRouterImpl: AppRouter {
     
     func showLanguageView() {
         let view = factory.makeScreen(.languageSelection, self)
+        navigation.pushViewController(view, animated: true)
+    }
+    
+    func showDetailView(for article: Article) {
+        let view = factory.makeScreen(.detail, self, articles: [article], selectedIndex: 0)
         navigation.pushViewController(view, animated: true)
     }
     

@@ -48,7 +48,7 @@ final class ActionButton: UIButton {
             setImage(UIImage.bookmarkIcon, for: .normal)
         case .darkBack:
             setImage(UIImage.leftIcon.withRenderingMode(.alwaysTemplate), for: .normal)
-            tintColor = .greyDarker
+            tintColor = .grayDarker
         }
     }
     

@@ -34,7 +34,7 @@ class BookmarkCell: UITableViewCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.InterRegular(ofSize: 14)
-        label.textColor = UIColor.greyPrimary
+        label.textColor = UIColor.grayPrimary
         label.numberOfLines = 1
         return label
     }()

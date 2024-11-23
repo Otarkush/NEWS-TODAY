@@ -49,11 +49,23 @@ extension AppFactoryImpl: AppFactory {
         
         switch screen {
         case .home:
-            let presenter = HomeViewPresenterImpl(
+            let presenter = MainViewPresenterImpl(
                 networking: networking,
                 router: router
             )
-            let viewController = HomeViewController(presenter: presenter)
+            
+            let collectionView = UICollectionView(
+                           frame: .zero,
+                           collectionViewLayout: MainViewCompLayout().createLayout()
+                       )
+            
+            let viewController = MainViewController(
+                presenter: presenter,
+                dataSource: MainViewDataSourceImpl(collectionView: collectionView),
+                collectionView: collectionView,
+                headerView: HeaderView()
+            )
+            
             presenter.view = viewController
             viewController.tabBarItem = makeTabItem(.home)
             return viewController
@@ -69,9 +81,11 @@ extension AppFactoryImpl: AppFactory {
             return viewController
             
         case .detail:
-            guard let articles = articles, let selectedIndex = selectedIndex else {
+            guard let articles = articles,
+                  let selectedIndex = selectedIndex else {
                 fatalError("Articles and selectedIndex must be provided for the detail screen")
             }
+            
             let presenter = DetailViewPresenterImpl(
                 networking: networking,
                 router: router,
@@ -84,6 +98,7 @@ extension AppFactoryImpl: AppFactory {
             )
             presenter.view = viewController
             return viewController
+
             
         case .profile:
             let presenter = ProfileViewPresenterImpl(
@@ -125,11 +140,14 @@ extension AppFactoryImpl: AppFactory {
             let viewController = LanguageSelectionViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
+            
         case .search:
             let presenter = SearchViewPresenterImpl(
                 networking: networking,
-                router: router
+                router: router,
+                articles: articles ?? []
             )
+            
             let viewController = SearchViewController(presenter: presenter)
             presenter.view = viewController
             return viewController
