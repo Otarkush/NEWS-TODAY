@@ -11,22 +11,18 @@ import Repository
 import Models
 
 protocol SearchViewPresenter: AnyObject {
+    func newsCount() -> Int
+    func articleForRow(at index: Int) -> Article?
+    func didSelectArticle(at index: Int)
 }
 
 final class SearchViewController: UIViewController {
     
     //MARK: - Properties
     private let presenter: SearchViewPresenter
-    private var news: [Article] = []
     
     //MARK: - UI Components
-    private lazy var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
-        searchBar.delegate = self
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        return searchBar
-    }()
+    private let searchBar = HeaderView()
     
     private lazy var tableView: UITableView = {
         let table = UITableView()
@@ -58,6 +54,7 @@ final class SearchViewController: UIViewController {
     
     //MARK: - Setup Methods
     private func setupViews() {
+        view.backgroundColor = .white
         view.addSubview(searchBar)
         view.addSubview(tableView)
     }
@@ -67,6 +64,7 @@ final class SearchViewController: UIViewController {
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 150),
             
             tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -79,44 +77,46 @@ final class SearchViewController: UIViewController {
 //MARK: - SearchViewController + UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return news.count
+        return presenter.newsCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkCell.reuseID, for: indexPath) as? BookmarkCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: BookmarkCell.reuseID,
+            for: indexPath
+        ) as? BookmarkCell else {
             fatalError("Unable to dequeue BookmarkCell")
         }
-        cell.set(info: news[indexPath.row])
+        
+        guard let article = presenter.articleForRow(at: indexPath.row) else {
+            assertionFailure("Presenter returned nil for index \(indexPath.row)")
+            return cell
+        }
+        
+        cell.set(info: article)
         return cell
     }
 }
 
 //MARK: - SearchViewController + UITableViewDelegate
 extension SearchViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        // Логика обработки выбора ячейки
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        presenter.didSelectArticle(at: indexPath.row)
     }
 }
 
-//MARK: - SearchViewController + UISearchBarDelegate
-extension SearchViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Логика фильтрации или поиска при изменении текста
-    }
-}
+extension SearchViewController: SearchViewDelegate {}
 
-extension SearchViewController: SearchViewDelegate {
-    
-}
-
-
-
+//MARK: - SwiftUI Preview
 struct SearchViewControllerPreview: UIViewRepresentable {
     
     func makeUIView(context: Context) -> UIView {
         let searchViewController = SearchViewController(
-            presenter: SearchViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController()))
+            presenter: SearchViewPresenterImpl(networking: NewsRepository.shared, router: AppRouterImpl(factory: AppFactoryImpl(), navigation: UINavigationController()), articles: [])
         )
         return searchViewController.view
     }

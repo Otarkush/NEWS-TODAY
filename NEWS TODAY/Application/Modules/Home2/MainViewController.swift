@@ -10,9 +10,16 @@ import SwiftUI
 import Models
 import Repository
 
+enum MainVCInteraction {
+    case searchButton(String)
+    case searchFieldDidChange(String)
+}
+
 protocol MainViewPresenter: AnyObject {
     func viewDidLoad()
+    func didTap(action: MainVCInteraction)
 }
+
 
 final class MainViewController: UIViewController {
     
@@ -48,6 +55,7 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupUI()
+        setupButtonActions()
         presenter.viewDidLoad()
         setupConstraints()
     }
@@ -64,6 +72,34 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(headerView)
         view.addSubview(collectionView)
+    }
+    
+    // MARK: - Button Actions
+    private func setupButtonActions() {
+        headerView.searchButton.addAction(
+            UIAction { [weak self] _ in
+                self?.searchButtonTapped()
+            },
+            for: .touchUpInside
+        )
+        
+        headerView.searchTextField.addAction(
+              UIAction { [weak self] _ in
+                  self?.searchTextFieldDidReturn()
+              },
+              for: .editingDidEndOnExit
+          )
+    }
+    
+    private func searchButtonTapped() {
+        guard let query = headerView.searchTextField.text, !query.isEmpty else { return }
+        presenter.didTap(action: .searchButton(query))
+    }
+    
+    private func searchTextFieldDidReturn() {
+        guard let query = headerView.searchTextField.text, !query.isEmpty else { return }
+        
+        presenter.didTap(action: .searchFieldDidChange(query))
     }
 }
 
