@@ -25,10 +25,37 @@ final class MainViewPresenterImpl {
         self.networking = networking
         self.router = router
     }
+    
+    private func handleSearch(query: String) {
+        
+        Task {
+            let result = await networking.search(query, size: 10)
+            
+            await MainActor.run {
+                switch result {
+                case .success(let articles):
+                    router.showSearch(for: articles)
+                    print("Found articles: \(articles.count)")
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
 }
 
 // MARK: - MainViewPresenter
 extension MainViewPresenterImpl: MainViewPresenter {
+
+    func didTap(action: MainVCInteraction) {
+        switch action {
+        case .searchButton(let query):
+            handleSearch(query: query)
+        case .searchFieldDidChange(let query):
+            handleSearch(query: query)
+        }
+    }
+    
     func viewDidLoad() {
         let categories = Categories.all
         
