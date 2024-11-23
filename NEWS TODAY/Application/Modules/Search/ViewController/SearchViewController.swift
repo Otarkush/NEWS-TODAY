@@ -76,11 +76,19 @@ final class SearchViewController: UIViewController {
 
 //MARK: - SearchViewController + UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+   
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int)
+    -> Int {
         return presenter.newsCount()
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath)
+    -> UITableViewCell {
+       
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: BookmarkCell.reuseID,
             for: indexPath

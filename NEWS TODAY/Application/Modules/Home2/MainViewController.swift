@@ -13,11 +13,13 @@ import Repository
 enum MainVCInteraction {
     case searchButton(String)
     case searchFieldDidChange(String)
+    case cellDidTap(Article)
 }
 
 protocol MainViewPresenter: AnyObject {
     func viewDidLoad()
     func didTap(action: MainVCInteraction)
+    func showDetailView(with article: Article)
 }
 
 
@@ -66,6 +68,7 @@ final class MainViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.register(CategoriesViewCell.self, forCellWithReuseIdentifier: CategoriesViewCell.identifier)
         collectionView.register(TopHeadlinesViewCell.self, forCellWithReuseIdentifier: TopHeadlinesViewCell.identifier)
+        collectionView.delegate = self
     }
     
     private func setupUI() {
@@ -115,6 +118,22 @@ extension MainViewController: MainViewDelegate {
             categories: categoriesArray,
             topHeadlines: topHeadlinesArray)
     }
+}
+
+//MARK: - MainViewController + UICollectionViewDelegate
+extension MainViewController: UICollectionViewDelegate {
+    
+    #warning("TODO: Implement collectionView(_:didSelectItemAt:)")
+//    func collectionView(
+//        _ collectionView: UICollectionView,
+//        didSelectItemAt indexPath: IndexPath
+//    ) {
+//        collectionView.deselectItem(at: indexPath, animated: false)
+//        guard let selected = indexPath.first? else { return }
+//        presenter.showDetailView(with: <#T##Article#>)
+//        
+//    }
+    
 }
 
 //MARK: - MainViewController + setupConstraints
