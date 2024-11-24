@@ -9,7 +9,10 @@ import UIKit
 import Models
 
 protocol MainViewDataSource: AnyObject {
-    #warning("Может убрать ассоц знаечния? Чтобы any не использовать при имплементации")
+    #warning("""
+1) Как лишний раз не создавать здесь   var dataSource: DataSource ? 
+2) убрать ассоц значения в протоколе? 
+""")
     associatedtype Section: Hashable, CaseIterable
     associatedtype Item: Hashable
     
