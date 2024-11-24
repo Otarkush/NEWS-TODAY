@@ -46,13 +46,18 @@ final class MainViewPresenterImpl {
 
 // MARK: - MainViewPresenter
 extension MainViewPresenterImpl: MainViewPresenter {
-
+//    func showDetailView(with article: Models.Article) {
+//        <#code#>
+//    }
+    
     func didTap(action: MainVCInteraction) {
         switch action {
         case .searchButton(let query):
             handleSearch(query: query)
         case .searchFieldDidChange(let query):
             handleSearch(query: query)
+        case .cellDidTap(_):
+            break
         }
     }
     

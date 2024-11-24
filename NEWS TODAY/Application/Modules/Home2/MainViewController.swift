@@ -19,7 +19,7 @@ enum MainVCInteraction {
 protocol MainViewPresenter: AnyObject {
     func viewDidLoad()
     func didTap(action: MainVCInteraction)
-    func showDetailView(with article: Article)
+//    func showDetailView(with article: Article)
 }
 
 
