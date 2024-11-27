@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Repository
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var appRouter: AppRouter?
@@ -13,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-    
+
         window = UIWindow(windowScene: windowScene)
         
         let factory = AppFactoryImpl()
@@ -24,4 +25,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
 }
-

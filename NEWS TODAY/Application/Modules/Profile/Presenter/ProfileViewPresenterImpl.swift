@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Repository
+
 
 struct ProfileViewModel {
     let userName: String
@@ -21,11 +23,11 @@ final class ProfileViewPresenterImpl  {
   
     //MARK: - Properties
     weak var view: ProfileViewDelegate?
-    private let networking: AppNetworking
+    private let networking: NewsRepository
     private let router: AppRouter
   
     //MARK: - Init
-    init(networking: AppNetworking,
+    init(networking: NewsRepository,
          router: AppRouter) {
         self.networking = networking
         self.router = router
@@ -59,27 +61,47 @@ extension ProfileViewPresenterImpl: ProfileViewPresenter {
         
     }
     
-    func didTapConditions() {
-        router.showTermsView()
+    func viewDidLoad() {
+        view?.updateUI(
+            ProfileViewModel(
+                userName: show(credentials: .name),
+                email: show(credentials: .email),
+                imageName: show(credentials: .image)
+            )
+        )
     }
     
-    func didTapChangeLanguage() {
-        print("didTapChangeLanguage")
+    func show(credentials: Credentials) -> String {
+        switch credentials {
+        case .name:
+            "Bob"
+        case .email:
+            "Bob@gmail.com"
+        case .image:
+            "profilePhoto"
+        }
     }
     
-    func didTapSignOut() {
-        print("didTapSignOut")
-    }
-
-    func showUserName() -> String {
-        "Bob"
-    }
-    
-    func showUserEmail() -> String {
-       "Bob1@gmail.com"
-    }
-    
-    func showUserImage() -> String {
-        "profilePhoto"
+    func didTap(button interaction: Interaction) {
+        switch interaction {
+        case .signOut:
+            router.showOnboarding()
+        case .changeLanguage:
+            router.showLanguageView()
+        case .conditions:
+            router.showTermsView()
+        case .chooseLanguage:
+            router.popToRoot()
+        case .backButton:
+            router.back()
+        }
     }
 }
+
+//MARK: - ViewModel 
+struct ProfileViewModel {
+    let userName: String
+    let email: String
+    let imageName: String
+}
+

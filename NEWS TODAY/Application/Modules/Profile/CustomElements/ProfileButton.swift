@@ -15,11 +15,13 @@ class ProfileButton: UIButton {
         case changeLanguage
         case conditions
         case signOut
+        case chooseLanguage
     }
 
     // MARK: - Init
     init(type: ButtonType, target: AnyObject? = nil, action: Selector? = nil) {
         super.init(frame: .zero)
+        self.setTitle(title, for: .normal)
         self.configuration = .plain()
         setupButton(type: type)
         setupConstraints()
@@ -36,25 +38,28 @@ class ProfileButton: UIButton {
     private func setupButton(type: ButtonType) {
         
         translatesAutoresizingMaskIntoConstraints = false
-        configuration?.image = UIImage.angleRight
         configuration?.imagePlacement = .trailing
         configuration?.imagePadding = 200
-        
+        setTitleColor(.darkGray, for: .normal) 
         titleLabel?.numberOfLines = 1
-        titleLabel?.font = .systemFont(ofSize: 16)
+        titleLabel?.font = .InterSemiBold(ofSize: 16)
         layer.cornerRadius = 12
-        backgroundColor = .greyLighter
+        backgroundColor = .grayLighter
         tintColor = .darkGray
         
         switch type {
         case .changeLanguage:
             setTitle("Language", for: .normal)
+            configuration?.image = .angleRight
         case .conditions:
             setTitle("Terms and Conditions", for: .normal)
+            configuration?.image = .angleRight
             configuration?.imagePadding = 100
         case .signOut:
             setTitle("Sign Out", for: .normal)
-            configuration?.image = UIImage.signOut
+            configuration?.image = .signOut
+        case .chooseLanguage:
+            configuration?.image = .check
         }
     }
     
