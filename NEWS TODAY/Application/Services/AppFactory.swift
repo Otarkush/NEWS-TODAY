@@ -11,6 +11,28 @@ import Models
 
 enum Screens { case home, categories, detail, profile, bookmarks, onboarding, termsAndConditions, languageSelection, search }
 
+protocol MainFactory {
+    
+}
+
+class MainRouter {
+    let factory: MainFactory
+    let parent: AppRouter
+    let navigationController: UINavigationController
+    
+    init(
+        factory: MainFactory,
+        parent: AppRouter,
+        navigationController: UINavigationController
+    ) {
+        self.factory = factory
+        self.parent = parent
+        self.navigationController = navigationController
+    }
+    
+    
+}
+
 protocol AppFactory {
     func makeScreen(_ screen: Screens, _ router: AppRouter, articles: [Article]?, selectedIndex: Int?) -> UIViewController
     func makeTabBar(_ router: AppRouter) -> UITabBarController
@@ -26,15 +48,9 @@ final class AppFactoryImpl {
         self.networking = NewsRepository.shared
     }
     
-    // MARK: - Methods
-    static func makeAppRouter(_ navigationController: UINavigationController,
-                              _ window: UIWindow?) -> AppRouter {
-        
-        AppRouterImpl(
-            factory: AppFactoryImpl(),
-            navigation: navigationController,
-            window: window
-        )
+    //MARK: - Methods
+    func makeAppRouter(_ navigationController: UINavigationController) -> AppRouter {
+        AppRouterImpl(factory: self,navigation: navigationController)
     }
 }
 
@@ -163,8 +179,13 @@ extension AppFactoryImpl: AppFactory {
         let bookmarksModule = makeScreen(.bookmarks, router)
         let profileModule = makeScreen(.profile, router)
         
-        tabBarController.viewControllers = [homeModule, categoriesModule, bookmarksModule, profileModule]
-        
+        let homeNavController = UINavigationController(rootViewController: homeModule)
+        tabBarController.viewControllers = [
+            homeNavController,
+            categoriesModule,
+            bookmarksModule ,
+            profileModule
+        ]
         return tabBarController
     }
     
@@ -184,18 +205,123 @@ extension AppFactoryImpl: AppFactory {
             }
         }
         
+        let viewController = HomeViewController(presenter: presenter)
+        presenter.view = viewController
+        viewController.tabBarItem = makeTabItem(.home)
+        
+        return viewController
+    }
+    
+    enum TabType: String {
+        case home
+        case categories
+        case bookmarks
+        case profile
+        
+        var title: String { rawValue.uppercased() }
+        
+        var imageNormal: UIImage? {
+            switch self {
+            case .home: UIImage(systemName: "house")
+            case .categories: UIImage(systemName: "square.grid.2x2")
+            case .bookmarks: UIImage(systemName: "bookmark")
+            case .profile: UIImage(systemName: "person")
+            }
+        }
+        
         var imageSelected: UIImage? {
             switch self {
-            case .home: return UIImage.homeSelected
-            case .categories: return UIImage.categoriesSelected
-            case .bookmarks: return UIImage.bookmarksSelected
-            case .profile: return UIImage.profileSelected
+            case .home: UIImage(systemName: "house.fill")
+            case .categories: UIImage(systemName: "square.grid.2x2.fill")
+            case .bookmarks: UIImage(systemName: "bookmark.fill")
+            case .profile: UIImage(systemName: "person.fill")
             }
         }
     }
     
     func makeTabItem(_ type: TabType) -> UITabBarItem {
-        return UITabBarItem(title: nil, image: type.imageNormal, selectedImage: type.imageSelected)
+        UITabBarItem(title: type.title, image: type.imageNormal, selectedImage: type.imageSelected)
+    }
+    
+    func makeCategoriesModule(_ router: AppRouter) -> UIViewController {
+        let presenter = CategoriesViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = CategoriesViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Categories",
+            image: UIImage(systemName: "square.grid.2x2"),
+            selectedImage: UIImage(systemName: "square.grid.2x2.fill"))
+        
+        return viewController
+    }
+    
+    func makeBookmarksModule(_ router: AppRouter) -> UIViewController {
+        let presenter = BookmarksViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = BookmarksViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Bookmarks",
+            image: UIImage(systemName: "bookmark"),
+            selectedImage: UIImage(systemName: "bookmark.fill"))
+        
+        return viewController
+    }
+    
+    func makeProfileModule(_ router: AppRouter) -> UIViewController {
+        let presenter = ProfileViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = ProfileViewController(
+            presenter: presenter,
+            profileView: ProfileViewImpl()
+        )
+        presenter.view = viewController
+        
+        viewController.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill"))
+        
+        return viewController
+    }
+    
+    func makeOnboardingModule(_ router: AppRouter) -> UIViewController {
+        
+        let presenter = OnboardingViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = OnboardingViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        return viewController
+    }
+    
+    func makeDetailModule(_ router: AppRouter) -> UIViewController {
+        let presenter = DetailViewPresenterImpl(
+            networking: networking,
+            router: router)
+        
+        let viewController = DetailViewController(presenter: presenter)
+        presenter.view = viewController
+        
+        return viewController
+    }
+    
+    //MARK: - Create screens
+   func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController {
+        let viewController = TermsViewController(
+            router: router)
+        return viewController
     }
 }
 

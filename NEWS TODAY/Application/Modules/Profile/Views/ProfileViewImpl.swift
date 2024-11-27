@@ -2,49 +2,87 @@
 //  ProfileViewImpl.swift
 //  NEWS TODAY
 //
-//  Created by Daniil Murzin on 24.10.2024.
+//  Created by Илья Шаповалов on 23.10.2024.
 //
+
 import UIKit
-import SwiftUI
 
 final class ProfileViewImpl: UIView, ProfileView {
+    //MARK: - Drawing
+    private enum Drawing {
+        static let imageSize: CGFloat = 72
+        static let imageTopPadding: CGFloat = 16
+        static let imageLeadingPadding: CGFloat = 16
+        static let nameLabelLeadingPadding: CGFloat = 24
+        static let emailLabelTopPadding: CGFloat = 8
+        static let languageButtonTopPadding: CGFloat = 50
+        static let conditionsButtonTopPadding: CGFloat = -120
+        static let signOutButtonTopPadding: CGFloat = 30
+    }
     
     // MARK: - UI Elements
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .InterSemiBold(ofSize: 16)
+        label.font = .preferredFont(forTextStyle: .headline)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    let emailLabel: UILabel = {
+    private let emailLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .grayPrimary
-        label.font = .InterSemiBold(ofSize: 16)
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.textColor = .secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    //MARK: - Init
+    private let languageButton = ProfileButton(type: .changeLanguage)
+    private let conditionsButton = ProfileButton(type: .conditions)
+    private let logoutButton = ProfileButton(type: .signOut)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setUpConstraints()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Private Methods
+    func render(_ viewModel: ProfilePageViewModel) {
+        nameLabel.text = viewModel.name
+        emailLabel.text = viewModel.email
+        imageView.image = UIImage(systemName: viewModel.image)
+        
+        languageButton.addAction(
+            UIAction { _ in viewModel.changeLanguage() },
+            for: .touchUpInside
+        )
+        
+        switch viewModel.logOut {
+        case .inactive:
+            logoutButton.removeAction(identifiedBy: logoutActionId, for: .touchUpInside)
+            
+        case .action(let action):
+            logoutButton.addAction(
+                UIAction(identifier: logoutActionId) { _ in action() },
+                for: .touchUpInside
+            )
+        }
+    }
+    
+    let logoutActionId = UIAction.Identifier("myLogoutAction")
+    
     private func setupViews() {
         [imageView,
          nameLabel,
@@ -57,12 +95,7 @@ final class ProfileViewImpl: UIView, ProfileView {
         backgroundColor = .white
     }
     
-    lazy var languageButton = ProfileButton(type: .changeLanguage)
-    lazy var conditionsButton = ProfileButton(type: .conditions)
-    lazy var logoutButton = ProfileButton(type: .signOut)
-    
-    //MARK: - Setup Constraints
-   private func setUpConstraints() {
+    private func setUpConstraints() {
        NSLayoutConstraint.activate([
            imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Drawing.imageTopPadding),
            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Drawing.imageLeadingPadding),
@@ -85,16 +118,36 @@ final class ProfileViewImpl: UIView, ProfileView {
            logoutButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
        ])
    }
+}
+
+import SwiftUI
+
+// MARK: - SwiftUI Preview for UIKit View
+struct ProfileView_Preview: PreviewProvider {
+    static var previews: some View {
+        ProfileViewWrapper()
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}
+
+struct ProfileViewPageWrapper: UIViewRepresentable {
     
-    //MARK: - Drawing
-    private enum Drawing {
-        static let imageSize: CGFloat = 72
-        static let imageTopPadding: CGFloat = 16
-        static let imageLeadingPadding: CGFloat = 16
-        static let nameLabelLeadingPadding: CGFloat = 24
-        static let emailLabelTopPadding: CGFloat = 8
-        static let languageButtonTopPadding: CGFloat = 50
-        static let conditionsButtonTopPadding: CGFloat = -120
-        static let signOutButtonTopPadding: CGFloat = 30
+    func makeUIView(context: Context) -> UIView {
+        let view = ProfileViewImpl()
+        view.render(
+            .init(
+                name: "Name",
+                email: "Email",
+                image: "person",
+                changeLanguage: {},
+                showConditions: {},
+                logOut: .inactive
+            )
+        )
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
     }
 }

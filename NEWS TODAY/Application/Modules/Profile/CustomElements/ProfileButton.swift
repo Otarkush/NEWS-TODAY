@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-final class ProfileButton: UIButton {
+class ProfileButton: UIButton {
     
     //MARK: - Type
     enum ButtonType {
@@ -19,11 +19,7 @@ final class ProfileButton: UIButton {
     }
 
     // MARK: - Init
-    init(
-        type: ButtonType,
-        target: AnyObject? = nil,
-        action: Selector? = nil,
-        title: String? = nil) {
+    init(type: ButtonType, target: AnyObject? = nil, action: Selector? = nil) {
         super.init(frame: .zero)
         self.setTitle(title, for: .normal)
         self.configuration = .plain()
@@ -31,7 +27,6 @@ final class ProfileButton: UIButton {
         setupConstraints()
         
         guard let action else { return }
-        
         addTarget(target, action: action, for: .touchUpInside)
     }
     
