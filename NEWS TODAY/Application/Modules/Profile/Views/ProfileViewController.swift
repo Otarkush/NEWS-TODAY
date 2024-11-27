@@ -8,38 +8,49 @@
 import UIKit
 import SwiftUI
 
+enum Credential { case name, email, image }
+enum Interaction { case conditions, signOut, lang }
+
 protocol ProfileViewPresenter: AnyObject {
-    func showUserName() -> String
-    func showUserEmail() -> String
-    func showUserImage() -> String
-    func didTapConditions()
-    func didTapSignOut()
-    func didTapChangeLanguage()
+    func show(_ credential: Credential) -> String
+    func viewDidLoad()
+    func didTap(button interaction: Interaction)
+}
+
+typealias Action = () -> Void
+
+struct ProfilePageViewModel {
+    let name: String
+    let email: String
+    let image: String
+
+    let changeLanguage: Action
+    let showConditions: Action
+    let logOut: ButtonState
+    
+    enum ButtonState {
+        case inactive
+        case action(Action)
+    }
+}
+
+protocol ProfileView: UIView {
+    func render(_ viewModel: ProfilePageViewModel)
 }
 
 final class ProfileViewController: UIViewController {
-    
-    //MARK: - Drawing
-    private enum Drawing {
-        static let imageSize: CGFloat = 72
-        static let imageTopPadding: CGFloat = 16
-        static let imageLeadingPadding: CGFloat = 16
-        static let nameLabelLeadingPadding: CGFloat = 24
-        static let emailLabelTopPadding: CGFloat = 8
-        static let languageButtonTopPadding: CGFloat = 50
-        static let conditionsButtonTopPadding: CGFloat = -120
-        static let signOutButtonTopPadding: CGFloat = 30
-    }
-    
     //MARK: - Properties
     private let presenter: ProfileViewPresenter
+    private let profileView: ProfileView
 
     //MARK: - Init
-    init(presenter: ProfileViewPresenter) {
+    init(
+        presenter: ProfileViewPresenter,
+        profileView: ProfileView
+    ) {
         self.presenter = presenter
+        self.profileView = profileView
         super.init(nibName: nil, bundle: nil)
-        setupViews()
-        setUpConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -47,100 +58,45 @@ final class ProfileViewController: UIViewController {
     }
     
     //MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        view = profileView
     }
     
-    // MARK: - UI Elements
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
-        label.textColor = .label
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    private let emailLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .secondaryLabel
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var languageButton = ProfileButton(type: .changeLanguage, target: self, action: #selector(languageButtonTapped))
-    private lazy var conditionsButton = ProfileButton(type: .conditions, target: self, action: #selector(conditionsButtonTapped))
-    private lazy var logoutButton = ProfileButton(type: .signOut, target: self, action: #selector(logoutButtonTapped))
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter.viewDidLoad()
+    }
     
     // MARK: - Button Actions
     @objc private func languageButtonTapped() {
-        presenter.didTapChangeLanguage()
+        presenter.didTap(button: .lang)
     }
 
     @objc private func conditionsButtonTapped() {
-        presenter.didTapConditions()
+        presenter.didTap(button: .conditions)
     }
 
     @objc private func logoutButtonTapped() {
-        presenter.didTapSignOut()
-    }
-    // MARK: - Private Methods
-    private func setupViews() {
-        [imageView,
-         nameLabel,
-         emailLabel,
-         languageButton,
-         conditionsButton,
-         logoutButton
-        ].forEach { view.addSubview($0)}
-        
-        view.backgroundColor = .white
-        updateUI()
+        presenter.didTap(button: .lang)
     }
 }
 
 //MARK: - ProfileViewController + ProfileViewDelegate
 extension ProfileViewController: ProfileViewDelegate {
-    func updateUI() {
-        nameLabel.text = presenter.showUserName()
-        emailLabel.text = presenter.showUserEmail()
-        imageView.image = UIImage(named: presenter.showUserImage())
-    }
-}
-
-//MARK: - ProfileViewController + Constraints
-private extension ProfileViewController {
-    
-     func setUpConstraints() {
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Drawing.imageTopPadding),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Drawing.imageLeadingPadding),
-            imageView.widthAnchor.constraint(equalToConstant: Drawing.imageSize),
-            imageView.heightAnchor.constraint(equalToConstant: Drawing.imageSize),
-            
-            nameLabel.topAnchor.constraint(equalTo: imageView.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: Drawing.nameLabelLeadingPadding),
-            
-            emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: Drawing.emailLabelTopPadding),
-            emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            
-            languageButton.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: Drawing.languageButtonTopPadding),
-            languageButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            
-            conditionsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Drawing.conditionsButtonTopPadding),
-            conditionsButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            
-            logoutButton.topAnchor.constraint(equalTo: conditionsButton.bottomAnchor, constant: Drawing.signOutButtonTopPadding),
-            logoutButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-        ])
+    func updateUI(_ viewModel: ProfileViewModel) {
+//        profileView.nameLabel.text = viewModel.userName
+//        profileView.emailLabel.text = viewModel.email
+//        profileView.imageView.image = UIImage(named: viewModel.imageName)
+        profileView.render(
+            .init(
+                name: viewModel.userName,
+                email: viewModel.email,
+                image: viewModel.imageName,
+                changeLanguage: { self.languageButtonTapped() },
+                showConditions: { self.conditionsButtonTapped() },
+                logOut: .inactive
+            )
+        )
     }
 }
 
@@ -161,7 +117,9 @@ struct ProfileViewWrapper: UIViewRepresentable {
                 networking: NetworkingManagerImpl(),
                 router: AppRouterImpl(
                     factory: AppFactoryImpl(),
-                    navigation: UINavigationController())))
+                    navigation: UINavigationController())),
+            profileView: ProfileViewImpl()
+        )
         
         return profileViewController.view
     }

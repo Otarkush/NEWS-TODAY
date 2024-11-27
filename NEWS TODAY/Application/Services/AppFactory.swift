@@ -7,6 +7,28 @@
 
 import UIKit
 
+protocol MainFactory {
+    
+}
+
+class MainRouter {
+    let factory: MainFactory
+    let parent: AppRouter
+    let navigationController: UINavigationController
+    
+    init(
+        factory: MainFactory,
+        parent: AppRouter,
+        navigationController: UINavigationController
+    ) {
+        self.factory = factory
+        self.parent = parent
+        self.navigationController = navigationController
+    }
+    
+    
+}
+
 protocol AppFactory {
     func makeHomeModule(_ router: AppRouter) -> UIViewController
     func makeTabBar(_ router: AppRouter) -> UITabBarController
@@ -29,13 +51,9 @@ final class AppFactoryImpl  {
     }
     
     //MARK: - Methods
-    static func makeAppRouter(_ navigationController: UINavigationController) -> AppRouter {
-        
-        AppRouterImpl(
-            factory: AppFactoryImpl(),
-            navigation: navigationController)
+    func makeAppRouter(_ navigationController: UINavigationController) -> AppRouter {
+        AppRouterImpl(factory: self,navigation: navigationController)
     }
-    
 }
 
 //MARK: - AppFactoryImpl + AppFactory
@@ -51,10 +69,12 @@ extension AppFactoryImpl: AppFactory {
         let profileModule = makeProfileModule(router)
         
         let homeNavController = UINavigationController(rootViewController: homeModule)
-        
-        
-        tabBarController.viewControllers = [homeNavController, categoriesModule,bookmarksModule ,profileModule]
-        
+        tabBarController.viewControllers = [
+            homeNavController,
+            categoriesModule,
+            bookmarksModule ,
+            profileModule
+        ]
         return tabBarController
     }
     
@@ -67,13 +87,40 @@ extension AppFactoryImpl: AppFactory {
         
         let viewController = HomeViewController(presenter: presenter)
         presenter.view = viewController
-        #warning("Норм pдесь создавать табБар итемы?")
-        viewController.tabBarItem = UITabBarItem(
-            title: "Home",
-            image: UIImage(systemName: "house"),
-            selectedImage: UIImage(systemName: "house.fill"))
+        viewController.tabBarItem = makeTabItem(.home)
         
         return viewController
+    }
+    
+    enum TabType: String {
+        case home
+        case categories
+        case bookmarks
+        case profile
+        
+        var title: String { rawValue.uppercased() }
+        
+        var imageNormal: UIImage? {
+            switch self {
+            case .home: UIImage(systemName: "house")
+            case .categories: UIImage(systemName: "square.grid.2x2")
+            case .bookmarks: UIImage(systemName: "bookmark")
+            case .profile: UIImage(systemName: "person")
+            }
+        }
+        
+        var imageSelected: UIImage? {
+            switch self {
+            case .home: UIImage(systemName: "house.fill")
+            case .categories: UIImage(systemName: "square.grid.2x2.fill")
+            case .bookmarks: UIImage(systemName: "bookmark.fill")
+            case .profile: UIImage(systemName: "person.fill")
+            }
+        }
+    }
+    
+    func makeTabItem(_ type: TabType) -> UITabBarItem {
+        UITabBarItem(title: type.title, image: type.imageNormal, selectedImage: type.imageSelected)
     }
     
     func makeCategoriesModule(_ router: AppRouter) -> UIViewController {
@@ -113,7 +160,10 @@ extension AppFactoryImpl: AppFactory {
             networking: networking,
             router: router)
         
-        let viewController = ProfileViewController(presenter: presenter)
+        let viewController = ProfileViewController(
+            presenter: presenter,
+            profileView: ProfileViewImpl()
+        )
         presenter.view = viewController
         
         viewController.tabBarItem = UITabBarItem(
@@ -148,7 +198,6 @@ extension AppFactoryImpl: AppFactory {
     }
     
     //MARK: - Create screens
-#warning("Здесь не стал делать презентер, кнопка бек через метод router.pop")
    func makeTermsAndConditionsScreen(_ router: AppRouter) -> UIViewController {
         let viewController = TermsViewController(
             router: router)

@@ -8,18 +8,16 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    var appRouter: AppRouter?
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         guard let windowScene = (scene as? UIWindowScene) else { return }
     
         window = UIWindow(windowScene: windowScene)
+        
         let factory = AppFactoryImpl()
-        let navigationController = UINavigationController()
-        let appRouter = AppRouterImpl(factory: factory, navigation: navigationController)
-
+        let appRouter = factory.makeAppRouter(UINavigationController())
         let tabBarController = factory.makeTabBar(appRouter)
 
         window?.rootViewController = tabBarController

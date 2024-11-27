@@ -7,8 +7,14 @@
 
 import Foundation
 
+struct ProfileViewModel {
+    let userName: String
+    let email: String
+    let imageName: String
+}
+
 protocol ProfileViewDelegate: AnyObject {
-    func updateUI()
+    func updateUI(_ viewModel: ProfileViewModel)
 }
 
 final class ProfileViewPresenterImpl  {
@@ -28,6 +34,30 @@ final class ProfileViewPresenterImpl  {
 
 //MARK: - ProfileViewPresenterImpl + ProfileViewPresenter
 extension ProfileViewPresenterImpl: ProfileViewPresenter {
+    func viewDidLoad() {
+        view?.updateUI(
+            .init(
+                userName: showUserName(),
+                email: showUserEmail(),
+                imageName: showUserImage()
+            )
+        )
+    }
+    
+    func show(_ credential: Credential) -> String {
+        switch credential {
+        case .name:
+            return .init()
+        case .email:
+            return .init()
+        case .image:
+            return .init()
+        }
+    }
+    
+    func didTap(button interaction: Interaction) {
+        
+    }
     
     func didTapConditions() {
         router.showTermsView()
